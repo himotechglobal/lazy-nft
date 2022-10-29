@@ -1,0 +1,284 @@
+@media(max-width: 1500px) {
+    
+     
+    .header-c2 {
+        width: 80%;
+    }
+
+    .bule-circle {
+        width: 220px;
+        height: 220px;
+    }
+
+    .coolect-box {
+        width: 22%;
+    }
+
+    .collect-c {
+        margin-top: 130px;
+    }
+
+    .coolect-box {
+        height: 210px;
+    }
+}
+
+@media(max-width: 1440px) {
+    #hometab-sec {
+        padding: 40px 140px;
+        height: auto;
+    }
+    #homebnrbg{
+        padding: 40px 140px;
+        height: 100vh;
+    }
+#pool2 {
+        padding: 80px 140px 40px 140px;
+        height: auto;
+    }
+    #farmwithsecond{
+        padding: 110px 120px;
+        height: auto; 
+    }
+    #bnrbg {
+        padding: 110px 120px;
+        height: auto;
+    }
+    #delete-sec {
+        padding: 110px 120px;
+        height: auto;
+    }
+    #farmbg{
+        padding: 40px 140px;
+        height: auto;
+    }
+    .header-c2 {
+        width: 100%;
+    }
+
+    .menu-butn {
+        color: #ffffff;
+    }
+
+    .menu-butn-c {
+        color: #2f5e90 !important;
+    }
+
+    .nav-list>li>a {
+        color: #000;
+    }
+
+    .nav-list {
+        margin-right: 0px;
+        display: inherit;
+    }
+
+    .searchipt-wrp {
+        margin: 9px 180px 0px 180px;
+        justify-content: space-between;
+    }
+
+    .nav-list>li {
+        margin-left: 0px;
+        align-self: center;
+        margin-top: 20px;
+    }
+
+    #bnr-bg {
+        padding: 90px 120px;
+    }
+
+    .multi-chain-bx {
+        padding: 30px;
+    }
+
+    .eth-c-bx {
+        padding: 20px;
+    }
+
+    .menu-list-d>li {
+        margin-left: 15px;
+    }
+
+    .yp-bx {
+        padding: 20px 30px;
+    }
+
+    .sc-wrp>p {
+        font-size: 14px;
+    }
+
+    .m-ecosys-bx {
+        padding: 10px;
+    }
+
+    .bnr2-cont>h1 {
+        font-size: 60px;
+    }
+
+    .mpad-bx {
+        padding: 25px 25px 25px 0px;
+    }
+
+    .mpad-bx-cont {
+        padding-left: 25px;
+    }
+    
+
+}
+
+@media(max-width: 1166px) {
+    .nftimg {
+        width: 290px;
+        height: 290px;
+    }
+    .NFT-menu {
+        width: 258px;
+    }
+    .top-popup {
+        width: 82%;
+        top: 45px;
+    }
+    #signup {
+        height: 100vh;
+        padding: 25px 0px;
+    }
+
+}
+
+@media(max-width: 992px) {
+    .NFT-menu {
+        width: 100%;
+    }
+    .NFTbox{
+        height: auto;
+    }
+    .top-popup {
+        width: 91%;
+        top: 53px;
+    }
+    .bnr-bxres{
+        margin-top: 30px;
+    }
+    .bnr-bx {
+        padding: 50px 25px;
+        height: 200px;
+    }
+    .nftimg {
+        width: 100%;
+        height: auto;
+    }
+    .nav-list>li {
+        margin-top: 0px;
+    }
+    .border-b {
+        padding: 10px 15px;
+    }
+    .logo-box {
+        margin-left: 0px;
+    }
+    .similar-hding {
+        margin-bottom: 20px;
+        margin-top: 30px;
+    }
+    #ethereum-box {
+        margin-top: 0px;
+    }
+
+}
+
+@media(max-width: 580px) {
+    .NFTbox {
+        margin-top: 20px;
+    }
+    .bnr-bxres {
+        margin-top: 20px;
+    }
+    
+    .signup-hding > h1 {
+        margin-bottom: 30px;
+        font-size: 20px;
+    }
+    .signupbox > input {
+        height: 40px;
+    }
+    .connect-wallet>a{
+        padding: 8px 16px;
+    font-size: 14px;
+    }
+    .moreinfobutn > a{
+        padding: 8px 16px;
+    font-size: 14px;  
+    }
+    .bizarroworldbutn > a{
+        padding: 8px 16px;
+    font-size: 14px;  
+    }
+    .openseabutn > a{
+        padding: 8px 16px;
+    font-size: 14px; 
+    width: 180px;
+    }
+    .etherscanbutn > a{
+        padding: 8px 16px;
+    font-size: 14px; 
+    width: 180px;
+    }
+.signpubutn > a {
+    padding: 8px 16px;
+    font-size: 14px;
+}
+    .signupbox {
+        padding: 15px;
+    }
+    .detail-video{
+        width: 100%;
+    }
+    #similarpage {
+        padding: 20px 0px;
+    }
+    #similarbtm-wrp {
+        padding: 30px 0px;
+        text-align: center;
+    }
+    .similar-hding {
+        margin-bottom: 10px;
+        margin-top: 40px;
+    }
+    .NFT-menu {
+        text-align: left;
+    }
+    .name {
+        font-size: 16px;
+    }
+    .border-b {
+        padding: 10px 0px;
+    }
+    .coin-list {
+        flex-wrap: wrap;
+        margin-left: 10px;
+    }
+    .top-popup {
+        width: 83%;
+        top: 43px;
+    }
+    .bizarroworldbutn {
+        margin: 35px 0px;
+    }
+    .bnr-bx {
+        padding: 40px 25px;
+    }
+    #banner-section {
+        padding: 40px 0px;
+    }
+    h1 {
+        font-size: 24px;
+        text-align: center;
+    }
+    .nftbox-bcont {
+        text-align: center;
+    }
+    #ethereum-box {
+        margin-top: 0px;
+    }
+}
