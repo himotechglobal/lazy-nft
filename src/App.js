@@ -8,6 +8,7 @@ import BizardWorld from './components/pages/bizardworld/BizardWorld'
 import Signup from'./components/pages/register/Signup'
  import Login from './components/pages/register/Login'
  import Reset from './components/pages/register/Reset'
+ import Wallet from './components/pages/walletpage/Wallet.js'
 
 
 
@@ -24,6 +25,7 @@ function App() {
 				<Route exact path="/" name="Home Page" element={<Home/>} />
 				<Route exact path="/productSimilar" name="ProductSimilar Page" element={<ProductSimilar/>} />
 				<Route exact path="/bizardworld" name="BizardWorld Page" element={<BizardWorld/>} />
+				<Route exact path="/wallet" name="Wallet Page" element={<Wallet/>} />
 				<Route exact path="/signup" name="Signup Page" element={<Signup/>} />
 				<Route exact path="/login" name="Login Page" element={<Login/>} />
 				<Route exact path="/reset" name="Reset Page" element={<Reset/>} />

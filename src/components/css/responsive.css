@@ -128,15 +128,13 @@
 }
 
 @media(max-width: 1166px) {
-    .nftimg {
-        width: 290px;
-        height: 290px;
+    .nftimg > img {
+        height: 296px;
     }
     .NFT-menu {
         width: 258px;
     }
     .top-popup {
-        width: 82%;
         top: 45px;
     }
     #signup {
@@ -156,6 +154,9 @@
     .top-popup {
         width: 91%;
         top: 53px;
+    }
+    .nftimg > img {
+        height: 696px;
     }
     .bnr-bxres{
         margin-top: 30px;
@@ -188,6 +189,9 @@
 }
 
 @media(max-width: 580px) {
+    .nftimg > img {
+        height: 336px;
+    }
     .NFTbox {
         margin-top: 20px;
     }
@@ -228,9 +232,10 @@
     padding: 8px 16px;
     font-size: 14px;
 }
-    .signupbox {
-        padding: 15px;
-    }
+.signupbox {
+    width: 300px;
+    padding: 15px;
+}
     .detail-video{
         width: 100%;
     }

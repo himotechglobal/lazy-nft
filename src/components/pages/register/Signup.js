@@ -70,6 +70,7 @@ const Signup = () => {
             </div>
         <form className="signupbox" onSubmit={formik.handleSubmit}>
         <TextField
+        className="form-input"
           fullWidth
           id="email"
           name="email"
@@ -80,6 +81,7 @@ const Signup = () => {
           helperText={formik.touched.email && formik.errors.email}
         />
         <TextField
+        className="form-input"
           fullWidth
           id="userName"
           name="userName"
@@ -90,6 +92,7 @@ const Signup = () => {
           helperText={formik.touched.userName && formik.errors.userName}
         />
         <TextField
+        className="form-input"
           fullWidth
           id="password"
           name="password"
