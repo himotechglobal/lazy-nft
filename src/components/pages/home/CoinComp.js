@@ -4,6 +4,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { FormControlLabel, FormGroup, TextField } from '@mui/material';
 import { useState } from 'react';
 import Popup from './Popup';
+import { Link } from 'react-router-dom';
 
 
 
@@ -68,7 +69,7 @@ export default function CoinComp() {
                         <div className='row'>
                             <div className='col-lg-4'>
 
-                               <a href='/productSimilar'>
+                               <Link to='/productSimilar'>
                                <div class="NFTbox clickable">
                                     <div>
                                         <video class="video" poster="https://lh3.googleusercontent.com/oeuXCLKDwB76hJOnSNdDYgTJOtZuQv70iLkCI7kzbemN0b8rc4ANA8ft2RpqEeTmTgcm484QkKflXasU2KjwY4IXKstCCMV1GHN1" playsinline="" autoplay="" loop=""><source src="https://client-metadata.ether.cards/embed/lamelo/1857" /></video>
@@ -82,11 +83,11 @@ export default function CoinComp() {
                                         </div>
                                     </div>
                                 </div>
-                               </a>
+                               </Link>
                                 <Popup />
                             </div>
                             <div className='col-lg-4'>
-                                <a href='/productSimilar'>
+                                <Link to='/productSimilar'>
                                 <div class="NFTbox clickable">
                                     <div>
                                         <video class="video" poster="https://lh3.googleusercontent.com/eXsUaCoMEsyVQqHef6h7bCjQFutUDTls3ygToKCOIzYT660QaUYUkEVogup4x1STdiiCjKqboYzZ6iPP0PhJUQ2CNHTsaGPxbRv8" playsinline="" autoplay="" loop=""><source src="https://client-metadata.ether.cards/embed/lamelo/1857" /></video>
@@ -100,11 +101,11 @@ export default function CoinComp() {
                                         </div>
                                     </div>
                                 </div>
-                                </a>
+                                </Link>
                                 <Popup />
                             </div>
                             <div className='col-lg-4'>
-                                <a href='/productSimilar'>
+                                <Link to='/productSimilar'>
                                 <div class="NFTbox clickable">
                                     <div>
                                         <video class="video" poster="https://lh3.googleusercontent.com/avZaPv5vb9pAFnTfnsfyLeZgU0Pd83sZqoinB1oQ0Oidnnxov8tkGp5bou9tmuxacOjMWBvacPSKoWkkBGkjet66fJt2NFU_dfvBnYc" playsinline="" autoplay="" loop=""><source src="https://client-metadata.ether.cards/embed/lamelo/1857" /></video>
@@ -118,7 +119,7 @@ export default function CoinComp() {
                                         </div>
                                     </div>
                                 </div>
-                                </a>
+                                </Link>
                                 <Popup />
                             </div>
                         </div>
@@ -128,7 +129,7 @@ export default function CoinComp() {
                         <div className='row'>
                             <div className='col-lg-4'>
 
-                               <a href='/productSimilar'>
+                               <Link to='/productSimilar'>
                                <div class="NFTbox clickable">
                                     <div className='nftimg'>
                                     <img class="image" src="https://lh3.googleusercontent.com/GYOfiGr1kmPgAAmxXGnNRV6hj9M_a0Z2Vt2zDHfDGnSE2ytLeGRX4rlEJnTt7o97s8KRkaWnst0sG4tUqJw6XCO3eSwC25Xtluy3Zw" alt=""/>
@@ -142,11 +143,11 @@ export default function CoinComp() {
                                         </div>
                                     </div>
                                 </div>
-                               </a>
+                               </Link>
                                 <Popup />
                             </div>
                             <div className='col-lg-4'>
-                                <a href='/productSimilar'>
+                                <Link to='/productSimilar'>
                                 <div class="NFTbox clickable">
                                     <div>
                                         <video class="video" poster="https://lh3.googleusercontent.com/ziG_pRjQfaKeWSLynRO5NkBsSTXhV2E0mCBXgUj-cirOxUyBpLDULaMtq13zWgDFKEY-O46-MCTytyvQ1D8Zl48dBKbUN6MkXznX" playsinline="" autoplay="" loop=""><source src="https://client-metadata.ether.cards/embed/lamelo/1857" /></video>
@@ -160,11 +161,11 @@ export default function CoinComp() {
                                         </div>
                                     </div>
                                 </div>
-                                </a>
+                                </Link>
                                 <Popup />
                             </div>
                             <div className='col-lg-4'>
-                                <a href='/productSimilar'>
+                                <Link to='/productSimilar'>
                                 <div class="NFTbox clickable">
                                     <div>
                                         <video class="video" poster="https://lh3.googleusercontent.com/J77suY331NNIX_uaemxKgEVInhXYahCK-UI0Fx-F9FHikxS2-89sjG08Cm7kOgqJpZzd9eD42cU8U81Fctf59V0PB0Sm7yDcw--B" playsinline="" autoplay="" loop=""><source src="https://client-metadata.ether.cards/embed/lamelo/1857" /></video>
@@ -178,7 +179,7 @@ export default function CoinComp() {
                                         </div>
                                     </div>
                                 </div>
-                                </a>
+                                </Link>
                                 <Popup />
                             </div>
                         </div>
@@ -200,7 +201,7 @@ export default function CoinComp() {
                         </div>
                         <div className='row'>
                             <div className='col-lg-4'>
-                                <a href='/productSimilar'>
+                                <Link to='/productSimilar'>
                                 <div class="NFTbox clickable">
                                     <div className='nftimg'>
                                     <img class="image" src="https://lh3.googleusercontent.com/nXRYmQhyreLR5FhVLSWoTowWOXJAwc0KU5F4tI6I64l-n8DvlSdI6bT8P7Lqsqj6bh1GU815WfBLCynu3Fw8lG3v7x9ikULu1gl7" alt=""/>
@@ -214,11 +215,11 @@ export default function CoinComp() {
                                         </div>
                                     </div>
                                 </div>
-                                </a>
+                                </Link>
                                 <Popup />
                             </div>
                             <div className='col-lg-4'>
-                                <a href='/productSimilar'>
+                                <Link to='/productSimilar'>
                                 <div class="NFTbox clickable">
                                     <div>
                                         <video class="video" poster="https://lh3.googleusercontent.com/eXsUaCoMEsyVQqHef6h7bCjQFutUDTls3ygToKCOIzYT660QaUYUkEVogup4x1STdiiCjKqboYzZ6iPP0PhJUQ2CNHTsaGPxbRv8" playsinline="" autoplay="" loop=""><source src="https://client-metadata.ether.cards/embed/lamelo/1857" /></video>
@@ -232,11 +233,11 @@ export default function CoinComp() {
                                         </div>
                                     </div>
                                 </div>
-                                </a>
+                                </Link>
                                 <Popup />
                             </div>
                             <div className='col-lg-4'>
-                                <a href='/productSimilar'>
+                                <Link to='/productSimilar'>
                                 <div class="NFTbox clickable">
                                     <div className='nftimg'>
                                     <img class="image" src="https://lh3.googleusercontent.com/us9D6ZL5SpXa2sGq_L1hTHjylBAeOmeY9Ko6rHe2A6YJcX1npm4R7P_V_X78WPeKxKNuQN3l3ANSD-7RGwBF6FqPPUhS9cW6ekF-WA" alt=""/>
@@ -250,7 +251,7 @@ export default function CoinComp() {
                                         </div>
                                     </div>
                                 </div>
-                                </a>
+                                </Link>
                                 <Popup />
                             </div>
                         </div>

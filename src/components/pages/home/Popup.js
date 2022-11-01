@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import cancel from '../../images/cancel.svg'
 import menuoption from '../../images/menuoption.svg'
 
@@ -31,8 +32,8 @@ const Popup = () => {
                         <div>
                             <div class="NFT-menu" >
                                 <ul className="nftmenulist">
-                                    <li><a href="/productSimilar">RabbitHole</a></li>
-                                    <li><a href="/productSimilar">BizarroWorld</a></li>
+                                    <li><Link to="/productSimilar">RabbitHole</Link></li>
+                                    <li><Link to="/productSimilar">BizarroWorld</Link></li>
                                     <li><a href="https://opensea.io/assets/ethereum/0x139b522955d54482e7662927653abb0bfb6f19ba/1857" target="_blank">View on OpenSea</a></li>
                                     <li><a href="https://etherscan.io/nft/0x139b522955d54482e7662927653abb0bfb6f19ba/1857" target="_blank">View on Etherscan</a></li>
                                 </ul>

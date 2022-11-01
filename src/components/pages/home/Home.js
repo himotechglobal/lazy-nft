@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Tabs, { Tab } from 'react-best-tabs';
-import 'react-best-tabs/dist/index.css';
-import Button from 'react-bootstrap/Button';
-import Collapse from 'react-bootstrap/Collapse';
+// import 'react-best-tabs/dist/index.css';
 import Header from '../header'
 import createac from '../../images/createac.png'
 import wallet from '../../images/wallet.png'
