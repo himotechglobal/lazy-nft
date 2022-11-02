@@ -189,6 +189,27 @@
 }
 
 @media(max-width: 580px) {
+    .token-main-box {
+        width: 100%;
+        margin: 0px;
+    }
+    .newlater-box {
+        padding: 10px;
+        width: 100%;
+        margin: 0px;
+    }
+    .newslater-hding > h1 {
+        margin-top: 40px;
+    }
+    .userbutn {
+        margin-top: 20px;
+    }
+    .sidebarIconToggle {
+        right: 20px;
+    }
+    #sidebarMenu {
+        margin-top: 56px;
+    }
     .nftimg > img {
         height: 336px;
     }

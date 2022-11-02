@@ -18,7 +18,9 @@ import Grid from '@mui/material/Grid';
 import Tooltip from '@mui/material/Tooltip';
 import qmark from '../../images/qmark.svg'
 import ethicon from '../../images/ethicon.svg'
-
+import uniswap from '../../images/uniswap.png'
+import news1 from '../../images/news1.gif'
+import Social from '../Social'
 
 const Wallet = () => {
     const [show, setShow] = useState(false);
@@ -175,10 +177,83 @@ const Wallet = () => {
                                     <div className="reviewswap">
                                         <a href="#">Review swap</a>
                                     </div>
-
+                                    <div className='uniswap'>
+                                        <a href="#"><span><img src={uniswap} /></span>Powered by the Uniswap protocol</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div className='newslater-wrp'>
+                            <div className='newslater-hding'>
+                                <h1>Recent Newsletters</h1>
+                            </div>
+                            <div className='newlater-box-wrp'>
+                                <a href='#'>
+                                <div className='newlater-box'>
+                                    <div className='newslater-left'>
+                                        <img src={news1}/>
+                                    </div>
+                                    <div className='newslater-cont'>
+                                        <h3>Newsletter #78</h3>
+                                        <p>Friday Beers + Reader Questions</p>
+                                    </div>
+                                </div>
+                                </a>
+                                <a href='#'>
+                                <div className='newlater-box'>
+                                    <div className='newslater-left'>
+                                        <img src={news1}/>
+                                    </div>
+                                    <div className='newslater-cont'>
+                                        <h3>Newsletter #78</h3>
+                                        <p>Friday Beers + Reader Questions</p>
+                                    </div>
+                                </div>
+                                </a>
+                                <a href='#'>
+                                <div className='newlater-box'>
+                                    <div className='newslater-left'>
+                                        <img src={news1}/>
+                                    </div>
+                                    <div className='newslater-cont'>
+                                        <h3>Newsletter #78</h3>
+                                        <p>Friday Beers + Reader Questions</p>
+                                    </div>
+                                </div>
+                                </a>
+                                <a href='#'>
+                                <div className='newlater-box'>
+                                    <div className='newslater-left'>
+                                        <img src={news1}/>
+                                    </div>
+                                    <div className='newslater-cont'>
+                                        <h3>Newsletter #78</h3>
+                                        <p>Friday Beers + Reader Questions</p>
+                                    </div>
+                                </div>
+                                </a>
+                                <a href='#'>
+                                <div className='newlater-box'>
+                                    <div className='newslater-left'>
+                                        <img src={news1}/>
+                                    </div>
+                                    <div className='newslater-cont'>
+                                        <h3>Newsletter #78</h3>
+                                        <p>Friday Beers + Reader Questions</p>
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div className='newslater-hding'>
+                                <h1>Share</h1>
+                            </div>
+                            <div className="userbutn">
+                            <Link to="#">lazy.com/jasim</Link>
+                        </div>
+                   <div className='social-w'>
+                   <Social/>
+                   </div>
                     </div>
                 </div>
             </div>
