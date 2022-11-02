@@ -9,9 +9,9 @@ import Signup from'./components/pages/register/Signup'
  import Login from './components/pages/register/Login'
  import Reset from './components/pages/register/Reset'
  import Wallet from './components/pages/walletpage/Wallet.js'
-
-
-
+import Explore from './components/pages/explore/Explore'
+import MyPortfolio from './components/pages/myportfolio/MyPortfolio'
+import HiddenNft from './components/pages/hiddennft/HiddenNft'
 
 
 
@@ -26,6 +26,9 @@ function App() {
 				<Route exact path="/productSimilar" name="ProductSimilar Page" element={<ProductSimilar/>} />
 				<Route exact path="/bizardworld" name="BizardWorld Page" element={<BizardWorld/>} />
 				<Route exact path="/wallet" name="Wallet Page" element={<Wallet/>} />
+				<Route exact path="/explore" name="Explore Page" element={<Explore/>} />
+				<Route exact path="/myportfolio" name="MyPortfolio Page" element={<MyPortfolio/>} />
+				<Route exact path="/hidden_nft" name="HiddenNft Page" element={<HiddenNft/>} />
 				<Route exact path="/signup" name="Signup Page" element={<Signup/>} />
 				<Route exact path="/login" name="Login Page" element={<Login/>} />
 				<Route exact path="/reset" name="Reset Page" element={<Reset/>} />

@@ -1,59 +1,145 @@
-import React, { useEffect } from 'react';
+import * as React from 'react';
 import { Link } from 'react-router-dom';
-import '../css/style.css'
-import '../css/responsive.css'
+import { styled, useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import MuiAppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import CssBaseline from '@mui/material/CssBaseline';
+import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import CloseIcon from '@mui/icons-material/Close';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
 
+const drawerWidth = 240;
 
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
+    ({ theme, open }) => ({
+        flexGrow: 1,
 
+        padding: theme.spacing(3),
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        marginRight: -drawerWidth,
+        ...(open && {
+            transition: theme.transitions.create('margin', {
+                easing: theme.transitions.easing.easeOut,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+            marginRight: 0,
 
+        }),
+    }),
+);
 
-const header3 = () => {
+const AppBar = styled(MuiAppBar, {
+    shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
+backgroundColor : '#1b1c1e !important',
+zIndex : '100 !important',
+    transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+    }),
+    ...(open && {
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
 
+        }),
+        marginRight: drawerWidth,
+    }),
+}));
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+    backgroundColor : "#000 !important"
+
+}));
+
+export default function header3() {
+    const theme = useTheme();
+    const [open, setOpen] = React.useState(false);
+
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    };
+
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
 
     return (
-        <div className="border-b">
-            <div className="container-fluid">
-                <div className="header-box">
-                    <div className="header-c2">
-                        <div className="header-c1">
-                            <div className="logo-box">
-                                <Link to="/">Lazy</Link>
-                            </div>
+        <Box sx={{ display: 'flex' }}  >
+
+            <AppBar style={{ backgroundColor: '#0000', padding: '10px 0px', zIndex: '100 !important' }} position="fixed" open={open}>
+                <Toolbar>
+                    <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
+                        <div className="logo-box">
+                            <Link to="/">Lazy</Link>
                         </div>
-                        <div>
-                        <div class="header"></div>
-                        <input type="checkbox" class="openSidebarMenu" id="openSidebarMenu" />
-                        <label for="openSidebarMenu" class="sidebarIconToggle">
-                            <div class="spinner diagonal part-1"></div>
-                            <div class="spinner horizontal"></div>
-                            <div class="spinner diagonal part-2"></div>
-                        </label>
-                        <div id="sidebarMenu">
-                            <ul class="sidebarMenuInner">
-                                <li><a href="#explore">Explore</a></li>
-                                <li><a href="#explore">My Settings</a></li>
-                                <li><a href="#explore">My Portfolio</a></li>
-                                <li><a href="#explore">Hidden NFTs</a></li>
-                                <li><a href="#explore">Sign Out</a></li>
-                            </ul>
-                        </div>
+                    </Typography>
+                    <IconButton
 
-                    </div>
+                        color="inherit"
+                        aria-label="open drawer"
+                        edge="end"
+                        onClick={handleDrawerOpen}
+                        sx={{ ...(open && { display: 'none' }) }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
 
+            <Drawer
+                sx={{
+                    width: drawerWidth,
 
+                    flexShrink: 0,
+                    '& .MuiDrawer-paper': {
+                        width: drawerWidth,
+                        backgroundColor: '#000 !important',
+                    },
+                }}
+                variant="persistent"
+                anchor="right"
 
-                    </div>
-                    
+                open={open}
+            >
+                <DrawerHeader >
+                    <IconButton onClick={handleDrawerClose}>
+                        {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <CloseIcon style={{ color: '#fff' }} />}
+                    </IconButton>
+                </DrawerHeader>
+                <Divider />
+                <ul class="sidebarMenuInner">
+                    <li><Link to="/explore">Explore</Link></li>
+                    <li><Link to="/wallet">My Settings</Link></li>
+                    <li><Link to="/myportfolio">My Portfolio</Link></li>
+                    <li><Link to="/hidden_nft">Hidden NFTs</Link></li>
+                    <li><Link to="/">Sign Out</Link></li>
+                </ul>
+                <Divider />
 
-                </div>
-
-
-            </div>
-        </div>
+            </Drawer>
+        </Box>
     );
-
 }
-
-
-export default header3;
-

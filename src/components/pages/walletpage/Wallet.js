@@ -21,6 +21,7 @@ import ethicon from '../../images/ethicon.svg'
 import uniswap from '../../images/uniswap.png'
 import news1 from '../../images/news1.gif'
 import Social from '../Social'
+ 
 
 const Wallet = () => {
     const [show, setShow] = useState(false);
@@ -99,7 +100,7 @@ const Wallet = () => {
 
                         <div className="token-main-box">
                             <div className="connect-wallet">
-                                <a href="#">Connect Wallet</a>
+                               <a href='#'>Connect Wallet</a>
                             </div>
                             <div className="token-box">
                                 <div className="swap-card">

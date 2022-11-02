@@ -653,6 +653,7 @@ body.smr-open .slide-menu-right {
 .coincomp-wrp{
   background-color: #1b1c1e;
   padding-bottom: 50px;
+  margin-top: -1px;
 }
 .bnr-hding > h1{
   text-align: center;
@@ -1104,11 +1105,12 @@ background-color: #000;
   letter-spacing: 1.25px;
 }
 #sidebarMenu {
+  z-index: 10;
   height: 100%;
   position: fixed;
   right: 0;
   width: 250px;
-  margin-top: 60px;
+  margin-top: -16px;
   transform: translateX(250px);
   transition: transform 250ms ease-in-out;
   background-color: #24262a;
@@ -1213,6 +1215,7 @@ input[type=checkbox]:checked ~ .sidebarIconToggle > .diagonal.part-2 {
 .walletpage {
   padding: 80px 0px;
   background-color: #1b1c1e;
+  margin-top: 60px;
 }
 .wallet-hding{
   display: flex;
@@ -1691,5 +1694,63 @@ text-align: center;
  .social-w{
   margin-top: 40px;
  }
+ .explore-wrp{
+  padding-top: 50px;
+ }
+ .myportfolio {
+  padding: 30px 0px 80px 0px;
+    background-color: #1b1c1e;
+    height: 100vh;
+    margin-top: 84px;
+}
+.edit-profile2 {
+  text-align: center;
+  margin-top: 10px;
+}
+.edit-profile2 > a {
+  display: inline-block;
+  background-color: #323335;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 15px;
+  transition: 0.4s;
+  font-weight: 500;
+  text-align: center;
+}
+.edit-profile2 > a:hover {
+  transform: translateY(-6px);
+  color: #fff;
+}
+.edit-profile2 > p {
+  margin-top: 20px;
+}
+.notadd-w{
+  text-align: center;
+}
+.notadd-w > p{
+  margin-top: 40px;
+}
+.fade{
+  background-color: rgba(0, 0, 0, 0.318) !important;
+}
+.profilemr{
+  margin-top: 60px;
+}
+ 
+.modal-90w {
+  width: 20% !important;
+  max-width: none!important;
+  margin-right: 0px !important;
+  margin-top: 0px !important;
+  
+}
+ 
+.sidebar-menu > a > img{
+  width: 30px;
+}
+.modal-content{
+  z-index: 10000;
+}
 /* swap closed here */
 /* walletpage closed here */
