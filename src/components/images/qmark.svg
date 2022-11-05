@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29">
-  <g id="Group_1" data-name="Group 1" transform="translate(50 -163)">
-    <g id="Ellipse_1" data-name="Ellipse 1" transform="translate(-50 163)" fill="none" stroke="#607af1" stroke-width="2">
-      <circle cx="14.5" cy="14.5" r="14.5" stroke="none"/>
-      <circle cx="14.5" cy="14.5" r="13.5" fill="none"/>
-    </g>
-    <path id="Icon_open-question-mark" data-name="Icon open-question-mark" d="M4.888,0A5.114,5.114,0,0,0,1.168,1.306,4.318,4.318,0,0,0,0,3.839L1.979,4.1a2.4,2.4,0,0,1,.613-1.366,2.939,2.939,0,0,1,2.3-.752A3.492,3.492,0,0,1,7.3,2.652a1.654,1.654,0,0,1,.554,1.306c0,1.643-.673,2.1-1.662,2.968a5.641,5.641,0,0,0-2.3,4.453v.495H5.878v-.495c0-1.643.613-2.1,1.6-2.968A5.675,5.675,0,0,0,9.836,3.958a3.8,3.8,0,0,0-1.168-2.79A5.47,5.47,0,0,0,4.888,0ZM3.9,13.853v1.979H5.878V13.853Z" transform="translate(-40 170)" fill="#607af1"/>
-  </g>
-</svg>
