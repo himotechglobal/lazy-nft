@@ -115,7 +115,7 @@ const Wallet = () => {
           </Grid>):(
             <Grid item md={12}  sx={{marginTop:5,}}>
             <Box className={classes.bag5}>
-            <Typography  component={'div'} variant='h6'>No Wallets Added Yet {" "}</Typography>
+            <Typography  component={'div'} variant='h6'>No Wallets Added Yets {" "}</Typography>
             </Box>
             </Grid>
           )}
