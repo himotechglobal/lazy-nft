@@ -1,35 +1,37 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import './App.css';
-
-import Home from './components/pages/home/Home'
-import ProductSimilar from './components/pages/productsimilar/ProductSimilar'
-import BizardWorld from './components/pages/bizardworld/BizardWorld'
-import Signup from'./components/pages/register/Signup'
- import Login from './components/pages/register/Login'
- import Reset from './components/pages/register/Reset'
- 
-
-
-
-
+import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/js/bootstrap.js";
+import Home from "./pages/Home/Home";
+import Profile from "./pages/Profile/Profile";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import HiddenNFT from "./components/HiddenNFT/HiddenNFT";
+import Explore from "./pages/Explore/Explore";
+import NFTdetailpage from "./pages/NFTdetailpage/NFTdetailpage";
+import Wallet from "./pages/Wallet/Wallet";
+import Reset from "./pages/Register/Reset";
+import Signup from "./pages/Register/Signup";
+import Login from "./pages/Register/Login";
+import Forget from "./pages/Register/Forget";
 
 function App() {
-
-
-	return (
-		<Router>
-			<div>
-				<Route exact path="/" name="Home Page" component={Home} />
-				<Route exact path="/productSimilar" name="ProductSimilar Page" component={ProductSimilar} />
-				<Route exact path="/bizardworld" name="BizardWorld Page" component={BizardWorld} />
-				<Route exact path="/signup" name="Signup Page" component={Signup} />
-				<Route exact path="/login" name="Login Page" component={Login} />
-				<Route exact path="/reset" name="Reset Page" component={Reset} />
-			</div>
-		</Router>
-	);
-
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route exact path="/profile" element={<Profile />} />
+          <Route exact path="/hidden-nft" element={<HiddenNFT />} />
+          <Route exact path="/explore" element={<Explore />} />
+          <Route exact path="/wallet" element={<Wallet />} />
+          <Route exact path="/nftdetailpage/:id" element={<NFTdetailpage />} />
+          <Route exact path="/signup" name="Signup Page" element={<Signup />} />
+          <Route exact path="/login" name="Login Page" element={<Login />} />
+          <Route exact path="/forget" name="Reset Page" element={<Forget />} />
+          <Route exact path="/reset" element={<Reset />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 }
-
 export default App;
