@@ -100,11 +100,11 @@ const Wallet = () => {
           </Grid>
           {
             (isConnected && address) ?(
-          <Grid container  spacing={3} sx={{ boxShadow: 1,marginTop:5}}>
+          <Grid container  spacing={3} sx={{marginTop:5, boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",borderRadius:"15px"}}>
           <Grid item md={10} >
               <Box className={classes.bag12}>
-                <Typography variant="h6" sx={{fontWeight:'bold'}}>{chain.name}</Typography>
-                <Typography>{address}</Typography>
+                <Typography variant="h6" sx={{fontWeight:'bold',wordBreak: "break-all"}}>{chain.name}</Typography>
+                <Typography sx={{wordBreak: "break-all"}}>{address}</Typography>
               </Box>
             </Grid>
             <Grid item md={2}>

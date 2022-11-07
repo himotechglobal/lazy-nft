@@ -13,9 +13,10 @@ import { makeStyles } from "@mui/styles";
 import Footer from "../../components/Footer/Footer";
 import { useParams } from "react-router-dom";
 import Data from "../Explore/ExploreData";
+import { Link } from "react-router-dom";
 const useStyle = makeStyles({
   wrap12: {
-    padding: "6rem 0 0",
+    padding: "6rem 0",
     width: "100%",
     backgroundColor: "#f0f0f0",
     display: "flex",
@@ -41,7 +42,7 @@ const useStyle = makeStyles({
       fontWeight: "600",
       margin: "1rem 0 0 0",
     },
-    "& Button": {
+    "& a": {
       display: "block",
       margin: "19px 0",
       border: "2px solid #000",
@@ -50,7 +51,7 @@ const useStyle = makeStyles({
       color: "#000",
       fontWeight: "bold",
     },
-    "& Button:hover": {
+    "& a:hover": {
       backgroundColor: "#000",
       color: "#fff",
     },
@@ -171,8 +172,8 @@ const NFTdetailpage = () => {
                   <Box>
                     <Stack spacing={2} direction="row" justifyContent="center">
                       <Box>
-                        <button>Veiw on OpenSea</button>
-                        <button>Veiw on EtherScan</button>
+                        <Link to="">Veiw on OpenSea</Link>
+                        <Link to="">Veiw on EtherScan</Link>
                       </Box>
                     </Stack>
                   </Box>
@@ -229,6 +230,20 @@ const NFTdetailpage = () => {
             {/* <Avatar src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/2048px-2021_Facebook_icon.svg.png"></Avatar> */}
           </Grid>
         </Container>
+
+        <Box className={classes.wrap13}>
+              <Container>
+                <Grid>
+                  <Box>
+                    <Stack spacing={2} direction="row" justifyContent="center">
+                      <Box>
+                        <Link to="/bizarro-world">BizarroWorld</Link>
+                      </Box>
+                    </Stack>
+                  </Box>
+                </Grid>
+              </Container>
+            </Box>
       </Box>
       <Footer />
     </>

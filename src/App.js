@@ -13,6 +13,8 @@ import Reset from "./pages/Register/Reset";
 import Signup from "./pages/Register/Signup";
 import Login from "./pages/Register/Login";
 import Forget from "./pages/Register/Forget";
+import BizarroWorld from "./pages/BizarroWorld/BizarroWorld";
+import Rabbithole from "./pages/Rabbithole/Rabbithole";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
           <Route exact path="/login" name="Login Page" element={<Login />} />
           <Route exact path="/forget" name="Reset Page" element={<Forget />} />
           <Route exact path="/reset" element={<Reset />} />
+          <Route exact path="/bizarro-world" element={<BizarroWorld />} />
+          <Route exact path="/rabit-hole" element={<Rabbithole />} />
         </Routes>
       </BrowserRouter>
     </div>

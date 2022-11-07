@@ -75,3 +75,10 @@
 @media (max-width: 1399.98px) { 
     
  }
+
+ .css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root{
+    padding: 0 !important;
+ }
+ .css-1p823my-MuiListItem-root{
+    padding: 0 26px;
+ }

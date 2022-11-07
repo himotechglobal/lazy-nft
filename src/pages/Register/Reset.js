@@ -41,6 +41,7 @@ const useStyle = makeStyles({
     "@media (maxwidth: 991.98px)": {},
     "@media (maxwidth: 1199.98px)": {},
   },
+  
 });
 const Reset = () => {
   const formik = useFormik({

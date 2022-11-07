@@ -6,9 +6,34 @@ import { login } from "../../api/ApiCall/login";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {TextField,Button} from '@mui/material'
-
+import {TextField,Button,Box} from '@mui/material'
+import { makeStyles } from "@mui/styles";
+const useStyle = makeStyles({
+  signupbox: {
+    width: "28%", margin: "5rem auto",
+    // borderRadius:"30px",
+  },
+  btn:{
+    textAlign:"center",
+    margin:"2rem 0",
+      "& button":{
+        background: "#000", padding: "10px 27px", border: "none", borderRadius: "36px"
+      }
+  },
+  signup:{
+    margin:"3rem 0",
+      "& h1":{
+        fontSize: "2rem", fontWeight: "500"
+      }
+  },
+  typ:{
+    color:"#000",
+    textDecoration:"underline !important",
+    fontSize:"1rem"
+  }
+});
 const Login = () => {
+  const classes = useStyle();
   const navigate = useNavigate();
   const { isError, error, isLoading, mutateAsync, isSuccess } = useMutation(
     "login",
@@ -60,44 +85,61 @@ const Login = () => {
       <Header />
       <section id="signup">
         <div className="container">
-          <div className="signup-hding">
+          <div className={classes.signup}>
             <h1>Log In</h1>
           </div>
-        <form onSubmit={formik.handleSubmit} className="signupbox">
+        <form onSubmit={formik.handleSubmit} className={classes.signupbox}>
         <TextField
-          fullWidth
+          // fullWidth
           id="email"
           name="email"
-          label="Email"
+          placeholder="Email"
+          variant="standard"
           value={formik.values.email}
           onChange={formik.handleChange}
           error={formik.touched.email && Boolean(formik.errors.email)}
           helperText={formik.touched.email && formik.errors.email}
+          sx={{display:"flex",margin: "12px", boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",   borderRadius: "35px", }}
+              InputProps={{
+                disableUnderline: true,
+              }}
         />
         <TextField
-          fullWidth
+          // fullWidth
           id="password"
           name="password"
-          label="Password"
+          placeholder="Password"
+          variant="standard"
           type="password"
           value={formik.values.password}
           onChange={formik.handleChange}
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
+          sx={{display:"flex",margin: "12px", boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",    borderRadius: "35px", }}
+              InputProps={{
+                disableUnderline: true,
+              }}
         />
  
-            <Button color="primary" variant="contained" fullWidth className="signpubutn" type="submit">
-              Login
-            </Button>
+ <Box className={classes.btn}>
+            <button
+              variant="contained"
+              color="primary"
+              type="submit"
+              className="btn btn-primary"
+            >
+             login
+            </button>
+            </Box>
             <p className="sig-pr">
               Don't have an account?
               <span>
-                <Link to="/signup"> Sign up.</Link>
+                <Link to="/signup" className={classes.typ}> Sign up.</Link>
               </span>
             </p>
-            <p className="sig-pr">
+            <p className="sig-pr" sx={{textAlign:"center"}}>
               <span>
-                <Link to="/forget"> Forgot your password?</Link>
+                <Link to="/forget" className={classes.typ} > Forgot your password?</Link>
               </span>
             </p>
           </form>
