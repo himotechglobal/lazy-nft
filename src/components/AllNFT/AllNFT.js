@@ -7,8 +7,11 @@ import {
   Checkbox,
   FormGroup,
   FormControlLabel,
+  CircularProgress
 } from "@mui/material";
 import { makeStyles } from "@mui/styles"
+import { data } from "autoprefixer";
+import NftBox from "../../pages/Explore/NftBox";
 
 const useStyle = makeStyles({
   wrap5: {
@@ -77,10 +80,8 @@ const useStyle = makeStyles({
     margin: "0 auto",
   },
 });
-const AllNFT = () => {
+const AllNFT = ({nfts}) => {
   const [show, setShow] = useState(false);
-  const [show1, setShow1] = useState(false);
-  const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
   const classes = useStyle();
   return (
@@ -104,114 +105,23 @@ const AllNFT = () => {
                 <Grid item md={12}>
                   <Typography variant="h5">Ethereum NFTs</Typography>
                 </Grid>
-                <Grid item md={4}>
-                  <Box className={classes.bag8}>
-                    <Box className={classes.bag9}>
-                      <Box className={classes.bag7}>
-                        <button
-                          className="btn btn-primary"
-                          onClick={() => setShow(!show)}
-                        >
-                          {" "}
-                          {show ? (
-                            <i class="bi bi-x-lg"></i>
-                          ) : (
-                            <i class="bi bi-three-dots"></i>
-                          )}
-                        </button>
-                      </Box>
+                { nfts.length>0 ?  (nfts.map((nft,index)=>{return (
 
-                      {show ? (
-                        <Box className={classes.bag10}>
-                          <p>RabbitHole</p>
-                          <p>BizarroWorld</p>
-                          <p>veiw on OpenSea</p>
-                          <p>veiw on EtherScan</p>
-                        </Box>
-                      ) : null}
-                    </Box>
-                    <img
-                      src="https://i.seadn.io/gae/unh12ZbfD9JszUXbyWG55N3f0nAR4QihGydoVy4aiFDqck7o5DGFROeIpiVdEO7Jy7uQtohw4rHHaNUApB4LDDBfoilHp6cs1itN?w=500&auto=format"
-                      alt=""
-                    />
-                    <Box>
-                      <h6>#3553</h6>
-                      <p style={{textAlign:"center"}}>"sleepy"</p>
-                    </Box>
-                  </Box>
+                   <Grid key={index} item md={4} sm={6} >
+                        <NftBox data={nft}/>
+                   </Grid>
+                )})):(
+                  <Container>
+                <Grid>
+                  <Grid>
+                  <Box sx={{ textAlign: 'center' }}>
+              <CircularProgress />
+              </Box>
+                  </Grid>
                 </Grid>
-                <Grid item md={4}>
-                  <Box className={classes.bag8}>
-                    <Box className={classes.bag9}>
-                      <Box className={classes.bag7}>
-                        <button
-                          className="btn btn-primary"
-                          onClick={() => setShow1(!show1)}
-                        >
-                          {" "}
-                          {show1 ? (
-                            <i class="bi bi-x-lg"></i>
-                          ) : (
-                            <i class="bi bi-three-dots"></i>
-                          )}
-                        </button>
-                      </Box>
-
-                      {show1 ? (
-                        <Box className={classes.bag10}>
-                          <p>RabbitHole</p>
-                          <p>BizarroWorld</p>
-                          <p>veiw on OpenSea</p>
-                          <p>veiw on EtherScan</p>
-                        </Box>
-                      ) : null}
-                    </Box>
-                    <img
-                      src="https://i.seadn.io/gae/unh12ZbfD9JszUXbyWG55N3f0nAR4QihGydoVy4aiFDqck7o5DGFROeIpiVdEO7Jy7uQtohw4rHHaNUApB4LDDBfoilHp6cs1itN?w=500&auto=format"
-                      alt=""
-                    />
-                    <Box>
-                      <h6>#3553</h6>
-                      <p style={{textAlign:"center"}}>"sleepy"</p>
-                    </Box>
-                  </Box>
-                </Grid>
-                <Grid item md={4}>
-                  <Box className={classes.bag8}>
-                    <Box className={classes.bag9}>
-                      <Box className={classes.bag7}>
-                        <button
-                          className="btn btn-primary"
-                          onClick={() => setShow2(!show2)}
-                        >
-                          {" "}
-                          {show2 ? (
-                            <i class="bi bi-x-lg"></i>
-                          ) : (
-                            <i class="bi bi-three-dots"></i>
-                          )}
-                        </button>
-                      </Box>
-
-                      {show2 ? (
-                        <Box className={classes.bag10}>
-                          <p>RabbitHole</p>
-                          <p>BizarroWorld</p>
-                          <p>veiw on OpenSea</p>
-                          <p>veiw on EtherScan</p>
-                        </Box>
-                      ) : null}
-                    </Box>
-                    <img
-                      src="https://i.seadn.io/gae/unh12ZbfD9JszUXbyWG55N3f0nAR4QihGydoVy4aiFDqck7o5DGFROeIpiVdEO7Jy7uQtohw4rHHaNUApB4LDDBfoilHp6cs1itN?w=500&auto=format"
-                      alt=""
-                    />
-                    <Box>
-                      <h6>#3553</h6>
-                      <p style={{textAlign:"center"}}>"sleepy"</p>
-                    </Box>
-                  </Box>
-                </Grid>
+             </Container>
+                )
+                }
               </>
             ) : null}
           </Grid>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import {
   Box,
   Container,
@@ -11,6 +11,10 @@ import {
 import { makeStyles } from "@mui/styles";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import {updateProfilePic} from "../../api/ApiCall/updateProfilePic"
+import { useMutation } from "react-query";
+import { UserContext } from "../../context/User/UserContext";
+import {actionTypes} from "../../context/User/UserReducer";
 const useStyle = makeStyles({
   wrap7: {
     // color:"#000",
@@ -92,34 +96,33 @@ const useStyle = makeStyles({
   },
 });
 const NftBox = (props) => {
-  // console.log("rtyfgh",id)
+  const [, dispatch] = useContext(UserContext);
   const navigate = useNavigate()
   const [show, setShow] = useState(false);
   const classes = useStyle();
 
   const clickable = (()=> {
-    // const id = props.data.id;
-    // console.log("trygh",id)
-    // navigate(`/nftdetailpage/${props.data.id}`)
-    navigate(`/nftdetailpage/${props.data.id}`)
-    console.log("rtfgh",navigate)
+    navigate(`/nftdetailpage/${props.data.name.split("#")[1]}`)
   })
-  // const {id } = props;
-  // console.log("uytfkgjyhk",props)
+  const {mutateAsync}=useMutation(
+    "updateProfilePic",
+    updateProfilePic,{
+    onSuccess:(data)=>{
+      dispatch({type:actionTypes.UPDATE_PROFILE_PIC,value:data?.responseResult})
+    }
+  }
+  )
   return (
     <>
-  {
-    
-    props.dfg ? 
-    <Container key={props.data.id} >
+    <Container >
     <Grid container spacing={3}>
       <Grid item lg={12} >
       <Box>
-          <Typography variant="h3" style={{margin:"2rem 0 0 0"}}>{props.data.title}</Typography>
+          {/* <Typography variant="h3" style={{margin:"2rem 0 0 0"}}></Typography> */}
           {/* <Typography variant="h3" style={{margin:"2rem 0 0 0"}}>{props.data1.title}</Typography> */}
         </Box>
       </Grid>
-      <Grid item md={12} style={{margin:props.data.margin}} >
+      <Grid  item md={12} style={{margin:props.data.margin}} >
         <Box className={classes.bag8}>
           <Box className={classes.bag9}>
             <Box className={classes.bag7}>
@@ -137,6 +140,13 @@ const NftBox = (props) => {
 
             {show ? (
               <Box className={classes.bag10}>
+               <p onClick={async()=>{
+                try{
+                  await mutateAsync({token:localStorage.getItem("token"),value:props.data.image.replace("ipfs://","https://ipfs.io/ipfs/")})
+                }catch(error){
+
+                }
+               }}>Make Profile Picture</p>
                 <p>RabbitHole</p>
                 <p>BizarroWorld</p>
                 <p>veiw on OpenSea</p>
@@ -145,11 +155,11 @@ const NftBox = (props) => {
             ) : null}
           </Box>
           {/* <Link to={`/nftdetailpage/${props.data.id}`}> */}
-          <img src={props.data.img} alt=""  onClick={clickable}/>
+          <img src={props.data.image?`${ props.data.image.replace("ipfs://","https://ipfs.io/ipfs/")}`:""} alt=""  onClick={clickable}/>
           {/* </Link> */}
           {/* <img src={props.data1.img} alt="" /> */}
-          <Box>
-            <h6>{props.data.decs}</h6>
+          <Box onClick={clickable}>
+            <h6>{props.data.description}</h6>
             <p>{props.data.name}</p>
           </Box>
         </Box>
@@ -157,10 +167,12 @@ const NftBox = (props) => {
       </Grid>
     </Container>
 
-    : null
-  }
     </>
   );
 };
 
 export default NftBox;
+
+
+
+// const metadata="{"name":"CHECK","description":"CHECK","properties":{"cover_url":null,"artist":null,"public_profile_link":null,"height":null,"breadth":null,"length":null,"weight":null,"tags":null},"image":"https://ipfs.io/ipfs/QmPVm6HMwVBRGsUH9HDCoaNMLciff361vwk3pT8w7MGQSQ","preview":"https://ipfs.io/ipfs/QmPVm6HMwVBRGsUH9HDCoaNMLciff361vwk3pT8w7MGQSQ"}"

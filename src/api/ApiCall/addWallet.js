@@ -1,13 +1,17 @@
 import axios from "axios";
 import ApiConfigs from "../ApiConfig";
 
-export const viewProfile = async (token) => {
+export const addWallet = async ({token,networkName,address}) => {
     try {
       const { data } = await axios({
-        method:'GET',
-        url:ApiConfigs.viewProfile, 
+        method:'POST',
+        url:ApiConfigs.addWallet, 
         headers:{
           'authorization':`Bearer ${token}`,
+        },
+        data:{
+          networkName:networkName,
+          address:address
         }
     });
     return data;

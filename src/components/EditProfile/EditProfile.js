@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext,useState } from "react";
 import {
   Box,
   Button,
@@ -15,10 +15,13 @@ import * as Yup from "yup";
 // import Button from 'react-bootstrap/Button';
 import Modal from "react-bootstrap/Modal";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { editProfile } from "../../api/ApiCall/editProfile";
+import { viewProfile } from "../../api/ApiCall/viewProfile";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
+import { UserContext } from "../../context/User/UserContext";
+import {actionTypes} from "../../context/User/UserReducer";
 const useStyle = makeStyles({
   //Wrap 3 Start
 
@@ -112,16 +115,16 @@ const useStyle = makeStyles({
   },
 });
 
-const EditProfile = () => {
-  const { isError, error, isLoading, mutateAsync, isSuccess } = useMutation(
+const EditProfile = ({heading}) => {
+  const [{userData}, dispatch] = useContext(UserContext);
+  const {isLoading, mutateAsync } = useMutation(
     "editProfile",
     editProfile,
     {
       onSuccess: (data) => {
-        // dispatch({ type: actionTypes.SET_TOKEN, value: data.token });
         try {
           if (data) {
-            console.log(data);
+            dispatch({ type: actionTypes.UPDATE_USER, value:data?.data});
             toast.success(JSON.stringify("You Profile Update Successfully"));
           } else {
             toast.error(JSON.stringify(data.responseMessage));
@@ -147,7 +150,7 @@ const EditProfile = () => {
       bio: Yup.string()
         .min(0, "Too Short!")
         .max(160, "Too Long!"),
-      twitterName: Yup.string().min(4, "Too Short!").max(12, "Too Long!"),
+      twitterName: Yup.string().min(4, "Too Short!").max(12, "Too Long!").required("Required!"),
       facebookName: Yup.string().min(4, "Too Short").max(12, "Too Long"),
       personalURL: Yup.string().min(4, "Too Short").max(12, "Too Long"),
     }),
@@ -190,7 +193,7 @@ const EditProfile = () => {
           >
             <Grid item md={12}>
               <Box>
-                <Typography variant="h2">My Profile</Typography>
+                <Typography variant="h2">{heading?? " "}</Typography>
               </Box>
             </Grid>
 
@@ -203,9 +206,10 @@ const EditProfile = () => {
             </Grid>
             <Grid item md={12}>
               <Box className={classes.bag5}>
-                <p style={{ margin: "0" }}>@rxctgfjk</p>
+                <p style={{ margin: "0" }}>@{userData?.userName ?? "demo"}</p>
               </Box>
             </Grid>
+     
           </Grid>
         </Container>
       </Box>
@@ -293,7 +297,7 @@ const EditProfile = () => {
                 Picture"
               </p>
               {/* </Box> */}
-              <button type="submit" >
+              <button type="submit"  >
                 Submit
               </button>
               

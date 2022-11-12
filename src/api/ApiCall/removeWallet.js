@@ -1,15 +1,19 @@
 import axios from "axios";
 import ApiConfigs from "../ApiConfig";
 
-export const viewProfile = async (token) => {
+export const removeWallet = async ({token,walletId}) => {
     try {
       const { data } = await axios({
-        method:'GET',
-        url:ApiConfigs.viewProfile, 
+        method:'DELETE',
+        url:ApiConfigs.removeWallet, 
         headers:{
           'authorization':`Bearer ${token}`,
+        },
+        params:{
+            id:walletId
         }
     });
+    // console.log(data);
     return data;
     } catch (error) {
       console.log(error,"hk");

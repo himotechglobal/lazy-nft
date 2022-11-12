@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import Header from '../../components/Header/Header'
-import { useMutation } from "react-query";
+import { useMutation,useQuery } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../api/ApiCall/login";
 import { toast } from "react-toastify";
@@ -8,6 +8,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import {TextField,Button,Box} from '@mui/material'
 import { makeStyles } from "@mui/styles";
+import { UserContext } from "../../context/User/UserContext";
+import {actionTypes} from "../../context/User/UserReducer"
+import { viewProfile } from "../../api/ApiCall/viewProfile";
 const useStyle = makeStyles({
   signupbox: {
     width: "28%", margin: "5rem auto",
@@ -35,16 +38,20 @@ const useStyle = makeStyles({
 const Login = () => {
   const classes = useStyle();
   const navigate = useNavigate();
+  const [, dispatch] = useContext(UserContext);
+
   const { isError, error, isLoading, mutateAsync, isSuccess } = useMutation(
     "login",
     login,
     {
       onSuccess: (data) => {
-        // dispatch({ type: actionTypes.SET_TOKEN, value: data.token });
         try {
           if (data.responseCode === 200) {
-            navigate("/");
+            console.log(data?.responseResult);
+            navigate("/explore");
+            dispatch({ type: actionTypes.SET_TOKEN, value: data.token });
             localStorage.setItem("token", data.token);
+            dispatch({ type: actionTypes.SET_USER, value:data.responseResult});
             toast.success(JSON.stringify("You are Login Successfully"));
           } else {
             toast.error(JSON.stringify(data.responseMessage));
@@ -58,6 +65,14 @@ const Login = () => {
       },
     }
   );
+  // const {refetch}=useQuery(
+  //   ["viewProfile",token],
+  //   ()=>viewProfile(token),{
+  //     onSuccess:(data)=>{
+  //       dispatch({ type: actionTypes.SET_USER, value:data.data});
+  //     }
+  //   }
+  // )
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -151,64 +166,3 @@ const Login = () => {
 
 export default Login;
 
-// import React from "react";
-// import Header2 from '../header2'
-// import { useFormik } from "formik";
-// import * as Yup from 'yup';
-
-// export default function Login() {
-//     const formik = useFormik({
-//       initialValues: {
-//         email: "",
-//         password: "",
-//       },
-//       validationSchema: Yup.object({
-//         email: Yup.string().email("Invalid email format").required("Required!"),
-//         password: Yup.string()
-//           .min(4, "Minimum 4 characters")
-//           .required("Required!")
-//       }),
-//       onSubmit: (values) => {
-//         alert(JSON.stringify(values, null, 2));
-//       }
-//     });
-//     return (
-//        <>
-//          <Header2 />
-//         <section id="signup">
-//         <div className="App">
-//         <h1>Validation with Formik + Yup</h1>
-//         <form onSubmit={formik.handleSubmit}>
-//           <div>
-//             <label>Email</label>
-//             <input
-//               type="email"
-//               name="email"
-//               value={formik.values.email}
-//               onChange={formik.handleChange}
-//             />
-//             {formik.errors.email && formik.touched.email && (
-//               <p>{formik.errors.email}</p>
-//             )}
-//           </div>
-//           <div>
-//             <label>Password</label>
-//             <input
-//               type="password"
-//               name="password"
-//               value={formik.values.password}
-//               onChange={formik.handleChange}
-//             />
-//             {formik.errors.password && formik.touched.password && (
-//               <p>{formik.errors.password}</p>
-//             )}
-//           </div>
-//           <div>
-//             <button type="submit">Submit</button>
-//           </div>
-//         </form>
-//       </div>
-//         </section>
-//        </>
-//     );
-//   }

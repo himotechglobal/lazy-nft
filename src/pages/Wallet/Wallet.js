@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
 import {
   Box,
@@ -10,8 +10,9 @@ import {
   TextareaAutosize,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { useConnectModal,useChainModal } from "@rainbow-me/rainbowkit";
-
+import { useConnectModal, useChainModal } from "@rainbow-me/rainbowkit";
+import { addWallet } from "../../api/ApiCall/addWallet";
+import { viewWallet } from "../../api/ApiCall/viewWallet";
 // import Button from 'react-bootstrap/Button';
 import Modal from "react-bootstrap/Modal";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -19,7 +20,12 @@ import EditProfile from "../../components/EditProfile/EditProfile";
 import Swap from "../../components/Swap/Swap";
 import Newsletter from "../../components/Newsletter/Newsletter";
 import Share from "../../components/Share/Share";
-import { useAccount,useDisconnect,useNetwork } from "wagmi";
+import { useAccount, useDisconnect, useNetwork } from "wagmi";
+import { toast } from "react-toastify";
+import { useMutation, useQuery } from "react-query";
+import { UserContext } from "../../context/User/UserContext";
+import { actionTypes } from "../../context/User/UserReducer"
+import { removeWallet } from "../../api/ApiCall/removeWallet"
 const useStyle = makeStyles({
   wrap2: {
     width: "100%",
@@ -55,7 +61,7 @@ const useStyle = makeStyles({
       background: "#fff",
       color: "#111",
       border: "2px solid black",
-      fontWeight:'bold'
+      fontWeight: 'bold'
     },
     "& Button:hover": {
       background: "#111",
@@ -66,63 +72,159 @@ const useStyle = makeStyles({
   },
 });
 const Wallet = () => {
-  const {openConnectModal}=useConnectModal();
-  const {openChainModal}=useChainModal();
-  const {isConnected,address}=useAccount()
-  const { chain, chains } = useNetwork()
-  const {disconnectAsync}=useDisconnect();
+  const { openConnectModal } = useConnectModal();
+  const { openChainModal } = useChainModal();
+  const { isConnected, address, status, isDisconnected } = useAccount()
+  const { chain } = useNetwork()
+  const { disconnectAsync } = useDisconnect({
+    async onMutate(id) {
+      await handleRemoveWallet?.(id)
+    }
+  });
+  const [{ token, userData }, dispatch] = useContext(UserContext);
 
-  const handleRemoveWallet=async()=>{
-    await disconnectAsync()
+  const { data, refetch, isLoading: walletLoading } = useQuery(
+    ["viewWallet"],
+    viewWallet, {
+    onSuccess: (data) => {
+      try {
+        if (data.success === true) {
+          // console.log(data.responseResult[0]?.wallets[0]);
+          // toast.success(JSON.stringify("You wallets fetched Successfully"));
+        } else {
+          toast.error(JSON.stringify(data));
+        }
+      } catch (error) {
+        toast.error(JSON.stringify(error));
+      }
+    }
+  }
+  );
+
+  const { isError, error, isLoading, mutateAsync, isSuccess } = useMutation(
+    "addWallet",
+    addWallet,
+    {
+      onSuccess: (data) => {
+        try {
+          if (data.success === true) {
+            refetch();
+          } else {
+            // toast.error(JSON.stringify(data.message));
+          }
+        } catch (error) {
+          toast.error(JSON.stringify(error));
+        }
+      },
+      onError: (error, data) => {
+        toast.error(JSON.stringify(error));
+      },
+    }
+  );
+
+  const addWallets = async () => {
+    if(isConnected && chain && address){
+      try {
+        await mutateAsync({ token: localStorage.getItem("token"), networkName: chain.name, address: address })
+      } catch (err) {
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (status === "connected") {
+      addWallets?.()
+    }
+  }, [chain?.name, address,status === "connecting"])
+
+
+
+  const { mutateAsync: mutateAsyncRemoveWallet } = useMutation(
+    "removeWallet",
+    removeWallet, {
+    onSuccess: (data) => {
+      try {
+        if (data.success === true) {
+          // navigate("/wallet");
+          // dispatch({ type: actionTypes.SET_TOKEN, value: data.token });
+          // localStorage.setItem("data", data);
+          // console.log(data);
+          refetch()
+          // toast.success(JSON.stringify("You are signup Successfully"));
+          // dispatch({ type: actionTypes.SET_USER, value: data.responseResult });
+        } else {
+          // toast.error(JSON.stringify(data));
+        }
+      } catch (error) {
+        toast.error(JSON.stringify(error));
+      }
+    }
+  }
+  )
+
+  const handleRemoveWallet = async (walletId) => {
+    try {
+      await mutateAsyncRemoveWallet({ token: localStorage.getItem("token"), walletId: walletId })
+    } catch (err) {
+
+    }
+
   }
   const classes = useStyle();
+
   return (
     <>
       <Header />
       <Box className={classes.wrap2}>
         <Container>
-          <Grid container spacing={2} sx={{justifyContent:{lg:"auto",xs:"space-between",alignItems:"center"}}}>
+          <Grid container spacing={2} sx={{ justifyContent: { lg: "auto", xs: "space-between", alignItems: "center" } }}>
             <Grid item md={6} sm={6}>
               <Box>
-                <Typography variant="h3" sx={{justifyContent:{lg:"auto",xs:"space-between",alignItems:"center",}}}>My Wallets</Typography>
+                <Typography variant="h3" sx={{ justifyContent: { lg: "auto", xs: "space-between", alignItems: "center", } }}>My Wallets</Typography>
               </Box>
             </Grid>
             <Grid item md={6} sm={6}>
               <Box className={classes.bag4}>
-              { (isConnected && address) ?(
-                <Button onClick={openChainModal} size="large" variant="contained"  sx={{borderRadius: 50,textTransform: 'none',}} >Add Wallet</Button>
-              ):(
-                <Button onClick={openConnectModal} size="large" variant="contained"  sx={{borderRadius: 50,textTransform: 'none',}} >Add Wallet</Button>
-              )
-              }
+                {(isConnected && address) ? (
+                  <Button onClick={openChainModal} size="large" variant="contained" sx={{ borderRadius: 50, textTransform: 'none', }} >Add Wallet</Button>
+                ) : (
+                  <Button onClick={() => isDisconnected && openConnectModal()} size="large" variant="contained" sx={{ borderRadius: 50, textTransform: 'none', }} >Add Wallet</Button>
+                )
+                }
               </Box>
             </Grid>
           </Grid>
           {
-            (isConnected && address) ?(
-          <Grid container  spacing={3} sx={{marginTop:5, boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",borderRadius:"15px"}}>
-          <Grid item md={10} >
-              <Box className={classes.bag12}>
-                <Typography variant="h6" sx={{fontWeight:'bold',wordBreak: "break-all"}}>{chain.name}</Typography>
-                <Typography sx={{wordBreak: "break-all"}}>{address}</Typography>
-              </Box>
-            </Grid>
-            <Grid item md={2}>
-            <Box className={classes.bag5}>
-            <Button onClick={handleRemoveWallet} size="large"  sx={{borderRadius: 50,textTransform: 'none',}} variant="submit">Remove</Button>
-            </Box>
-            </Grid>
-          </Grid>):(
-            <Grid item md={12}  sx={{marginTop:5,}}>
-            <Box className={classes.bag5}>
-            <Typography  component={'div'} variant='h6'>No Wallets Added Yets {" "}</Typography>
-            </Box>
-            </Grid>
-          )}
+            (data?.responseResult) ? (
+              <>
+                {data?.responseResult && data?.responseResult[0]?.wallets.map(({ networkName, address, _id }, index) => {
+                  return (
+                    <Grid container key={index} spacing={3} sx={{ marginTop: 5, boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px", borderRadius: "15px" }}>
+                      <Grid item md={10} >
+                        <Box className={classes.bag12}>
+                          <Typography variant="h6" sx={{ fontWeight: 'bold', wordBreak: "break-all" }}>{networkName}</Typography>
+                          <Typography sx={{ wordBreak: "break-all" }}>{address}</Typography>
+                        </Box>
+                      </Grid>
+                      <Grid item md={2}>
+                        <Box className={classes.bag5}>
+                          <Button onClick={async () => await disconnectAsync(_id)} size="large" sx={{ borderRadius: 50, textTransform: 'none', }} variant="submit">Remove</Button>
+                        </Box>
+                      </Grid>
+                    </Grid>)
+                })
+                }
+              </>) : (
+              <Grid item md={12} sx={{ marginTop: 5, }}>
+                <Box className={classes.bag5}>
+                  <Typography component={'div'} variant='h6'>No Wallets Added Yets {" "}</Typography>
+                </Box>
+              </Grid>
+            )}
         </Container>
       </Box>
 
-      <EditProfile />
+      <EditProfile heading="My Profile" />
       <Swap />
       <Newsletter />
       <Share />

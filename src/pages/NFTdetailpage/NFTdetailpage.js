@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Header/Header";
 import {
   Box,
@@ -14,6 +14,12 @@ import Footer from "../../components/Footer/Footer";
 import { useParams } from "react-router-dom";
 import Data from "../Explore/ExploreData";
 import { Link } from "react-router-dom";
+import WOLFPUPS_NFT_ABI from "../../config/WOLFPUPS_NFT_ABI.json"
+import {WOLFPUPS_NFT_address} from "../../config/index";
+import { useQuery } from "react-query";
+import {getUserNFTByTokenURI} from "../../api/ApiCall/getNftByTokenURI"
+import { useContractRead,useContract,useProvider } from "wagmi";
+
 const useStyle = makeStyles({
   wrap12: {
     padding: "6rem 0",
@@ -121,68 +127,76 @@ const useStyle = makeStyles({
   },
 });
 const NFTdetailpage = () => {
-  //     const [data, setData] = useState(itemData);
-  //   const itemData = Data.filter((id) => Data.id == id);
-  //     console.log("yrtfghj",itemData)
+  const provider = useProvider()
   const [show, setShow] = useState(false);
+  const [tokenUri,setTokenUri]=useState("")
   const classes = useStyle();
-  //   setData(itemData)
+  const {id:tokenId } = useParams();
+  const contract=  useContract({
+    address: WOLFPUPS_NFT_address,
+    abi: WOLFPUPS_NFT_ABI,
+    signerOrProvider: provider,
 
-  const { id } = useParams();
-  console.log("id", id);
-  //   const itemData = Data.filter((itemData) => itemData.id == id);
-  const itemData = Data.filter((itemData) => itemData.id == id);
-  console.log("itemData", itemData);
+  })
+  const tokenUriFunc=async (tokenId)=>{
+    const token= await contract.tokenURI?.(tokenId);
+    setTokenUri(token);
+  }
+
+useEffect(()=>{
+    tokenUriFunc?.(tokenId)
+  },[tokenId]) 
+
+const {data}=useQuery(["getUserNFTByTokenURI",tokenUri],()=>getUserNFTByTokenURI(tokenUri),{
+    onError:(data)=>{
+      console.log({data});
+     
+    }
+  })
+
+
   return (
     <>
       <Header />
-      {itemData.map((elz) => {
-        const { img, decs, title, name } = elz;
-        console.log("elz", img);
-        return (
+        (
           <>
             <Box className={classes.wrap12}>
               <Container>
                 <Grid container >
                   <Grid md={12}>
                     <Box className={classes.bag15}>
-                      <img src={elz.img} alt="" />
+                      <img src={data?.image?`${ data?.image.replace("ipfs://","https://ipfs.io/ipfs/")}`:""}alt="" />
                       {/* <h1>{elz.title}</h1> */}
                     </Box>
                   </Grid>
                 </Grid>
               </Container>
             </Box>
-          </>
-        );
-      })}
-
-      {itemData.map((elz) => {
-        return (
-          <>
+       
             <Box className={classes.wrap13}>
               <Container>
                 <Grid>
                   <Grid md={12}>
                     <Box>
-                      <Typography variant="h4">{elz.name}</Typography>
-                      <p>{elz.para}</p>
+                      <Typography variant="h4">{data?.name}</Typography>
+                      <p>{data?.description}</p>
                     </Box>
                   </Grid>
                   <Box>
                     <Stack spacing={2} direction="row" justifyContent="center">
                       <Box>
-                        <Link to="">Veiw on OpenSea</Link>
-                        <Link to="">Veiw on EtherScan</Link>
+                        <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${tokenId}`} target="_blank">Veiw on OpenSea</a>
+                        <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${tokenId}`} target="_blank">Veiw on EtherScan</a>
                       </Box>
                     </Stack>
                   </Box>
                 </Grid>
               </Container>
             </Box>
-          </>
-        );
-      })}
+         
+            </>
+        )
+      
 
       <Box>
         <Container>

@@ -1,14 +1,15 @@
 import axios from "axios";
 import ApiConfigs from "../ApiConfig";
 
-export const viewProfile = async (token) => {
+export const updateProfilePic = async ({token,value}) => {
     try {
       const { data } = await axios({
-        method:'GET',
-        url:ApiConfigs.viewProfile, 
+        method:'PUT',
+        url:ApiConfigs.updateProfilePic, 
         headers:{
           'authorization':`Bearer ${token}`,
-        }
+        },
+        data:{profilePic:value}
     });
     return data;
     } catch (error) {

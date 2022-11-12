@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import Box from "@mui/material/Box";
 import {Drawer, Avatar} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -7,7 +7,7 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import CloseIcon from '@mui/icons-material/Close';
-import { Link, useLocation } from "react-router-dom";
+import { Link,useLocation, useNavigate } from "react-router-dom";
 import {
   Button,
   List,
@@ -15,6 +15,8 @@ import {
   ListItemButton,
   ListItemText,
 } from "@mui/material";
+import { UserContext } from "../../context/User/UserContext";
+import {actionTypes} from "../../context/User/UserReducer"
 const drawerWidth = 300;
 const sideBar = [
   { sidebarName: "Explore", path: "/explore" },
@@ -24,6 +26,14 @@ const sideBar = [
 ];
 
 const Header = () => {
+  const [, dispatch] = useContext(UserContext);
+  const navigate = useNavigate();
+  const logout = (e) => {
+    e.preventDefault();
+    navigate("/");
+    localStorage.removeItem("token");
+    dispatch({ type: actionTypes.SET_TOKEN, value: null });
+  };
   const location = useLocation();
   const [isopen, setIsOpen] = useState(false);
   const toggleDrawer = (open) => (event) => {
@@ -113,9 +123,7 @@ const Header = () => {
           <ListItem >
             <ListItemButton>
               <ListItemText
-                onClick={() => {
-                  console.log("test");
-                }}
+                onClick={logout}
                 primary={`Sign Out`}
               />
             </ListItemButton>

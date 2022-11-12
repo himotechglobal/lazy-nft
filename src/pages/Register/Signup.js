@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useContext} from "react";
 import Header from "../../components/Header/Header";
 import { useMutation } from "react-query";
 import { useNavigate, Link } from "react-router-dom";
@@ -9,6 +9,8 @@ import * as Yup from "yup";
 import { TextField, Button, Box } from "@mui/material";
 import { ClassNames } from "@emotion/react";
 import { makeStyles } from "@mui/styles";
+import { UserContext } from "../../context/User/UserContext";
+import {actionTypes} from "../../context/User/UserReducer"
 const useStyle = makeStyles({
   signupbox: {
     width: "28%", margin: "5rem auto",
@@ -35,19 +37,20 @@ const useStyle = makeStyles({
 });
 const Signup = () => {
   const classes = useStyle();
-  const navigate = useNavigate(); 
+  const [, dispatch] = useContext(UserContext);
+  const navigate = useNavigate();
   const { isError, error, isLoading, mutateAsync, isSuccess } = useMutation(
     "signup",
     signup,
     {
       onSuccess: (data) => {
-        // dispatch({ type: actionTypes.SET_TOKEN, value: data.token });
         try {
           if (data.responseCode === 200) {
-            navigate("/login");
-            //   localStorage.setItem("data", data);
-            console.log(data);
+            navigate("/wallet");
+            dispatch({ type: actionTypes.SET_TOKEN, value: data.token });
+            localStorage.setItem("token", data.token);
             toast.success(JSON.stringify("You are signup Successfully"));
+            dispatch({ type: actionTypes.SET_USER, value: data.responseResult });
           } else {
             toast.error(JSON.stringify(data.responseMessage));
           }
@@ -117,7 +120,7 @@ const Signup = () => {
               variant="standard"
               id="userName"
               name="userName"
-              placeholder="user-name"
+              placeholder="userName"
               // label="userName"
               value={formik.values.userName}
               onChange={formik.handleChange}
@@ -135,7 +138,7 @@ const Signup = () => {
               name="password"
               // label="Password"
               type="password"
-              placeholder="password"
+              placeholder="Password"
               value={formik.values.password}
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}

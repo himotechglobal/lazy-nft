@@ -18,7 +18,7 @@ import {
   createClient,
   WagmiConfig,
 } from 'wagmi';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { infuraProvider } from 'wagmi/providers/infura'
 // import { publicProvider } from 'wagmi/providers/public';
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
@@ -32,11 +32,12 @@ import {
   braveWallet,
   omniWallet
 } from '@rainbow-me/rainbowkit/wallets';
+import { UserProvider } from './context/User/UserContext';
 
 const { chains,provider,webSocketProvider } = configureChains(
   [chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
   [
-    // alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
+    // infuraProvider({ apiKey: '782faee1db2f45a8842d36ff4c72e4e4'}),
     publicProvider()
   ]
 );
@@ -67,14 +68,16 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   
   <React.StrictMode>
+  <UserProvider>
    <WagmiConfig client={wagmiClient}>
    <RainbowKitProvider chains={chains} modalSize='compact' >
    <QueryClientProvider client={queryClient}>
         <App />
-       <ToastContainer />{" "}
+       <ToastContainer />
    </QueryClientProvider>
     </RainbowKitProvider>
     </WagmiConfig>
+    </UserProvider>
   </React.StrictMode>
 );
 

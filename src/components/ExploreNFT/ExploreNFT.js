@@ -132,34 +132,34 @@ import {
                   <Box className={classes.bag15}>
                     <FormGroup>
                       <FormControlLabel
-                        control={<Checkbox defaultChecked onClick={Active} />}
+                        control={<Checkbox  onClick={Active} />}
                         label="Ethereum"
                       />
                     </FormGroup>
                     <FormGroup>
                       <FormControlLabel
-                        control={<Checkbox defaultChecked onClick={inActive} />}
+                        control={<Checkbox defaultChecked  onClick={inActive} />}
                         label="Polygon"
                       />
                     </FormGroup>
-                    <FormGroup>
+                    {/* <FormGroup>
                       <FormControlLabel
-                        control={<Checkbox defaultChecked onClick={DisActive} />}
+                        control={<Checkbox  onClick={DisActive} />}
                         label="Solana"
                       />
                     </FormGroup>
                     <FormGroup>
                       <FormControlLabel
-                        control={<Checkbox defaultChecked onClick={unActive} />}
+                        control={<Checkbox  onClick={unActive} />}
                         label="Wax"
                       />
                     </FormGroup>
                     <FormGroup>
                       <FormControlLabel
-                        control={<Checkbox defaultChecked onClick={DActive} />}
+                        control={<Checkbox  onClick={DActive} />}
                         label="Tezos"
                       />
-                    </FormGroup>
+                    </FormGroup> */}
                   </Box>
                 </Box>
               </Grid>
@@ -169,7 +169,7 @@ import {
             <Typography variant="h3">{title}</Typography>
           </Box>
         </Grid> */}
-              <Container>
+              {/* <Container>
                 <Grid container >
                   {Data &&
                     Data.map((e,index) => {
@@ -182,7 +182,7 @@ import {
                       );
                     })}
                 </Grid>
-              </Container>
+              </Container> */}
               <Container>
                 <Grid container>
                   {Data1 &&
@@ -197,7 +197,7 @@ import {
                     })}
                 </Grid>
               </Container>
-              <Container>
+              {/* <Container>
                 <Grid container>
                   {Data2 &&
                     Data2.map((e) => {
@@ -210,8 +210,8 @@ import {
                       );
                     })}
                 </Grid>
-              </Container>
-              <Container>
+              </Container> */}
+              {/* <Container>
                 <Grid container>
                   {Data3 &&
                     Data3.map((e) => {
@@ -224,8 +224,8 @@ import {
                       );
                     })}
                 </Grid>
-              </Container>
-              <Container>
+              </Container> */}
+              {/* <Container>
                 <Grid container>
                   {Data4 &&
                     Data4.map((e) => {
@@ -238,7 +238,7 @@ import {
                       );
                     })}
                 </Grid>
-              </Container>
+              </Container> */}
             </Grid>
           {/* </Container> */}
         </Box>

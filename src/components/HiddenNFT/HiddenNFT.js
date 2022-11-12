@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useContext} from "react";
 import {
   Box,
   Button,
@@ -16,6 +16,7 @@ import * as Yup from "yup";
 import Modal from "react-bootstrap/Modal";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Header from "../Header/Header";
+import { UserContext } from "../../context/User/UserContext";
 const useStyle = makeStyles({
     wrap5: {
       padding: "2rem 0 ",
@@ -116,6 +117,7 @@ const HiddenNFT = () => {
     const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
+  const [{userData,userUpdateData,updatePic}, ] = useContext(UserContext);
   const classes = useStyle();
   return (
     <>
@@ -125,13 +127,13 @@ const HiddenNFT = () => {
           <Grid container spacing={2}>
             <Grid item md={12}>
               <div>
-                <img
-                  src="https://lh3.googleusercontent.com/rRuk-xtEg28mkFYfLAnClC-UNrCGc2mPqvA_72fcUFM-zy6XTNkuFs9uWG8klzkRCyQRkDdmc-5AAqG-9EY-D4R1W865MhJnA6TFGg"
+              <img
+                  src={ updatePic?.profilePic ?? userData?.profilePic}
                   alt=""
                 />
-                <h6>@dontask6</h6>
+                <h6>@{userData?.userName}</h6>
                 <p>
-                @dontask6 Hidden NFTs
+               <b>{userData?.userName}</b> Hidden NFTs
                 </p>
               </div>
             </Grid>

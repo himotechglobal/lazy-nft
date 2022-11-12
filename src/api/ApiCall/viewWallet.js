@@ -1,13 +1,13 @@
 import axios from "axios";
 import ApiConfigs from "../ApiConfig";
 
-export const viewProfile = async (token) => {
+export const viewWallet= async () => {
     try {
       const { data } = await axios({
         method:'GET',
-        url:ApiConfigs.viewProfile, 
+        url:ApiConfigs.viewWallet, 
         headers:{
-          'authorization':`Bearer ${token}`,
+          'authorization':`Bearer ${localStorage?.getItem("token")}`,
         }
     });
     return data;

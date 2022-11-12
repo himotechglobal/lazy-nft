@@ -71,7 +71,7 @@ const Swap = () => {
               { (isConnected && address) ?(
                 <p></p>
               ):(
-                <Button onClick={openConnectModal} size="large" variant="contained"  sx={{borderRadius: 50,textTransform: 'none',}} >Add Wallet</Button>
+                <Button onClick={openConnectModal} size="large" variant="contained"  sx={{borderRadius: 50,textTransform: 'none',}} >Connect Wallet</Button>
               )
               }
               </Box>

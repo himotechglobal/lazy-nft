@@ -11,7 +11,6 @@ export const editProfile = async ({token,value}) => {
         },
         data:value
     });
-    console.log(data);
     return data;
     } catch (error) {
       console.log(error,"hk");
