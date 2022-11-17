@@ -8,6 +8,8 @@ import {
   Stack,
   Button,
   Avatar,
+  TextField,
+  TextareaAutosize
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Footer from "../../components/Footer/Footer";
@@ -19,7 +21,10 @@ import {WOLFPUPS_NFT_address} from "../../config/index";
 import { useQuery } from "react-query";
 import {getUserNFTByTokenURI} from "../../api/ApiCall/getNftByTokenURI"
 import { useContractRead,useContract,useProvider } from "wagmi";
-
+// import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 const useStyle = makeStyles({
   wrap12: {
     padding: "6rem 0",
@@ -56,10 +61,11 @@ const useStyle = makeStyles({
       padding: "7px 25px",
       color: "#000",
       fontWeight: "bold",
+      cursor:"pointer"
     },
     "& a:hover": {
       backgroundColor: "#000",
-      color: "#fff",
+      color: "#fff !important",
     },
   },
   bag8: {
@@ -125,6 +131,40 @@ const useStyle = makeStyles({
       fontWeight: "bold",
     },
   },
+  bag90: {
+    display: "block",
+    border: "1px solid linen",
+    margin: "10px 0",
+    width: "100%",
+    padding: "13px",
+    borderRadius: "15px",
+    boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
+  },
+  bagr:{
+    "& button": {
+      width: "100%",
+      margin: "13px 0",
+      border: "1px solid #000",
+      padding: "10px",
+      borderRadius: "41px",
+    },
+    "& button:hover": {
+      backgroundColor: "#000",
+      color: "#fff",
+      transition:
+        "color 0.5s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out",
+    },
+  }
+});
+
+const validationSchema = yup.object({
+  name: yup
+    .string('Enter your email')
+    .required('Name is required'),
+    decs: yup.string()
+    .min(0, "Too Short!")
+    .max(160, "Too Long!")
+    .required('Description is required'),
 });
 const NFTdetailpage = () => {
   const provider = useProvider()
@@ -153,8 +193,31 @@ const {data}=useQuery(["getUserNFTByTokenURI",tokenUri],()=>getUserNFTByTokenURI
      
     }
   })
+  const [shows, setShows] = useState(false);
 
-
+  const handleClose = () => setShows(false);
+  const handleShow = () => setShows(true);
+  const formik = useFormik({
+    initialValues: {
+      decs: "",
+      name: "",
+    },
+    // validationSchema: validationSchema,
+    // onSubmit: (values) => {
+    //   alert(JSON.stringify(values, null, 2));
+    // },
+    validationSchema: yup.object({
+      decs: yup.string()
+        .min(0, "Too Short!")
+        .max(160, "Too Long!")
+        .required("Required!"),
+      name: yup.string()
+      .min(4, "Too Short!")
+      .max(12, "Too Long!")
+      .required("Required!"),
+     
+    }),
+  });
   return (
     <>
       <Header />
@@ -176,19 +239,29 @@ const {data}=useQuery(["getUserNFTByTokenURI",tokenUri],()=>getUserNFTByTokenURI
             <Box className={classes.wrap13}>
               <Container>
                 <Grid>
-                  <Grid md={12}>
+                  <Grid md={6}>
                     <Box>
                       <Typography variant="h4">{data?.name}</Typography>
                       <p>{data?.description}</p>
                     </Box>
                   </Grid>
                   <Box>
-                    <Stack spacing={2} direction="row" justifyContent="center">
+                    <Grid>
+                      <Stack spacing={2} direction="row" justifyContent="center">
                       <Box>
+                      <a variant="primary" onClick={handleShow} style={{textAlign:'center'}}>
+        Edit
+      </a>
                         <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${tokenId}`} target="_blank">Veiw on OpenSea</a>
                         <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${tokenId}`} target="_blank">Veiw on EtherScan</a>
+
+                      </Box>
+
+                      <Box>
+
                       </Box>
                     </Stack>
+                    </Grid>
                   </Box>
                 </Grid>
               </Container>
@@ -260,6 +333,61 @@ const {data}=useQuery(["getUserNFTByTokenURI",tokenUri],()=>getUserNFTByTokenURI
             </Box>
       </Box>
       <Footer />
+
+
+      {/* Modal Open Edit name and decs */}
+
+      <Modal show={shows} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Box>
+          <Box>
+         <form  className={classes.bagr} onSubmit={formik.handleSubmit}>
+         <TextField
+                name="name"
+                id="name"
+                placeholder="Enter  Name"
+                className={classes.bag90}
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.name &&
+                  Boolean(formik.errors.name)
+                }
+                helperText={
+                  formik.touched.name && formik.errors.name
+                }
+              />
+                <TextareaAutosize
+                  className={classes.bag90}
+                  // aria-label="minimum height"
+                  minRows={3}
+                  placeholder="Enter Description"
+                  // style={{ width: 200 }}
+                  onChange={formik.handleChange}
+                  id="decs"
+                  name="decs"
+                  value={formik.values.decs}
+                  error={formik.touched.decs && Boolean(formik.errors.decs)}
+                  helperText={formik.touched.decs && formik.errors.decs}
+                />
+                 <button type="submit">
+                Submit
+              </button>
+       
+              <button  onClick={handleClose}>
+                Close
+              </button>
+         </form>
+        
+              </Box>
+          </Box>
+        </Modal.Body>
+       
+      </Modal>
+
     </>
   );
 };

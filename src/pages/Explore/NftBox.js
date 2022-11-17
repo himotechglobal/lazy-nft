@@ -94,6 +94,9 @@ const useStyle = makeStyles({
     background: "#fff",
     margin: "0 auto",
     borderRadius: "6px",
+    "& p":{
+      cursor:"pointer",
+    }
   },
   bag11: {
     width: "13%",
@@ -224,8 +227,12 @@ const NftBox = (props) => {
               
                </>
                )}
-               <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank">Veiw on OpenSea</a>
-               <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank">Veiw on EtherScan</a>
+               <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "10px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
+               <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000"}}>Veiw on OpenSea</a>
+               </Box>
+               <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "10px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
+               <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000"}}>Veiw on EtherScan</a>
+               </Box>
 
               </Box>
             ) : null}
