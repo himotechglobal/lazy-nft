@@ -15,6 +15,11 @@ import {updateProfilePic} from "../../api/ApiCall/updateProfilePic"
 import { useMutation } from "react-query";
 import { UserContext } from "../../context/User/UserContext";
 import {actionTypes} from "../../context/User/UserReducer";
+import {pinnedNft} from "../../api/ApiCall/pinnedNft/pinnedNft"
+import {unpinnedNft} from "../../api/ApiCall/pinnedNft/unpinnedNft"
+import {hideNft} from "../../api/ApiCall/nftHide/hideNft"
+import {unhideNft} from "../../api/ApiCall/nftHide/unhideNft";
+import {WOLFPUPS_NFT_address} from "../../config/index";
 const useStyle = makeStyles({
   wrap7: {
     // color:"#000",
@@ -100,9 +105,8 @@ const NftBox = (props) => {
   const navigate = useNavigate()
   const [show, setShow] = useState(false);
   const classes = useStyle();
-
   const clickable = (()=> {
-    navigate(`/nftdetailpage/${props.data.name.split("#")[1]}`)
+    navigate(`/nftdetailpage/${props?.data.tokenId}`)
   })
   const {mutateAsync}=useMutation(
     "updateProfilePic",
@@ -112,17 +116,46 @@ const NftBox = (props) => {
     }
   }
   )
+
+  const {mutateAsync:mutateAsyncPinnedNft}=useMutation(
+    "pinnedNft",
+    pinnedNft,{
+    onSuccess:(data)=>{
+     props?.pinnedRefetch.refetch();
+    }
+  }
+  )
+
+  const {mutateAsync:mutateAsyncUnpinnedNft}=useMutation(
+    "unpinnedNft",
+    unpinnedNft,{
+    onSuccess:(data)=>{
+     props?.pinnedRefetch.refetch();
+    }
+  }
+  )
+
+  const {mutateAsync:mutateAsyncHideNft}=useMutation(
+    "hideNft",
+    hideNft,
+  )
+
+  const {mutateAsync:mutateAsyncUnhideNft}=useMutation(
+    "unhideNft",
+    unhideNft,
+  )
+
   return (
     <>
     <Container >
-    <Grid container spacing={3}>
+    <Grid container spacing={3} >
       <Grid item lg={12} >
       <Box>
           {/* <Typography variant="h3" style={{margin:"2rem 0 0 0"}}></Typography> */}
           {/* <Typography variant="h3" style={{margin:"2rem 0 0 0"}}>{props.data1.title}</Typography> */}
         </Box>
       </Grid>
-      <Grid  item md={12} style={{margin:props.data.margin}} >
+      <Grid  item md={12} style={{margin:props.data.margin}}  >
         <Box className={classes.bag8}>
           <Box className={classes.bag9}>
             <Box className={classes.bag7}>
@@ -140,27 +173,70 @@ const NftBox = (props) => {
 
             {show ? (
               <Box className={classes.bag10}>
+              { props?.data.tokenOwner==="0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73" && (
+                <>
                <p onClick={async()=>{
                 try{
-                  await mutateAsync({token:localStorage.getItem("token"),value:props.data.image.replace("ipfs://","https://ipfs.io/ipfs/")})
+                  await mutateAsync({token:localStorage.getItem("token"),value:props.data.metadata.image.replace("ipfs://","https://ipfs.io/ipfs/")})
                 }catch(error){
 
                 }
-               }}>Make Profile Picture</p>
-                <p>RabbitHole</p>
-                <p>BizarroWorld</p>
-                <p>veiw on OpenSea</p>
-                <p>veiw on EtherScan</p>
+               }}>
+               Make Profile Picture</p>
+
+               {props?.pin==="true" ? (
+          
+               <p onClick={async()=>{
+                try{
+                  await mutateAsyncUnpinnedNft({token:localStorage.getItem("token"),tokenAddress:props?.data.tokenAddress,tokenId:props?.data.tokenId})
+                }catch(error){
+
+                }
+               }}
+               >Unpinned Nft</p>
+               ):(
+                <p onClick={async()=>{
+                try{
+                  await mutateAsyncPinnedNft({token:localStorage.getItem("token"),tokenAddress:props?.data.tokenAddress,tokenId:props?.data.tokenId})
+                }catch(error){
+
+                }
+               }}>Pinned Nft</p>
+               )}
+               { props?.hide==="true" ?(
+               <p onClick={async()=>{
+                try{
+                  await mutateAsyncUnhideNft({token:localStorage.getItem("token"),tokenAddress:props?.data.tokenAddress,tokenId:props?.data.tokenId})
+                }catch(error){
+
+                }
+               }}
+               >Unhide Nft</p>
+               ):(
+                <p onClick={async()=>{
+                try{
+                  await mutateAsyncHideNft({token:localStorage.getItem("token"),tokenAddress:props?.data.tokenAddress,tokenId:props?.data.tokenId})
+                }catch(error){
+
+                }
+               }}>Hide Nft</p>
+               )}
+              
+               </>
+               )}
+               <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank">Veiw on OpenSea</a>
+               <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank">Veiw on EtherScan</a>
+
               </Box>
             ) : null}
           </Box>
           {/* <Link to={`/nftdetailpage/${props.data.id}`}> */}
-          <img src={props.data.image?`${ props.data.image.replace("ipfs://","https://ipfs.io/ipfs/")}`:""} alt=""  onClick={clickable}/>
+          <img src={props.data.metadata.image?`${ props.data.metadata.image.replace("ipfs://","https://ipfs.io/ipfs/")}`:""} alt=""  onClick={clickable}/>
           {/* </Link> */}
           {/* <img src={props.data1.img} alt="" /> */}
           <Box onClick={clickable}>
-            <h6>{props.data.description}</h6>
-            <p>{props.data.name}</p>
+            <h6>{props.data.metadata.description}</h6>
+            <p>{props.data.metadata.name}</p>
           </Box>
         </Box>
       </Grid>

@@ -48,9 +48,9 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<Home />} />
-          <Route exact path="/profile" element={<AuthGuard><Profile /></AuthGuard>} />
-          <Route exact path="/hidden-nft" element={<HiddenNFT />} />
+          <Route exact path="/" element={<UserGuard><Home /></UserGuard>} />
+          <Route exact path="/:userName" element={<AuthGuard><Profile /></AuthGuard>} />
+          <Route exact path="/hidden-nft" element={<AuthGuard><HiddenNFT /></AuthGuard>} />
           <Route exact path="/explore" element={<AuthGuard><Explore/></AuthGuard>} />
           <Route exact path="/wallet" element={<AuthGuard><Wallet /></AuthGuard>} />
           <Route exact path="/nftdetailpage/:id" element={<NFTdetailpage />} />

@@ -1,4 +1,4 @@
-import React, { useState ,useContext} from "react";
+import React, { useState ,useContext,useEffect} from "react";
 import {
   Box,
   Button,
@@ -7,6 +7,7 @@ import {
   Typography,
   TextField,
   TextareaAutosize,
+  CircularProgress
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -17,6 +18,10 @@ import Modal from "react-bootstrap/Modal";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Header from "../Header/Header";
 import { UserContext } from "../../context/User/UserContext";
+import {getAllHideNfts} from "../../api/ApiCall/nftHide/getAllHideNfts"
+import { useQuery } from "react-query";
+import NftBox from "../../pages/Explore/NftBox";
+import {getMyNftByTokenAddressAndTokenId} from "../../api/ApiCall/nftCollection/getMyNftByTokenAddressAndTokenId"
 const useStyle = makeStyles({
     wrap5: {
       padding: "2rem 0 ",
@@ -102,23 +107,39 @@ const useStyle = makeStyles({
       },
   });
 
-const SignupSchema = Yup.object().shape({
-  firstName: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
-  lastName: Yup.string()
-    .min(2, "Too Short!")
-    .max(50, "Too Long!")
-    .required("Required"),
-  email: Yup.string().email("Invalid email").required("Required"),
-});
+
 const HiddenNFT = () => {
-    const [show, setShow] = useState(false);
-  const [show1, setShow1] = useState(false);
-  const [show2, setShow2] = useState(false);
-  const [{userData,userUpdateData,updatePic}, ] = useContext(UserContext);
+  const [{userData,userUpdateData,updatePic,token}, ] = useContext(UserContext);
   const classes = useStyle();
+  const [hideNft,setHideNft]=useState([])
+  const [hideNftData,setHideNftData]=useState([])
+  const {isLoading,refetch}=useQuery(
+    ["getAllHideNfts",token],
+    ()=>getAllHideNfts(token),{
+      onSuccess:(data)=>{
+      //  console.log(data?.responseResult?.pinnedNfts[0].tokenAddress);
+      setHideNft([...data?.responseResult?.hideNfts])
+      }
+    }
+  )
+
+  const getAllPinnedNftsByTokenIdAndAddress=async()=>{
+    // getMyNftByTokenAddressAndTokenId
+    const data=await Promise.all(hideNft?.map(async({tokenAddress,tokenId})=>{
+      const nft=await getMyNftByTokenAddressAndTokenId(token,tokenAddress,tokenId)
+      return {...nft?.responseResult?.nfts};
+    }))
+    return data
+  }
+  useEffect(()=>{
+    const temp=async()=>{
+      const lol=await getAllPinnedNftsByTokenIdAndAddress?.();
+      setHideNftData([...lol])
+    }
+    temp?.();
+  },[hideNft])
+
+
   return (
     <>
     <Header/>
@@ -147,117 +168,27 @@ const HiddenNFT = () => {
             <Grid item md={12}>
               <Typography variant="h2">Hidden NFTs</Typography>
             </Grid>
-            <Grid item md={4}>
-             
-              <Box className={classes.bag8}>
-                <Box className={classes.bag9}>
-                  <Box className={classes.bag7}>
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => setShow(!show)}
-                    >
-                      {" "}
-                      {show ? (
-                        <i class="bi bi-x-lg"></i>
-                      ) : (
-                        <i class="bi bi-three-dots"></i>
-                      )}
-                    </button>
-                  </Box>
-
-                  {show ? (
-                    <Box className={classes.bag10}>
-                      <p>RabbitHole</p>
-                      <p>BizarroWorld</p>
-                      <p>veiw on OpenSea</p>
-                      <p>veiw on EtherScan</p>
-                    </Box>
-                  ) : null}
-                </Box>
-                <img
-                  src="https://i.seadn.io/gae/unh12ZbfD9JszUXbyWG55N3f0nAR4QihGydoVy4aiFDqck7o5DGFROeIpiVdEO7Jy7uQtohw4rHHaNUApB4LDDBfoilHp6cs1itN?w=500&auto=format"
-                  alt=""
-                />
-                <Box>
-                  <h6>#3553</h6>
-                  <p style={{textAlign:"center"}}>"sleepy"</p>
-                </Box>
+            {isLoading  ? (
+             <Container>
+                <Grid>
+                  <Grid>
+                  <Box sx={{ textAlign: 'center' }}>
+              <CircularProgress />
               </Box>
-            </Grid>
-            <Grid item md={4}>
-
-              <Box className={classes.bag8}>
-                <Box className={classes.bag9}>
-                  <Box className={classes.bag7}>
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => setShow1(!show1)}
-                    >
-                      {" "}
-                      {show1 ? (
-                        <i class="bi bi-x-lg"></i>
-                      ) : (
-                        <i class="bi bi-three-dots"></i>
-                      )}
-                    </button>
-                  </Box>
-
-                  {show1 ? (
-                    <Box className={classes.bag10}>
-                      <p>RabbitHole</p>
-                      <p>BizarroWorld</p>
-                      <p>veiw on OpenSea</p>
-                      <p>veiw on EtherScan</p>
-                    </Box>
-                  ) : null}
-                </Box>
-                <img
-                  src="https://i.seadn.io/gae/unh12ZbfD9JszUXbyWG55N3f0nAR4QihGydoVy4aiFDqck7o5DGFROeIpiVdEO7Jy7uQtohw4rHHaNUApB4LDDBfoilHp6cs1itN?w=500&auto=format"
-                  alt=""
-                />
-                <Box>
-                  <h6>#3553</h6>
-                  <p style={{textAlign:"center"}}>"sleepy"</p>
-                </Box>
-              </Box>
-            </Grid>
-            <Grid item md={4}>
-             
-              <Box className={classes.bag8}>
-                <Box className={classes.bag9}>
-                  <Box className={classes.bag7}>
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => setShow2(!show2)}
-                    >
-                      {" "}
-                      {show2 ? (
-                        <i class="bi bi-x-lg"></i>
-                      ) : (
-                        <i class="bi bi-three-dots"></i>
-                      )}
-                    </button>
-                  </Box>
-
-                  {show2 ? (
-                    <Box className={classes.bag10}>
-                      <p>RabbitHole</p>
-                      <p>BizarroWorld</p>
-                      <p>veiw on OpenSea</p>
-                      <p>veiw on EtherScan</p>
-                    </Box>
-                  ) : null}
-                </Box>
-                <img
-                  src="https://i.seadn.io/gae/unh12ZbfD9JszUXbyWG55N3f0nAR4QihGydoVy4aiFDqck7o5DGFROeIpiVdEO7Jy7uQtohw4rHHaNUApB4LDDBfoilHp6cs1itN?w=500&auto=format"
-                  alt=""
-                />
-                <Box>
-                  <h6>#3553</h6>
-                  <p style={{textAlign:"center"}}>"sleepy"</p>
-                </Box>
-              </Box>
-            </Grid>
+                  </Grid>
+                </Grid>
+             </Container>
+            ):(
+              hideNftData && hideNftData?.map((nft, index) => {
+                return (
+                  <Grid key={index} item md={4} sm={6}>
+                    <NftBox hide={"true"} data={nft["0"]} />
+                  </Grid>
+                )
+              })
+              
+              )
+            }
           </Grid>
         </Container>
       </Box>

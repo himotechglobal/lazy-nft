@@ -11,7 +11,8 @@ import { getUserNFT } from "../../api/ApiCall/moralis/getUserNFT";
 import WOLFPUPS_NFT_ABI from "../../config/WOLFPUPS_NFT_ABI.json"
 import {WOLFPUPS_NFT_address} from "../../config/index";
 import { useContractRead,useContract,useProvider } from "wagmi";
-import {getUserNFTByTokenURI} from "../../api/ApiCall/getNftByTokenURI"
+import {getUserNFTByTokenURI} from "../../api/ApiCall/getNftByTokenURI";
+import {addorUpdateNftCollection} from "../../api/ApiCall/nftCollection/addorUpdateNftCollection"
 
 const useStyle = makeStyles({
   wrap5: {
@@ -39,10 +40,10 @@ const Profile =  () => {
   const provider = useProvider()
   const {address,isConnected}=useAccount()
   const classes = useStyle();
-  const [{userData,userUpdateData,updatePic}, ] = useContext(UserContext);
+  const [{userData,userUpdateData,updatePic,token}, ] = useContext(UserContext);
   const [NFTBalance,SetNFTBalance]=useState(0)
   const [getMetaData,setMetaData]=useState([])
-  const [tokenIdList,setTokenIdList]=useState([])
+  const [tokenIdList,setTokenIdList]=useState([]);
   const contract=  useContract({
     address: WOLFPUPS_NFT_address,
     abi: WOLFPUPS_NFT_ABI,
@@ -69,9 +70,9 @@ const MetaData= async (TokenIdList)=>{
   const data=await Promise.all(TokenIdList.map(async(tokenId)=>{
     const tokenUri=await contract.tokenURI(tokenId);
     const metaData=await getUserNFTByTokenURI(tokenUri);
+    await addorUpdateNftCollection({token:token,value:{tokenAddress:WOLFPUPS_NFT_address,tokenId:tokenId,tokenOwner:"0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73",metadata:metaData}})
     return metaData;
   }));
-  
   return data;
 }
 
@@ -81,7 +82,7 @@ const metadataFunc=async()=>{
   var arr =await ArraysOfTokenId(balance);
   SetNFTBalance(balance?.toString());
   setTokenIdList([...arr])
-  const meta =await MetaData([...arr]);
+  const meta=await MetaData([...arr]);
   setMetaData(meta);
   }
   
@@ -91,13 +92,12 @@ const metadataFunc=async()=>{
 
   metadataFunc();
 
-
  },[]);
 
   return (
     <>
       <Header />
-      { (getMetaData && !address ) && 
+      { (!address ) && 
       <EditProfile />
       }
       { ( isConnected && getMetaData  && address) ?(
@@ -125,7 +125,7 @@ const metadataFunc=async()=>{
           </Grid>
         </Container>
       </Box>
-      <PinnedNFT data={getMetaData}/>
+      <PinnedNFT/>
       </>
      ):(
         <Container>

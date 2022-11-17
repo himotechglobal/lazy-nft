@@ -26,7 +26,7 @@ const sideBar = [
 ];
 
 const Header = () => {
-  const [, dispatch] = useContext(UserContext);
+  const [{token}, dispatch] = useContext(UserContext);
   const navigate = useNavigate();
   const logout = (e) => {
     e.preventDefault();
@@ -62,10 +62,10 @@ const Header = () => {
                 component="div"
                 sx={{ color: "#fff", fontWeight: "bold" }}
               >
-                <Link to={`/`} style={{color:"#000"}}>Lazy</Link>
+                <Link to={token?`/explore`:`/`} style={{color:"#000"}}>Lazy</Link>
               </Typography>
             </Box>
-            {localStorage.getItem("token") ? (
+            {token? (
               <IconButton
                 color="inherit"
                 aria-label="open drawer"

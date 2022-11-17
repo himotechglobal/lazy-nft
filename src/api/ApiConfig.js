@@ -10,6 +10,16 @@ const ApiConfigs = {
   addWallet:`${url}/api/v1/userWallet/add`,
   removeWallet:`${url}/api/v1/userWallet/remove/`,
   updateProfilePic:`${url}/api/v1/profile/updateProfilePic`,
+  addorUpdateNftCollection:`${url}/api/v1/nftCollection/addorUpdate`,
+  getAllNftCollection:`${url}/api/v1/nftCollection/getAllNft`,
+  getMyNftCollection:`${url}/api/v1/nftCollection/getMyNft`,
+  getMyNftByTokenAddressAndTokenId:`${url}/api/v1/nftCollection/getMyNftByTokenAddressAndTokenId`,
+  hideNft:`${url}/api/v1/hideNft/hide`,
+  unhideNft:`${url}/api/v1/hideNft/unhide`,
+  getAllHideNfts:`${url}/api/v1/hideNft/getAllHideNft`,
+  pinnedNft:`${url}/api/v1/pinnedNft/pinned`,
+  unpinnedNft:`${url}/api/v1/pinnedNft/unpinned`,
+  getAllPinnedNfts:`${url}/api/v1/pinnedNft/getAllPinnedNft`,
   getUserNFT:`https://deep-index.moralis.io/api/v2/`
 };
 

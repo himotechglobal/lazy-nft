@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useContext} from "react";
 import {
   Box,
   Button,
@@ -9,6 +9,8 @@ import {
   TextareaAutosize,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { UserContext } from "../../context/User/UserContext";
+import { Link } from "react-router-dom";
 const useStyle = makeStyles({
   wrap5: {
     width: "100%",
@@ -58,6 +60,7 @@ const useStyle = makeStyles({
   },
 });
 const Share = () => {
+  const [{ userData },] = useContext(UserContext);
   const Data = [
     {
       id: 1,
@@ -103,7 +106,9 @@ const Share = () => {
             </Grid>
             <Grid item md={12}>
               <Box className={classes.bag5}>
-                <Button variant="contained" sx={{mt:{lg:"auto",xs:"15px",}}}>lazy.com/rxctgfjk</Button>
+                <Button variant="contained" sx={{mt:{lg:"auto",xs:"15px",textTransform:"none"}}}>
+                  <Link to={`/${userData?.userName}`}>http://localhost:3000/{userData?.userName}</Link>
+                </Button>
               </Box>
             </Grid>
             <Grid item md={12}>

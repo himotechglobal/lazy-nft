@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState,useContext, useEffect } from "react";
 import { Container, Grid, Box, Typography, CircularProgress } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { fontWeight } from "@mui/system";
 import AllNFT from "../AllNFT/AllNFT";
 import NftBox from "../../pages/Explore/NftBox";
+import {getAllPinnedNfts} from "../../api/ApiCall/pinnedNft/getAllPinnedNfts"
+import { useQueries, useQuery } from "react-query";
+import { UserContext } from "../../context/User/UserContext";
+import {getMyNftByTokenAddressAndTokenId} from "../../api/ApiCall/nftCollection/getMyNftByTokenAddressAndTokenId"
 
 const useStyle = makeStyles({
   wrap5: {
@@ -69,8 +73,44 @@ const useStyle = makeStyles({
     padding: "11px",
   },
 });
-const PinnedNFT = ({ data }) => {
+const PinnedNFT = () => {
   const classes = useStyle();
+  const [{token}, ] = useContext(UserContext);
+  const [pinnedNft,setPinnedNft]=useState([])
+  const [pinnedNftData,setPinnedNftData]=useState([])
+  const {isLoading,refetch}=useQuery(
+    ["getAllPinnedNfts",token],
+    ()=>getAllPinnedNfts(token),{
+      onSuccess:(data)=>{
+      //  console.log(data?.responseResult?.pinnedNfts[0].tokenAddress);
+       setPinnedNft([...data?.responseResult?.pinnedNfts])
+      }
+    }
+  )
+// const useCustomeQuery=async()=>{
+//   return useQuery(
+//     ["getMyNftByTokenAddressAndTokenId",token,query.tokenAddress,query.tokenId],
+//    () => getMyNftByTokenAddressAndTokenId(token,query.tokenAddress,query.tokenId),
+// )
+// }
+
+// console.log(pinnedNft[0]?.tokenId);
+  const getAllPinnedNftsByTokenIdAndAddress=async()=>{
+    // getMyNftByTokenAddressAndTokenId
+    const data=await Promise.all(pinnedNft?.map(async({tokenAddress,tokenId})=>{
+      const nft=await getMyNftByTokenAddressAndTokenId(token,tokenAddress,tokenId)
+      return {...nft?.responseResult?.nfts};
+    }))
+    return data
+  }
+  useEffect(()=>{
+    const temp=async()=>{
+      const lol=await getAllPinnedNftsByTokenIdAndAddress?.();
+      setPinnedNftData([...lol])
+    }
+    temp?.();
+  },[pinnedNft])
+  // console.log(pinnedNftData); 
 
   return (
     <>
@@ -80,7 +120,7 @@ const PinnedNFT = ({ data }) => {
             <Grid item md={12}>
               <Typography variant="h2">Pinned NFTs</Typography>
             </Grid>
-            {data.length === 0 ? (
+            {isLoading  ? (
              <Container>
                 <Grid>
                   <Grid>
@@ -90,20 +130,22 @@ const PinnedNFT = ({ data }) => {
                   </Grid>
                 </Grid>
              </Container>
-            )
-              : (data && data?.map((nft, index) => {
+            ):(
+              pinnedNftData && pinnedNftData?.map((nft, index) => {
                 return (
-                  <Grid key={index} item md={4} sm={6} >
-                    <NftBox data={nft} />
+                  <Grid key={index} item md={4} sm={6}>
+                    <NftBox pin={"true"} pinnedRefetch={refetch}  data={nft["0"]} />
                   </Grid>
                 )
-              }))
+              })
+              
+              )
             }
           </Grid>
         </Container>
       </Box>
 
-      <AllNFT nfts={data} />
+      <AllNFT />
     </>
   );
 };

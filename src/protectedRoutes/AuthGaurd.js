@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 export default function AuthGuard({ children } ) {
   const [{token} ]= useContext(UserContext);
   if (!token) {
-    return <Navigate to='/' replace />;
+    return <Navigate to='/' />;
   }
 
   return <>{children}</>;

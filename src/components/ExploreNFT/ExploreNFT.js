@@ -11,7 +11,7 @@ import {
 //   import Header from "../Header/Header";
   import { makeStyles } from "@mui/styles";
 //   import Data from "../ExploreData";
-  import Data from "../../pages/Explore/ExploreData";
+  // import Data from "../../pages/Explore/ExploreData";
   import Data1 from "../../pages/Explore/Polygon/PolygonData";
   import Data2 from "../../pages/Explore/Solana/SolanaData";
   import Data3 from "../../pages/Explore/Wax/WaxData";
@@ -20,6 +20,8 @@ import {
   import Polygon from "../../pages/Explore/Polygon/Polygon";
   import Solana from "../../pages/Explore/Solana/Solana";
   import Tezos from "../../pages/Explore/Tezos/Tezos";
+  import {getAllNftCollection} from "../../api/ApiCall/nftCollection/getAllNftCollection"
+import { useQuery } from "react-query";
   const useStyle = makeStyles({
     wrap7: {
       "& h3": {
@@ -120,6 +122,16 @@ import {
     const DActive = () => {
       setShow4(!show4);
     };
+
+    const {data,isLoading}=useQuery(
+      "getAllNftCollection",
+      getAllNftCollection,
+      {
+        onSuccess:(data)=>{
+          console.log(data?.responseResult);
+        }
+      }
+    )
   
     const classes = useStyle();
     return (
@@ -132,16 +144,16 @@ import {
                   <Box className={classes.bag15}>
                     <FormGroup>
                       <FormControlLabel
-                        control={<Checkbox  onClick={Active} />}
+                        control={<Checkbox defaultChecked onClick={Active} />}
                         label="Ethereum"
                       />
                     </FormGroup>
-                    <FormGroup>
+                    {/* <FormGroup>
                       <FormControlLabel
                         control={<Checkbox defaultChecked  onClick={inActive} />}
                         label="Polygon"
                       />
-                    </FormGroup>
+                    </FormGroup> */}
                     {/* <FormGroup>
                       <FormControlLabel
                         control={<Checkbox  onClick={DisActive} />}
@@ -164,26 +176,32 @@ import {
                 </Box>
               </Grid>
   
-              {/* <Grid item lg={12}>
-          <Box>
-            <Typography variant="h3">{title}</Typography>
-          </Box>
-        </Grid> */}
-              {/* <Container>
-                <Grid container >
-                  {Data &&
-                    Data.map((e,index) => {
+            <Grid item lg={12}>
+           <Box sx={{marginLeft:"23rem"}}>
+            <Typography variant="h3">Ethereum Feature Nfts</Typography>
+          </Box> 
+        </Grid>
+              <Container>
+               
+                  {data?.responseResult && show &&
+                    data?.responseResult.map((nfts,i) => {
                       return (
-                        <>
-                          <Grid item md={4} sm={6} >
-                            <NftBox data={e} dfg={show}/>
+                        <Grid key={i} container  justifyContent="center">
+                        {nfts?.nfts.map((nft,index)=>{return(
+                          <>
+                          <Grid item key={index}  md={4} sm={6} >
+                            <NftBox data={nft} />
                           </Grid>
-                        </>
+                          </>
+                        )})
+              
+                        }
+                        </Grid>
                       );
                     })}
-                </Grid>
-              </Container> */}
-              <Container>
+              
+              </Container>
+              {/* <Container>
                 <Grid container>
                   {Data1 &&
                     Data1.map((e) => {
@@ -196,7 +214,7 @@ import {
                       );
                     })}
                 </Grid>
-              </Container>
+              </Container> */}
               {/* <Container>
                 <Grid container>
                   {Data2 &&
