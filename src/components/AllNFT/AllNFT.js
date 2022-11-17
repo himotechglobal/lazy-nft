@@ -104,7 +104,7 @@ const AllNFT = () => {
     <>
       <Box className={classes.wrap5}>
         <Container>
-          <Grid container spacing={3}>
+          <Grid container spacing={3} justifyContent="center">
             <Grid item md={12}>
               <Typography variant="h2">All NFTs</Typography>
               <Box className={classes.bag11}>

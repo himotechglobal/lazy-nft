@@ -94,6 +94,9 @@ const useStyle = makeStyles({
     background: "#fff",
     margin: "0 auto",
     borderRadius: "6px",
+    "& p":{
+      cursor:"pointer",
+    }
   },
   bag11: {
     width: "13%",
@@ -224,19 +227,23 @@ const NftBox = (props) => {
               
                </>
                )}
-               <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank">Veiw on OpenSea</a>
-               <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank">Veiw on EtherScan</a>
+               <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "10px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
+               <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000"}}>Veiw on OpenSea</a>
+               </Box>
+               <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "10px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
+               <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000"}}>Veiw on EtherScan</a>
+               </Box>
 
               </Box>
             ) : null}
           </Box>
           {/* <Link to={`/nftdetailpage/${props.data.id}`}> */}
-          <img src={props.data.metadata.image?`${ props.data.metadata.image.replace("ipfs://","https://ipfs.io/ipfs/")}`:""} alt=""  onClick={clickable}/>
+          <img src={props?.data.metadata.image?`${ props?.data.metadata.image.replace("ipfs://","https://ipfs.io/ipfs/")}`:""} alt=""  onClick={clickable}/>
           {/* </Link> */}
           {/* <img src={props.data1.img} alt="" /> */}
           <Box onClick={clickable}>
-            <h6>{props.data.metadata.description}</h6>
-            <p>{props.data.metadata.name}</p>
+            <h6>#{props.data.tokenId}</h6>
+            <p>{props?.data.lazyName? props?.data.lazyName : props?.data.metadata.name}</p>
           </Box>
         </Box>
       </Grid>
