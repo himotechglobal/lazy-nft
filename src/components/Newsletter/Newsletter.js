@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme)=>({
   wrap5: {
     width: "100%",
     padding: "2rem 0",
@@ -22,13 +22,19 @@ const useStyle = makeStyles({
       width: "15%",
       borderRadius: "10px",
       height: "130px",
+      [theme.breakpoints.down("sm")]: {
+        width: "100%",
+       },
+      [theme.breakpoints.down("md")]: {
+        width: "50%",
+       },
     },
   },
   // bag9: {
   //   width: "15%",
   //   lineHeight: "10px",
   // },
-});
+}));
 
 const Newsletter = () => {
   const classes = useStyle();

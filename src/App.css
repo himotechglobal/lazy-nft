@@ -82,3 +82,25 @@
  .css-1p823my-MuiListItem-root{
     padding: 0 26px;
  }
+ .btn:active{
+    background-color: #000 !important;
+ }
+ .btn:hover{
+    background-color: #000 !important;
+ }
+ .css-1ptx2yq-MuiInputBase-root-MuiInput-root:after{
+    border-bottom: 0px transparent !important;
+ }
+ .css-1a1fmpi-MuiInputBase-root-MuiInput-root:before{
+    border-bottom: 0px transparent !important;
+ }
+ .css-1a1fmpi-MuiInputBase-root-MuiInput-root:after{
+    border-bottom: 0px transparent !important;  
+ }
+ .css-1d1r5q-MuiFormHelperText-root.Mui-error{
+    top: 52px !important;
+ }
+ .css-htnf0n-MuiAvatar-root{
+    background-color: #000 !important;
+    cursor: pointer;
+ }

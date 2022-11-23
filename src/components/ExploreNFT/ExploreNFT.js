@@ -22,7 +22,7 @@ import {
   import Tezos from "../../pages/Explore/Tezos/Tezos";
   import {getAllNftCollection} from "../../api/ApiCall/nftCollection/getAllNftCollection"
 import { useQuery } from "react-query";
-  const useStyle = makeStyles({
+  const useStyle = makeStyles((theme)=>({
     wrap7: {
       "& h3": {
         fontSize: "1.7rem",
@@ -97,7 +97,13 @@ import { useQuery } from "react-query";
       width: "13%",
       margin: "0 auto",
     },
-  });
+    hjk:{
+      [theme.breakpoints.down("sm")]: {
+        flexDirection: "column !important",
+        display:"flex",
+       },
+    }
+  }));
   const ExploreNFT = () => {
     const [show, setShow] = useState(true);
     const [show1, setShow1] = useState(true);
@@ -136,9 +142,9 @@ import { useQuery } from "react-query";
     const classes = useStyle();
     return (
       <>
-        <Box className={classes.wrap7}>
-          {/* <Container> */}
-            <Grid container >
+        <Box className={classes.wrap7} >
+          <Container >
+            {/* <Grid container className={classes.hjk}> */}
               <Grid item md={12}>
                 <Box>
                   <Box className={classes.bag15}>
@@ -176,8 +182,9 @@ import { useQuery } from "react-query";
                 </Box>
               </Grid>
   
-            <Grid item lg={12}>
-           <Box sx={{marginLeft:"23rem"}}>
+            <Grid item lg={12} >
+           <Box sx={{textAlign:"center",margin:"1rem 0"}}>
+           {/* <Box> */}
             <Typography variant="h3">Ethereum Feature Nfts</Typography>
           </Box> 
         </Grid>
@@ -257,8 +264,8 @@ import { useQuery } from "react-query";
                     })}
                 </Grid>
               </Container> */}
-            </Grid>
-          {/* </Container> */}
+            {/* </Grid> */}
+          </Container>
         </Box>
       </>
     );

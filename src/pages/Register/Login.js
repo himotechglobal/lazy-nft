@@ -11,11 +11,30 @@ import { makeStyles } from "@mui/styles";
 import { UserContext } from "../../context/User/UserContext";
 import { actionTypes } from "../../context/User/UserReducer";
 import { viewProfile } from "../../api/ApiCall/viewProfile";
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme)=>({
   signupbox: {
-    width: "28%",
+    width: "33%",
     margin: "5rem auto",
-    // borderRadius:"30px",
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+    },
+    // [theme.breakpoints.up("md")]: {
+    //   width: "100%",
+    // },
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+    },
+    // [theme.breakpoints.up("lg")]: {
+    //   width: "28%",
+    // },
+    "& input::placeholder": {
+      fontSize: "13px",
+      // padding:"0 10px"
+    },
+    "& input": {
+      fontSize: "13px",
+      padding:"10px 20px !important"
+    }
   },
   btn: {
     textAlign: "center",
@@ -25,7 +44,9 @@ const useStyle = makeStyles({
       padding: "10px 27px",
       border: "none",
       borderRadius: "36px",
-    },
+    }, "& button:hover":{
+      background: "#000", padding: "10px 27px", border: "none", borderRadius: "36px"
+    }
   },
   signup: {
     margin: "3rem 0",
@@ -39,7 +60,7 @@ const useStyle = makeStyles({
     textDecoration: "underline !important",
     fontSize: "1rem",
   },
-});
+}));
 const Login = () => {
   const classes = useStyle();
   const navigate = useNavigate();

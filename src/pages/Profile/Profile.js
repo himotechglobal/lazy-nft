@@ -14,14 +14,18 @@ import { useContractRead,useContract,useProvider } from "wagmi";
 import {getUserNFTByTokenURI} from "../../api/ApiCall/getNftByTokenURI";
 import {addorUpdateNftCollection} from "../../api/ApiCall/nftCollection/addorUpdateNftCollection"
 
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme)=>({
   wrap5: {
     padding: "2rem 0 ",
+    [theme.breakpoints.down("sm")]: {
+
+     },
     "& div": {
       " & img": {
         margin: "1rem auto",
         width: "16%",
         borderRadius: "50%",
+        
       },
       "& h6": {
         // margin:"1rem 0 0 0",
@@ -35,7 +39,12 @@ const useStyle = makeStyles({
       },
     },
   },
-});
+  wer:{
+    [theme.breakpoints.down("md")]: {
+      justifyContent:"center"
+    },
+  }
+}));
 const Profile =  () => {
   const provider = useProvider()
   const {address,isConnected}=useAccount()
@@ -103,8 +112,8 @@ const metadataFunc=async()=>{
       { ( isConnected && getMetaData  && address) ?(
         <>
       <Box className={classes.wrap5}>
-        <Container>
-          <Grid container spacing={2}>
+        <Container >
+          <Grid container spacing={2} className={classes.wer}>
             <Grid item md={12}>
               <div>
                 <img

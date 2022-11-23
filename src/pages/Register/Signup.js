@@ -11,15 +11,35 @@ import { ClassNames } from "@emotion/react";
 import { makeStyles } from "@mui/styles";
 import { UserContext } from "../../context/User/UserContext";
 import {actionTypes} from "../../context/User/UserReducer"
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme)=>({
   signupbox: {
-    width: "28%", margin: "5rem auto",
+    width: "33%", margin: "5rem auto",
     // borderRadius:"30px",
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+    },
+    // [theme.breakpoints.up("md")]: {
+    //   width: "400%",
+    // },
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+    },
+    "& input::placeholder": {
+      fontSize: "13px",
+      // padding:"0 10px"
+    },
+    "& input": {
+      fontSize: "13px",
+      padding:"10px 20px !important"
+    }
   },
   btn:{
     textAlign:"center",
     margin:"2rem 0",
       "& button":{
+        background: "#000", padding: "10px 27px", border: "none", borderRadius: "36px"
+      },
+      "& button:hover":{
         background: "#000", padding: "10px 27px", border: "none", borderRadius: "36px"
       }
   },
@@ -34,7 +54,7 @@ const useStyle = makeStyles({
     textDecoration:"underline !important",
     fontSize:"1rem"
   }
-});
+}));
 const Signup = () => {
   const classes = useStyle();
   const [, dispatch] = useContext(UserContext);
@@ -120,7 +140,7 @@ const Signup = () => {
               variant="standard"
               id="userName"
               name="userName"
-              placeholder="userName"
+              placeholder="Username"
               // label="userName"
               value={formik.values.userName}
               onChange={formik.handleChange}

@@ -11,13 +11,17 @@ import {
 import { makeStyles } from "@mui/styles";
 import { UserContext } from "../../context/User/UserContext";
 import { Link } from "react-router-dom";
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme)=>({
   wrap5: {
     width: "100%",
     padding: "2rem 0",
     "& h3": {
       fontSize: "1.9rem",
       fontWeight: "bold",
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "1.5rem",
+        textAlign:"center"
+       },
     },
     "& button": {
       fontSize: "1rem",
@@ -34,7 +38,6 @@ const useStyle = makeStyles({
       fontSize: "13px",
       border: "2px solid #000",
       borderRadius: "26px",
-      
     },
     "& Button:hover": {
       background: "#000",
@@ -58,17 +61,19 @@ const useStyle = makeStyles({
         border: "1px solid #ccc", padding: "8px 11px", borderRadius: "5px", width: "80%"
     }
   },
-});
+}));
 const Share = () => {
   const [{ userData },] = useContext(UserContext);
   const Data = [
     {
       id: 1,
       img: "https://platform-cdn.sharethis.com/img/twitter-white.svg",
+      link:"https://twitter.com/",
     },
     {
       id: 1,
       img: "https://platform-cdn.sharethis.com/img/facebook-white.svg",
+      link:"https://www.facebook.com/",
     },
     // {
     //   id: 1,
@@ -77,10 +82,12 @@ const Share = () => {
     {
       id: 1,
       img: "https://platform-cdn.sharethis.com/img/email-white.svg",
+      link:"https://www.facebook.com/",
     },
     {
       id: 1,
       img: "https://platform-cdn.sharethis.com/img/sms-white.svg",
+      link:"https://www.facebook.com/",
     },
     // {
     //   id: 1,
@@ -90,6 +97,7 @@ const Share = () => {
     {
       id: 1,
       img: "https://platform-cdn.sharethis.com/img/whatsapp-white.svg",
+      link:"https://web.whatsapp.com/",
     //   width:"61%"
     },
   ];
@@ -99,25 +107,26 @@ const Share = () => {
       <Box className={classes.wrap5}>
         <Container>
           <Grid container sx={{justifyContent:{lg:"auto",xs:"center",}}}>
-            <Grid item lg={12}>
+            <Grid item lg={12} sm={12}>
               <Box>
                 <Typography variant="h3">Share</Typography>
               </Box>
-            </Grid>
-            <Grid item md={12}>
               <Box className={classes.bag5}>
                 <Button variant="contained" sx={{mt:{lg:"auto",xs:"15px",textTransform:"none"}}}>
-                  <Link to={`/${userData?.userName}`}>http://localhost:3000/{userData?.userName}</Link>
+                  <Link to={`/${userData?.userName}`} style={{color:"#000"}}>http://localhost:3000/{userData?.userName}</Link>
                 </Button>
               </Box>
             </Grid>
+            {/* <Grid item md={12} sm={12}>
+             
+            </Grid> */}
             <Grid item md={12}>
               <Box className={classes.bag9}>
                 {Data.map((e,i) => {
                   return (
                     <>
                       <Box key={i}>
-                        <img src={e.img} alt="" style={{width:e.width}}/>
+                        <a href={e.link}><img src={e.img} alt="" style={{width:e.width}}/></a>
                       </Box>
                     </>
                   );

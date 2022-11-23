@@ -16,7 +16,7 @@ import {getMyNftCollection} from "../../api/ApiCall/nftCollection/getMyNftCollec
 import { useQuery } from "react-query";
 import { UserContext } from "../../context/User/UserContext";
 
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme)=>({
   wrap5: {
     padding: "2rem 0 ",
 
@@ -82,7 +82,7 @@ const useStyle = makeStyles({
     width: "13%",
     margin: "0 auto",
   },
-});
+}));
 const AllNFT = () => {
   const [show, setShow] = useState(false);
   const [show3, setShow3] = useState(false);
@@ -104,8 +104,8 @@ const AllNFT = () => {
     <>
       <Box className={classes.wrap5}>
         <Container>
-          <Grid container spacing={3} justifyContent="center">
-            <Grid item md={12}>
+          <Grid container spacing={3}>
+            <Grid item md={12} sm={12}>
               <Typography variant="h2">All NFTs</Typography>
               <Box className={classes.bag11}>
                 <FormGroup>
@@ -118,8 +118,8 @@ const AllNFT = () => {
             </Grid>
             {show3 ? (
               <>
-                <Grid item md={12}>
-                  <Typography variant="h5">Ethereum NFTs</Typography>
+                <Grid item md={12} sm={12}>
+                  <Typography variant="h5" sx={{textAlign:"center"}}>Ethereum NFTs</Typography>
                 </Grid>
                 { nfts[0]?.nfts.length>0 ?  (nfts[0]?.nfts.map((nft,index)=>{return (
                   

@@ -14,13 +14,16 @@ import "@uniswap/widgets/fonts.css";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme)=>({
     wrap5: {
         width: "100%",
         padding: "2rem 0",
         "& h3": {
           fontSize: "1.9rem",
           fontWeight:"bold",
+          [theme.breakpoints.down("sm")]: {
+            fontSize: "1.5rem",
+           },
         },
         "& button": {
           fontSize: "1rem",
@@ -34,7 +37,9 @@ const useStyle = makeStyles({
           borderRadius: "15px",
           padding: "0.6rem 1.4rem",
           fontSize: "13px",
-
+          [theme.breakpoints.down("sm")]: {
+            marginTop:"1rem"
+           },
         },
         "& Button:hover": {
           background: "#000",
@@ -50,8 +55,20 @@ const useStyle = makeStyles({
       },
       bag6:{
           // width:"100% !important"
+      },
+      yhu:{
+        [theme.breakpoints.down("sm")]: {
+         justifyContent:"center",
+         alignItems:"center"
+        },
+      },
+      yhu:{
+        [theme.breakpoints.down("md")]: {
+         justifyContent:"space-between",
+         alignItems:"center"
+        },
       }
-  });
+  }));
 const Swap = () => {
   const {openConnectModal}=useConnectModal();
   const {isConnected,address}=useAccount()
@@ -59,8 +76,8 @@ const Swap = () => {
   return (
     <>
       <Box className={classes.wrap5}>
-        <Container>
-          <Grid container>
+        <Container >
+          <Grid container className={classes.yhu}>
             <Grid item lg={12}>
               <Box >
               <Typography variant="h3">My Wallets</Typography>
