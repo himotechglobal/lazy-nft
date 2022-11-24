@@ -139,12 +139,14 @@ const useStyle = makeStyles((theme) => ({
   },
   bag9: {
     // // position: "relative !important",
-    // position: "absolute !important",
+    position: "absolute !important",
     // zIndex: "1",
     // // top:"14.6rem",
     // textAlign: "center",
     // left: "0",
     // right: "0",
+    // position: absolute;
+    width: "100%"
   },
   bag10: {
     width: "93%",
@@ -475,7 +477,7 @@ const NftBox = (props) => {
                       }
                     />
                   </Badge>
-                  <Typography variant="body2"><RemoveRedEyeIcon/>{count}</Typography>
+                  <Typography variant="body2"><RemoveRedEyeIcon/>{" "}{count}</Typography>
                 </Box>
               </Box>
               {/* </Link> */}

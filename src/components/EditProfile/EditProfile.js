@@ -198,9 +198,11 @@ const EditProfile = ({heading}) => {
             personalURL: values.personalURL,
           },
         });
+        
       } catch (error) {
         console.log(error);
       }
+    setShow(true)
     },
   });
 
@@ -358,7 +360,7 @@ const EditProfile = ({heading}) => {
                 Picture"
               </p>
               {/* </Box> */}
-              <button type="submit"  >
+              <button type="submit">
                 Submit
               </button>
               
