@@ -134,6 +134,7 @@ const useStyle = makeStyles({
       fontWeight: "bold",
     },
   },
+    
   bag90: {
     display: "block",
     border: "1px solid linen",
@@ -353,7 +354,7 @@ updateNftNameOrDescription,{
          <TextField
                 name="name"
                 id="name"
-                placeholder="Enter  Name"
+                placeholder="Enter Name"
                 className={classes.bag90  }
                 sx={{width:"100%"}}
                 value={formik.values.name}
@@ -366,6 +367,7 @@ updateNftNameOrDescription,{
                   formik.touched.name && formik.errors.name
                 }
               />
+              
                 <TextareaAutosize
                   className={classes.bag90}
                   // aria-label="minimum height"

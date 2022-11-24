@@ -7,6 +7,8 @@ import {
   FormControlLabel,
   Checkbox,
   Typography,
+  TextField,
+  TextareaAutosize,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Link } from "react-router-dom";
@@ -19,8 +21,20 @@ import { pinnedNft } from "../../api/ApiCall/pinnedNft/pinnedNft";
 import { unpinnedNft } from "../../api/ApiCall/pinnedNft/unpinnedNft";
 import { hideNft } from "../../api/ApiCall/nftHide/hideNft";
 import { unhideNft } from "../../api/ApiCall/nftHide/unhideNft";
+import Badge from "@mui/material/Badge";
+// import Checkbox from '@mui/material/Checkbox';
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import Favorite from "@mui/icons-material/Favorite";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { WOLFPUPS_NFT_address } from "../../config/index";
-const useStyle = makeStyles((theme)=>({
+import Modal from "react-bootstrap/Modal";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
+
+const useStyle = makeStyles((theme) => ({
   wrap7: {
     // color:"#000",
     "& h3": {
@@ -56,13 +70,38 @@ const useStyle = makeStyles((theme)=>({
       borderTopRightRadius: "5px",
     },
     "& p": {
-      fontSize: "1rem",
+      fontSize: "0.8rem",
       fontWeight: "500",
       textAlign: "left",
       padding: "10px  ",
       margin: "0 0 4px 0",
       color: "#000",
       // display:"none"
+    },
+
+    bag90: {
+      display: "block",
+      border: "1px solid linen",
+      margin: "10px 0",
+      width: "100%",
+      padding: "13px",
+      borderRadius: "15px",
+      boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
+    },
+    bagr: {
+      "& button": {
+        width: "100%",
+        margin: "13px 0",
+        border: "1px solid #000",
+        padding: "10px",
+        borderRadius: "41px",
+      },
+      "& button:hover": {
+        backgroundColor: "#000",
+        color: "#fff",
+        transition:
+          "color 0.5s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out",
+      },
     },
   },
   bag7: {
@@ -72,11 +111,12 @@ const useStyle = makeStyles((theme)=>({
     // left: "0",
     // right: "0",
     // top:"6.5rem",
-    display: "flex",
-    alignItems: "center",
-    margin: "0",
-    justifyContent: "space-between",
-    // boxShadow:"0px 0px 10px #ccc", 
+    // display: "flex",
+    // alignItems: "center",
+    // margin: "0",
+    // justifyContent: "space-between",
+    // boxShadow:"0px 0px 10px #ccc",
+    textAlign: "end",
     "& button": {
       background: "#fff",
       color: "#000",
@@ -111,10 +151,10 @@ const useStyle = makeStyles((theme)=>({
     background: "#fff",
     margin: "0 auto",
     borderRadius: "6px",
-        boxShadow:"0px 0px 10px #ccc",
+    boxShadow: "0px 0px 10px #ccc",
     [theme.breakpoints.down("sm")]: {
       width: "100% !important",
-     },
+    },
     "& p": {
       cursor: "pointer",
     },
@@ -123,11 +163,36 @@ const useStyle = makeStyles((theme)=>({
     width: "13%",
     margin: "0 auto",
   },
+
+  bag90: {
+    display: "block",
+    border: "1px solid linen",
+    margin: "10px 0",
+    width: "100%",
+    padding: "13px",
+    borderRadius: "15px",
+    boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
+  },
+  bagr: {
+    "& button": {
+      width: "100%",
+      margin: "13px 0",
+      border: "1px solid #000",
+      padding: "10px",
+      borderRadius: "41px",
+    },
+    "& button:hover": {
+      backgroundColor: "#000",
+      color: "#fff",
+      transition:
+        "color 0.5s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out",
+    },
+  },
 }));
 const NftBox = (props) => {
   const [, dispatch] = useContext(UserContext);
   const navigate = useNavigate();
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
   const classes = useStyle();
   const clickable = () => {
     navigate(`/nftdetailpage/${props?.data.tokenId}`);
@@ -167,7 +232,42 @@ const NftBox = (props) => {
     "unhideNft",
     unhideNft
   );
+  const [count, setCount] = useState(0);
 
+  const [shows, setShows] = useState(false);
+  const [show, setShow] = useState(false);
+  const toggleModal = (open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setShow(!open);
+  };
+  const handleClose = () => setShows(false);
+  const handleShow = () => setShows(true);
+  const formik = useFormik({
+    initialValues: {
+      decs: "",
+      name: "",
+    },
+    validationSchema: yup.object({
+      decs: yup
+        .string()
+        .min(0, "Too Short!")
+        .max(160, "Too Long!")
+        .required("Required!"),
+      name: yup
+        .string()
+        .min(4, "Too Short!")
+        .max(20, "Too Long!")
+        .required("Required!"),
+    }),
+    onSubmit: async (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
   return (
     <>
       <Container>
@@ -182,17 +282,10 @@ const NftBox = (props) => {
             <Box className={classes.bag8}>
               <Box className={classes.bag9}>
                 <Box className={classes.bag7}>
-                  <Box onClick={clickable}>
-                    <h6>#{props.data.tokenId}</h6>
-                    <p>
-                      {props?.data.lazyName
-                        ? props?.data.lazyName
-                        : props?.data.metadata.name}
-                    </p>
-                  </Box>
                   <button
                     className="btn btn-primary"
                     onClick={() => setShow(!show)}
+                    // onClose={toggleModal(true)}
                   >
                     {show ? (
                       <i class="bi bi-x-lg"></i>
@@ -207,6 +300,15 @@ const NftBox = (props) => {
                     {props?.data.tokenOwner ===
                       "0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73" && (
                       <>
+                      
+                        <p
+                       
+                          onClick={handleShow}
+                          
+                       
+                        >
+                          Edit
+                        </p>
                         <p
                           onClick={async () => {
                             try {
@@ -234,6 +336,7 @@ const NftBox = (props) => {
                                 });
                               } catch (error) {}
                             }}
+                            
                           >
                             Unpinned Nft
                           </p>
@@ -248,6 +351,7 @@ const NftBox = (props) => {
                                 });
                               } catch (error) {}
                             }}
+                            onClose={toggleModal(true)}
                           >
                             Pinned Nft
                           </p>
@@ -288,7 +392,7 @@ const NftBox = (props) => {
                         color: "#000",
                         margin: "0 0 4px 0",
                         padding: "10px",
-                        fontSize: "1rem",
+                        fontSize: "0.8rem",
                         textAlign: "left",
                         fontWeight: "500",
                         width: "123%",
@@ -297,7 +401,7 @@ const NftBox = (props) => {
                       <a
                         href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${props?.data.tokenId}`}
                         target="_blank"
-                        style={{ color: "#000" }}
+                        style={{ color: "#000", fontSize: "0.8rem" }}
                       >
                         Veiw on OpenSea
                       </a>
@@ -307,7 +411,7 @@ const NftBox = (props) => {
                         color: "#000",
                         margin: "0 0 4px 0",
                         padding: "10px",
-                        fontSize: "1rem",
+                        fontSize: "0.8rem",
                         textAlign: "left",
                         fontWeight: "500",
                         width: "123%",
@@ -316,7 +420,7 @@ const NftBox = (props) => {
                       <a
                         href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${props?.data.tokenId}`}
                         target="_blank"
-                        style={{ color: "#000" }}
+                        style={{ color: "#000", fontSize: "0.8rem" }}
                       >
                         Veiw on EtherScan
                       </a>
@@ -337,12 +441,91 @@ const NftBox = (props) => {
                 alt=""
                 onClick={clickable}
               />
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Box onClick={clickable}>
+                  <h6>#{props.data.tokenId}</h6>
+                  <p>
+                    {props?.data.lazyName
+                      ? props?.data.lazyName
+                      : props?.data.metadata.name}
+                  </p>
+                </Box>
+                <Box sx={{ textAlign: "center" }}>
+                  <Badge badgeContent={`${count}`} color="primary">
+                    <Checkbox
+                      onClick={() => {
+                        setCount(count + 1);
+                      }}
+                      {...label}
+                      icon={<FavoriteBorder />}
+                      checkedIcon={
+                        <Favorite
+                          indeterminateIcon
+                          sx={{ color: "red" }}
+                          // onClick={() => {
+                          //   setCount(count + 1);
+                          // }}
+                        />
+                      }
+                    />
+                  </Badge>
+                  <Typography variant="body2"><RemoveRedEyeIcon/>{count}</Typography>
+                </Box>
+              </Box>
               {/* </Link> */}
               {/* <img src={props.data1.img} alt="" /> */}
             </Box>
           </Grid>
         </Grid>
       </Container>
+
+      <Modal show={shows} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Box>
+            <Box>
+              <form className={classes.bagr} onSubmit={formik.handleSubmit}>
+                <TextField
+                  name="name"
+                  id="name"
+                  placeholder="Enter Name"
+                  className={classes.bag90}
+                  sx={{ width: "100%" }}
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  error={formik.touched.name && Boolean(formik.errors.name)}
+                  helperText={formik.touched.name && formik.errors.name}
+                />
+
+                <TextareaAutosize
+                  className={classes.bag90}
+                  // aria-label="minimum height"
+                  minRows={3}
+                  placeholder="Enter Description"
+                  // style={{ width: 200 }}
+                  onChange={formik.handleChange}
+                  id="decs"
+                  name="decs"
+                  value={formik.values.decs}
+                  error={formik.touched.decs && Boolean(formik.errors.decs)}
+                  helperText={formik.touched.decs && formik.errors.decs}
+                />
+                <button type="submit">Submit</button>
+
+                <button onClick={handleClose}>Close</button>
+              </form>
+            </Box>
+          </Box>
+        </Modal.Body>
+      </Modal>
     </>
   );
 };

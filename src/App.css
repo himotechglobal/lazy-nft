@@ -78,6 +78,7 @@
 
  .css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root{
     padding: 0 !important;
+    display: block !important;
  }
  .css-1p823my-MuiListItem-root{
     padding: 0 26px;
@@ -103,4 +104,8 @@
  .css-htnf0n-MuiAvatar-root{
     background-color: #000 !important;
     cursor: pointer;
+ }
+
+ .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root{
+    padding: 0 !important;
  }
