@@ -18,10 +18,9 @@ import Modal from "react-bootstrap/Modal";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Header from "../Header/Header";
 import { UserContext } from "../../context/User/UserContext";
-import {getAllHideNfts} from "../../api/ApiCall/nftHide/getAllHideNfts"
-import { useQuery } from "react-query";
+import {getAllHideNft} from "../../api/ApiCall/nftHide/getAllHideNft"
+import { useQuery} from "react-query";
 import NftBox from "../../pages/Explore/NftBox";
-import {getMyNftByTokenAddressAndTokenId} from "../../api/ApiCall/nftCollection/getMyNftByTokenAddressAndTokenId"
 const useStyle = makeStyles({
     wrap5: {
       padding: "2rem 0 ",
@@ -111,34 +110,16 @@ const useStyle = makeStyles({
 const HiddenNFT = () => {
   const [{userData,userUpdateData,updatePic,token}, ] = useContext(UserContext);
   const classes = useStyle();
-  const [hideNft,setHideNft]=useState([])
-  const [hideNftData,setHideNftData]=useState([])
-  const {isLoading,refetch}=useQuery(
-    ["getAllHideNfts",token],
-    ()=>getAllHideNfts(token),{
+
+
+  const {data,isLoading}=useQuery(
+    ["getAllHideNft",token],
+    ()=>getAllHideNft(token),{
       onSuccess:(data)=>{
-      //  console.log(data?.responseResult?.pinnedNfts[0].tokenAddress);
-      setHideNft([...data?.responseResult?.hideNfts])
+        
       }
     }
   )
-
-  const getAllPinnedNftsByTokenIdAndAddress=async()=>{
-    // getMyNftByTokenAddressAndTokenId
-    const data=await Promise.all(hideNft?.map(async({tokenAddress,tokenId})=>{
-      const nft=await getMyNftByTokenAddressAndTokenId(token,tokenAddress,tokenId)
-      return {...nft?.responseResult?.nfts};
-    }))
-    return data
-  }
-  useEffect(()=>{
-    const temp=async()=>{
-      const lol=await getAllPinnedNftsByTokenIdAndAddress?.();
-      setHideNftData([...lol])
-    }
-    temp?.();
-  },[hideNft])
-
 
   return (
     <>
@@ -168,7 +149,7 @@ const HiddenNFT = () => {
             <Grid item md={12}>
               <Typography variant="h2">Hidden NFTs</Typography>
             </Grid>
-            {isLoading  ? (
+            { isLoading? (
              <Container>
                 <Grid>
                   <Grid>
@@ -179,18 +160,25 @@ const HiddenNFT = () => {
                 </Grid>
              </Container>
             ):(
-              hideNftData && hideNftData?.map((nft, index) => {
+             ( data?.responseResult && data?.responseResult?.map((nft, index) => {
                 return (
                   <Grid key={index} item md={4} sm={6}>
-                    <NftBox hide={"true"} data={nft["0"]} />
+                    <NftBox hide={"true"} data={nft} />
                   </Grid>
                 )
-              })
-              
+                })
               )
+             )
             }
+ 
           </Grid>
         </Container>
+        { !data?.responseResult && <Container>
+              <Grid container md={12} justifyContent="center">
+              <Typography variant="h5">No Hidden NFTs Added Yet</Typography>
+              </Grid>
+              </Container>
+               }
       </Box>
     </>
   );

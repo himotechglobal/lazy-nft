@@ -1,14 +1,16 @@
 import axios from "axios";
 import ApiConfigs from "../../ApiConfig";
 
-export const getNftByTokenAddressAndTokenId = async (tokenAddress,tokenId) => {
+export const toggleLike = async ({token,nftCollectionId}) => {
     try {
       const { data } = await axios({
-        method:'GET',
-        url:ApiConfigs.getNftByTokenAddressAndTokenId, 
+        method:'PUT',
+        url:ApiConfigs.hideNft, 
+        headers:{
+          'authorization':`Bearer ${token}`,
+        },
         params:{
-            tokenAddress:tokenAddress,
-            tokenId:tokenId
+            id:nftCollectionId
         }
     });
     return data;

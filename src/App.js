@@ -26,15 +26,7 @@ import { toast } from "react-toastify";
 
 function App() {
   const [{ token }, dispatch] = useContext(UserContext);
-  useEffect(() => {
-    if (token === "") {
-      const jwtToken = localStorage.getItem("token");
-      if (jwtToken) {
-        dispatch({ type: actionTypes.SET_TOKEN, value: jwtToken });
-        refetch?.()
-      }
-    };
-  }, [dispatch, token]);
+
  const tokens=token?token: localStorage.getItem("token");
     const {refetch } = useQuery(
     ["viewProfile", tokens],
@@ -43,6 +35,14 @@ function App() {
       dispatch({ type: actionTypes.SET_USER, value: data?.data });
     },
   });
+
+  useEffect(() => {
+      const jwtToken = localStorage.getItem("token");
+      if (jwtToken) {
+        dispatch({ type: actionTypes.SET_TOKEN, value: jwtToken });
+        refetch?.()
+      }
+  }, [dispatch,token]);
 
   return (
     <div className="App">

@@ -1,17 +1,17 @@
 import axios from "axios";
 import ApiConfigs from "../../ApiConfig";
 
-export const hideNft = async ({token,tokenAddress,tokenId}) => {
+export const pinnedToggleNft = async ({token,nftCollectionId}) => {
+  // console.log(nftCollectionId,token);
     try {
       const { data } = await axios({
-        method:'POST',
-        url:ApiConfigs.hideNft, 
+        method:'PUT',
+        url:ApiConfigs.pinnedToggleNft, 
         headers:{
           'authorization':`Bearer ${token}`,
         },
-        data:{
-            tokenAddress:tokenAddress,
-            tokenId:tokenId
+        params:{
+          id:nftCollectionId
         }
     });
     return data;

@@ -3,10 +3,10 @@ import React, { useContext } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
 export default function UserGuard({ to,children } ) {
-  const [{token,userData} ]= useContext(UserContext);
-  if (token && userData?.userName ) {
-    return <Navigate to={`/${userData?.userName}`}  />;
+  const [{userData} ]= useContext(UserContext);
+  if (userData?.userName ) {
+    return <Navigate to={`/${userData?.userName}`} replace  />;
   }
 
-  return <>{children}</>;
+  return children
 }

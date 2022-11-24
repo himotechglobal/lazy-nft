@@ -5,8 +5,8 @@ import { Box, Container, Grid,Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PinnedNFT from "../../components/PinnedNFT/PinnedNFT";
 import { UserContext } from "../../context/User/UserContext";
-import { useAccount } from "wagmi";
-import { useMutation,useQuery } from "react-query";
+import { chain, useAccount } from "wagmi";
+import { useMutation,useQuery, useQueryClient } from "react-query";
 import { getUserNFT } from "../../api/ApiCall/moralis/getUserNFT";
 import WOLFPUPS_NFT_ABI from "../../config/WOLFPUPS_NFT_ABI.json"
 import {WOLFPUPS_NFT_address} from "../../config/index";
@@ -38,11 +38,11 @@ const useStyle = makeStyles({
 });
 const Profile =  () => {
   const provider = useProvider()
+  const queryClient=useQueryClient();
   const {address,isConnected}=useAccount()
   const classes = useStyle();
   const [{userData,userUpdateData,updatePic,token}, ] = useContext(UserContext);
   const [NFTBalance,SetNFTBalance]=useState(0)
-  const [getMetaData,setMetaData]=useState([])
   const [tokenIdList,setTokenIdList]=useState([]);
   const contract=  useContract({
     address: WOLFPUPS_NFT_address,
@@ -56,8 +56,8 @@ const Profile =  () => {
   }
 
  const  ArraysOfTokenId= async(balance)=>{
-  let TokenIdList=[]
-  for(let i=0;i<Number(balance)-272;i++){
+  var TokenIdList=[];
+  for(let i=0;i<Number(balance)-270;i++){
     const tokenId = await contract.tokenOfOwnerByIndex("0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73",i);
     TokenIdList.push(tokenId?.toString());
   }
@@ -67,30 +67,28 @@ const Profile =  () => {
 
 
 const MetaData= async (TokenIdList)=>{
-  const data=await Promise.all(TokenIdList.map(async(tokenId)=>{
+  console.log({TokenIdList});
+  await Promise.all(TokenIdList?.map(async(tokenId)=>{
     const tokenUri=await contract.tokenURI(tokenId);
-    const metaData=await getUserNFTByTokenURI(tokenUri);
-    await addorUpdateNftCollection({token:token,value:{tokenAddress:WOLFPUPS_NFT_address,tokenId:tokenId,tokenOwner:"0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73",metadata:metaData}})
-    return metaData;
+    const metadata=await getUserNFTByTokenURI(tokenUri);
+    await addorUpdateNftCollection({token:token,value:{tokenAddress:WOLFPUPS_NFT_address,tokenId:tokenId,tokenOwner:"0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73",metadata:metadata}})
+
   }));
-  return data;
 }
 
 const metadataFunc=async()=>{
-  if(address && isConnected){
   const balance = await Balance();
-  var arr =await ArraysOfTokenId(balance);
-  SetNFTBalance(balance?.toString());
+  SetNFTBalance(balance.toString());
+  const arr =await ArraysOfTokenId?.(balance);
   setTokenIdList([...arr])
-  const meta=await MetaData([...arr]);
-  setMetaData(meta);
-  }
-  
+  await MetaData?.([...arr]);
+  await queryClient.invalidateQueries("getMyNftCollection")
 }
 
  useEffect( ()=>{
-
+if(address && isConnected && chain.mainnet){
   metadataFunc();
+}
 
  },[]);
 
@@ -100,7 +98,7 @@ const metadataFunc=async()=>{
       { (!address ) && 
       <EditProfile />
       }
-      { ( isConnected && getMetaData  && address) ?(
+      { ( isConnected  && address) ?(
         <>
       <Box className={classes.wrap5}>
         <Container>

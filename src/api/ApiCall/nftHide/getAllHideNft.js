@@ -1,18 +1,14 @@
 import axios from "axios";
 import ApiConfigs from "../../ApiConfig";
 
-export const unhideNft = async ({token,tokenAddress,tokenId}) => {
+export const getAllHideNft = async (token) => {
     try {
       const { data } = await axios({
-        method:'DELETE',
-        url:ApiConfigs.unhideNft, 
+        method:'GET',
+        url:ApiConfigs.getAllHideNft, 
         headers:{
           'authorization':`Bearer ${token}`,
         },
-        params:{
-          tokenAddress:tokenAddress,
-          tokenId:tokenId
-      }
     });
     return data;
     } catch (error) {

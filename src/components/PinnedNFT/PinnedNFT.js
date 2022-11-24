@@ -4,10 +4,10 @@ import { makeStyles } from "@mui/styles";
 import { fontWeight } from "@mui/system";
 import AllNFT from "../AllNFT/AllNFT";
 import NftBox from "../../pages/Explore/NftBox";
-import {getAllPinnedNfts} from "../../api/ApiCall/pinnedNft/getAllPinnedNfts"
+import {getAllPinnedNft} from "../../api/ApiCall/pinnedNft/getAllPinnedNft"
 import { useQueries, useQuery } from "react-query";
 import { UserContext } from "../../context/User/UserContext";
-import {getMyNftByTokenAddressAndTokenId} from "../../api/ApiCall/nftCollection/getMyNftByTokenAddressAndTokenId"
+
 
 const useStyle = makeStyles({
   wrap5: {
@@ -76,15 +76,10 @@ const useStyle = makeStyles({
 const PinnedNFT = () => {
   const classes = useStyle();
   const [{token}, ] = useContext(UserContext);
-  const [pinnedNft,setPinnedNft]=useState([])
-  const [pinnedNftData,setPinnedNftData]=useState([])
-  const {isLoading,refetch}=useQuery(
-    ["getAllPinnedNfts",token],
-    ()=>getAllPinnedNfts(token),{
-      onSuccess:(data)=>{
-      //  console.log(data?.responseResult?.pinnedNfts[0].tokenAddress);
-       setPinnedNft([...data?.responseResult?.pinnedNfts])
-      }
+  const {data,isLoading}=useQuery(
+    ["getAllPinnedNft",token],
+    ()=>getAllPinnedNft(token),{
+      staleTime:2000,
     }
   )
 // const useCustomeQuery=async()=>{
@@ -94,23 +89,23 @@ const PinnedNFT = () => {
 // )
 // }
 
-// console.log(pinnedNft[0]?.tokenId);
-  const getAllPinnedNftsByTokenIdAndAddress=async()=>{
-    // getMyNftByTokenAddressAndTokenId
-    const data=await Promise.all(pinnedNft?.map(async({tokenAddress,tokenId})=>{
-      const nft=await getMyNftByTokenAddressAndTokenId(token,tokenAddress,tokenId)
-      return {...nft?.responseResult?.nfts};
-    }))
-    return data
-  }
-  useEffect(()=>{
-    const temp=async()=>{
-      const lol=await getAllPinnedNftsByTokenIdAndAddress?.();
-      setPinnedNftData([...lol])
-    }
-    temp?.();
-  },[pinnedNft])
-  // console.log(pinnedNftData); 
+// // console.log(pinnedNft[0]?.tokenId);
+//   const getAllPinnedNfts=async()=>{
+//     // getMyNftByTokenAddressAndTokenId
+//     const data=await Promise.all(pinnedNft?.map(async({tokenAddress,tokenId})=>{
+//       const nft=await getMyNftByTokenAddressAndTokenId(token,tokenAddress,tokenId)
+//       return {...nft?.responseResult?.nfts};
+//     }))
+//     return data
+//   }
+  // const temp=async()=>{
+  //   const lol=await getAllPinnedNftsByTokenIdAndAddress?.();
+  //   setPinnedNftData([...lol])
+  // }
+  // useEffect(()=>{
+    
+  // },[pinnedNft])
+
 
   return (
     <>
@@ -131,10 +126,10 @@ const PinnedNFT = () => {
                 </Grid>
              </Container>
             ):(
-              pinnedNftData && pinnedNftData?.map((nft, index) => {
+              data?.responseResult && data?.responseResult?.map((nft, index) => {
                 return (
                   <Grid key={index} item md={4} sm={6}>
-                    <NftBox pin={"true"} pinnedRefetch={refetch}  data={nft["0"]} />
+                    <NftBox  data={nft} />
                   </Grid>
                 )
               })

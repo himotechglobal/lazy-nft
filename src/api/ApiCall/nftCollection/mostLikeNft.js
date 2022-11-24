@@ -1,14 +1,12 @@
 import axios from "axios";
 import ApiConfigs from "../../ApiConfig";
 
-export const getAllHideNfts = async (token) => {
+export const mostLikeNft = async () => {
     try {
       const { data } = await axios({
         method:'GET',
-        url:ApiConfigs.getAllHideNfts, 
-        headers:{
-          'authorization':`Bearer ${token}`,
-        },
+        url:ApiConfigs.mostLikeNft, 
+
     });
     return data;
     } catch (error) {

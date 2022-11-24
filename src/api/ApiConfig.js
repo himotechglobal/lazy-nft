@@ -1,6 +1,6 @@
 // const url = "http://172.16.1.240:8008/";
-// const url = "http://localhost:5000";
-const url ="https://d2ugm2w8bdhvj3.cloudfront.net"
+const url = "http://localhost:5000";
+// const url ="https://d2ugm2w8bdhvj3.cloudfront.net"
 
 
 const ApiConfigs = {
@@ -16,15 +16,16 @@ const ApiConfigs = {
   updateNftNameOrDescription:`${url}/api/v1/nftCollection/updateNftNameOrDescription`,
   getAllNftCollection:`${url}/api/v1/nftCollection/getAllNft`,
   getMyNftCollection:`${url}/api/v1/nftCollection/getMyNft`,
-  getMyNftByTokenAddressAndTokenId:`${url}/api/v1/nftCollection/getMyNftByTokenAddressAndTokenId`,
-  getNftByTokenAddressAndTokenId:`${url}/api/v1/nftCollection/getNftByTokenAddressAndTokenId`,
-  hideNft:`${url}/api/v1/hideNft/hide`,
-  unhideNft:`${url}/api/v1/hideNft/unhide`,
-  getAllHideNfts:`${url}/api/v1/hideNft/getAllHideNft`,
-  pinnedNft:`${url}/api/v1/pinnedNft/pinned`,
-  unpinnedNft:`${url}/api/v1/pinnedNft/unpinned`,
-  getAllPinnedNfts:`${url}/api/v1/pinnedNft/getAllPinnedNft`,
-  getUserNFT:`https://deep-index.moralis.io/api/v2/`
+  getNftByNftCollectionId:`${url}/api/v1/nftCollection/getNftByNftCollectionId`,
+  hideToggleNft:`${url}/api/v1/nftCollection/hideToggleNft`,
+  getAllHideNft:`${url}/api/v1/nftCollection/getAllHideNft`,
+  pinnedToggleNft:`${url}/api/v1/nftCollection/pinnedToggleNft`,
+  getAllPinnedNft:`${url}/api/v1/nftCollection/getAllPinnedNft`,
+  toggleLike:`${url}/api/v1/nftCollection/toggleLike`,
+  mostLikeNft:`${url}/api/v1/nftCollection/mostLikeNft`,
+  mostViewNft:`${url}/api/v1/nftCollection/mostViewNft`,
+  recentlyListedNft:`${url}/api/v1/nftCollection/recentlyListedNft`,
+  // getUserNFT:`https://deep-index.moralis.io/api/v2/`
 };
 
 export default ApiConfigs;

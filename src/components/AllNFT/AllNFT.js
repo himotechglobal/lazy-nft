@@ -85,10 +85,10 @@ const useStyle = makeStyles({
 });
 const AllNFT = () => {
   const [show, setShow] = useState(false);
-  const [show3, setShow3] = useState(false);
+  const [show3, setShow3] = useState(true);
   const [{token}, ] = useContext(UserContext);
   const [nfts,setNfts]=useState([])
-  const {data,isLoading}=useQuery(
+  const {isLoading}=useQuery(
     ["getMyNftCollection",token],
     ()=>getMyNftCollection(token),
     {
@@ -110,7 +110,7 @@ const AllNFT = () => {
               <Box className={classes.bag11}>
                 <FormGroup>
                   <FormControlLabel
-                    control={<Checkbox onClick={() => setShow3(!show3)} />}
+                    control={<Checkbox defaultChecked onClick={() => setShow3(!show3)} />}
                     label="Ethereum"
                   />
                 </FormGroup>
@@ -121,7 +121,7 @@ const AllNFT = () => {
                 <Grid item md={12}>
                   <Typography variant="h5">Ethereum NFTs</Typography>
                 </Grid>
-                { nfts[0]?.nfts.length>0 ?  (nfts[0]?.nfts.map((nft,index)=>{return (
+                { nfts.length>0 ?  (nfts.map((nft,index)=>{return (
                   
                    <Grid key={index} item md={4} sm={6} >
                         <NftBox data={nft}/>

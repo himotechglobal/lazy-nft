@@ -12,14 +12,13 @@ import { makeStyles } from "@mui/styles";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import {updateProfilePic} from "../../api/ApiCall/updateProfilePic"
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { UserContext } from "../../context/User/UserContext";
 import {actionTypes} from "../../context/User/UserReducer";
-import {pinnedNft} from "../../api/ApiCall/pinnedNft/pinnedNft"
-import {unpinnedNft} from "../../api/ApiCall/pinnedNft/unpinnedNft"
-import {hideNft} from "../../api/ApiCall/nftHide/hideNft"
-import {unhideNft} from "../../api/ApiCall/nftHide/unhideNft";
+import {pinnedToggleNft} from "../../api/ApiCall/pinnedNft/pinnedToggleNft"
+import {hideToggleNft} from "../../api/ApiCall/nftHide/hideToggleNft"
 import {WOLFPUPS_NFT_address} from "../../config/index";
+import { useAccount } from "wagmi";
 const useStyle = makeStyles({
   wrap7: {
     // color:"#000",
@@ -104,12 +103,15 @@ const useStyle = makeStyles({
   },
 });
 const NftBox = (props) => {
+  const queryClient=useQueryClient();
   const [, dispatch] = useContext(UserContext);
+  const {address,isConnected}=useAccount()
   const navigate = useNavigate()
   const [show, setShow] = useState(false);
   const classes = useStyle();
+  // console.log(props?.data._id);
   const clickable = (()=> {
-    navigate(`/nftdetailpage/${props?.data.tokenId}`)
+    navigate(`/nftdetailpage/${props?.data._id}`)
   })
   const {mutateAsync}=useMutation(
     "updateProfilePic",
@@ -120,33 +122,33 @@ const NftBox = (props) => {
   }
   )
 
-  const {mutateAsync:mutateAsyncPinnedNft}=useMutation(
-    "pinnedNft",
-    pinnedNft,{
+  const {mutateAsync:mutateAsyncPinnedToggleNft}=useMutation(
+    "pinnedToggleNft",
+    pinnedToggleNft,{
     onSuccess:(data)=>{
-     props?.pinnedRefetch.refetch();
+      queryClient.invalidateQueries("getAllPinnedNft");
+      queryClient.invalidateQueries("getMyNftCollection")
+      queryClient.invalidateQueries("getAllHideNft");
+      queryClient.invalidateQueries("getAllNftCollection");
     }
   }
   )
 
-  const {mutateAsync:mutateAsyncUnpinnedNft}=useMutation(
-    "unpinnedNft",
-    unpinnedNft,{
-    onSuccess:(data)=>{
-     props?.pinnedRefetch.refetch();
+
+  const {mutateAsync:mutateAsyncHideToggleNft}=useMutation(
+    "hideToggleNft",
+    hideToggleNft,{
+      onSuccess:(data)=>{
+        queryClient.invalidateQueries("getAllHideNft");
+        queryClient.invalidateQueries("getMyNftCollection")
+        queryClient.invalidateQueries("getAllPinnedNft");
+        queryClient.invalidateQueries("getAllNftCollection");
+        
+      }
     }
-  }
   )
 
-  const {mutateAsync:mutateAsyncHideNft}=useMutation(
-    "hideNft",
-    hideNft,
-  )
 
-  const {mutateAsync:mutateAsyncUnhideNft}=useMutation(
-    "unhideNft",
-    unhideNft,
-  )
 
   return (
     <>
@@ -176,7 +178,7 @@ const NftBox = (props) => {
 
             {show ? (
               <Box className={classes.bag10}>
-              { props?.data.tokenOwner==="0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73" && (
+              { address && isConnected && props?.data.tokenOwner===address|| "fghj0x13deFBAC61a79761EB40B86E41B0fe3B9541aEFFkjhbv" && (
                 <>
                <p onClick={async()=>{
                 try{
@@ -187,11 +189,11 @@ const NftBox = (props) => {
                }}>
                Make Profile Picture</p>
 
-               {props?.pin==="true" ? (
+               {props?.data.pinnedStatus==="PINNED" ? (
           
                <p onClick={async()=>{
                 try{
-                  await mutateAsyncUnpinnedNft({token:localStorage.getItem("token"),tokenAddress:props?.data.tokenAddress,tokenId:props?.data.tokenId})
+                  await mutateAsyncPinnedToggleNft({token:localStorage.getItem("token"),nftCollectionId:props?.data._id})
                 }catch(error){
 
                 }
@@ -200,16 +202,16 @@ const NftBox = (props) => {
                ):(
                 <p onClick={async()=>{
                 try{
-                  await mutateAsyncPinnedNft({token:localStorage.getItem("token"),tokenAddress:props?.data.tokenAddress,tokenId:props?.data.tokenId})
+                  await mutateAsyncPinnedToggleNft({token:localStorage.getItem("token"),nftCollectionId:props?.data._id})
                 }catch(error){
 
                 }
                }}>Pinned Nft</p>
                )}
-               { props?.hide==="true" ?(
+               { props?.data.status==="HIDE" ?(
                <p onClick={async()=>{
                 try{
-                  await mutateAsyncUnhideNft({token:localStorage.getItem("token"),tokenAddress:props?.data.tokenAddress,tokenId:props?.data.tokenId})
+                  await mutateAsyncHideToggleNft({token:localStorage.getItem("token"),nftCollectionId:props?.data._id})
                 }catch(error){
 
                 }
@@ -218,7 +220,7 @@ const NftBox = (props) => {
                ):(
                 <p onClick={async()=>{
                 try{
-                  await mutateAsyncHideNft({token:localStorage.getItem("token"),tokenAddress:props?.data.tokenAddress,tokenId:props?.data.tokenId})
+                  await mutateAsyncHideToggleNft({token:localStorage.getItem("token"),nftCollectionId:props?.data._id})
                 }catch(error){
 
                 }

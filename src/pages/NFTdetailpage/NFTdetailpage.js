@@ -19,13 +19,12 @@ import { Link } from "react-router-dom";
 import WOLFPUPS_NFT_ABI from "../../config/WOLFPUPS_NFT_ABI.json"
 import {WOLFPUPS_NFT_address} from "../../config/index";
 import { useMutation, useQuery } from "react-query";
-import {getUserNFTByTokenURI} from "../../api/ApiCall/getNftByTokenURI"
-import { useContractRead,useContract,useProvider } from "wagmi";
+import { useContractRead,useContract,useProvider, useAccount } from "wagmi";
 import Modal from 'react-bootstrap/Modal';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {updateNftNameOrDescription} from "../../api/ApiCall/nftCollection/updateNftNameOrDescription"
-import {getNftByTokenAddressAndTokenId} from "../../api/ApiCall/nftCollection/getNftByTokenAddressAndTokenId"
+import {getNftByNftCollectionId} from "../../api/ApiCall/nftCollection/getNftByNftCollectionId"
 
 
 const useStyle = makeStyles({
@@ -162,16 +161,16 @@ const useStyle = makeStyles({
 
 const NFTdetailpage = () => {
   // const provider = useProvider()
+  const {address,isConnected}=useAccount()
   const [show, setShow] = useState(false);
-  const [tokenUri,setTokenUri]=useState("")
   const classes = useStyle();
-  const {id:tokenId } = useParams();
+  const {id:nftCollectionId } = useParams();
 
 
-const {data,refetch}=useQuery(["getNftByTokenAddressAndTokenId",WOLFPUPS_NFT_address,tokenId],
- ()=>getNftByTokenAddressAndTokenId(WOLFPUPS_NFT_address,tokenId),{
+const {data,refetch}=useQuery(["getNftByNftCollectionId",nftCollectionId],
+ ()=>getNftByNftCollectionId(nftCollectionId),{
     onSuccess:(data)=>{
-      console.log({data});
+      // console.log({data});
      
     }
   })
@@ -210,9 +209,8 @@ updateNftNameOrDescription,{
       try {
         await mutateAsync({
           token: localStorage.getItem("token"),
+          nftCollectionId:nftCollectionId,
           value: {
-            tokenAddress:WOLFPUPS_NFT_address,
-            tokenId:tokenId,
             lazyName:values.name,
             lazyDescription:values.decs
           }
@@ -233,7 +231,7 @@ updateNftNameOrDescription,{
                 <Grid container >
                   <Grid md={12}>
                     <Box className={classes.bag15}>
-                      <img src={data?.responseResult?.nfts[0]?.metadata?.image?`${ data?.responseResult?.nfts[0]?.metadata?.image.replace("ipfs://","https://ipfs.io/ipfs/")}`:""}alt="" />
+                      <img src={data?.responseResult?.metadata?.image?`${ data?.responseResult?.metadata?.image.replace("ipfs://","https://ipfs.io/ipfs/")}`:""}alt="" />
                       {/* <h1>{elz.title}</h1> */}
                     </Box>
                   </Grid>
@@ -246,20 +244,20 @@ updateNftNameOrDescription,{
                 <Grid>
                   <Grid md={6}>
                     <Box>
-                    <Typography variant="h4">#{tokenId}</Typography>
-                      <Typography variant="h4">{data?.responseResult?.nfts[0]?.lazyName? data?.responseResult?.nfts[0]?.lazyName :data?.responseResult?.nfts[0]?.metadata?.name}</Typography>
-                      <p>{data?.responseResult?.nfts[0]?.lazyDescription? data?.responseResult?.nfts[0]?.lazyDescription :data?.responseResult?.nfts[0]?.metadata?.description}</p>
+                    <Typography variant="h4">#{data?.responseResult?.tokenId}</Typography>
+                      <Typography variant="h4">{data?.responseResult?.lazyName? data?.responseResult?.lazyName :data?.responseResult?.metadata?.name}</Typography>
+                      <p>{data?.responseResult?.lazyDescription? data?.responseResult?.lazyDescription :data?.responseResult?.metadata?.description}</p>
                     </Box>
                   </Grid>
                   <Box>
                     <Grid>
                       <Stack spacing={2} direction="row" justifyContent="center">
                       <Box>
-                      { data?.responseResult?.nfts[0]?.tokenOwner==="0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73" &&
+                      { isConnected && address && data?.responseResult?.tokenOwner===address || "0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73" &&
                       <a variant="primary" onClick={handleShow} style={{textAlign:'center'}}>Edit</a>
                       }
-                        <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${tokenId}`} target="_blank">Veiw on OpenSea</a>
-                        <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${tokenId}`} target="_blank">Veiw on EtherScan</a>
+                        <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${data?.responseResult?.tokenId}`} target="_blank">Veiw on OpenSea</a>
+                        <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${data?.responseResult?.tokenId}`} target="_blank">Veiw on EtherScan</a>
 
                       </Box>
 
@@ -303,8 +301,6 @@ updateNftNameOrDescription,{
 
                   {show ? (
                     <Box className={classes.bag10}>
-                      <p>RabbitHole</p>
-                      <p>BizarroWorld</p>
                       <p>veiw on OpenSea</p>
                       <p>veiw on EtherScan</p>
                     </Box>

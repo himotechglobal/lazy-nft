@@ -92,10 +92,10 @@ const Wallet = () => {
           // console.log(data.responseResult[0]?.wallets[0]);
           // toast.success(JSON.stringify("You wallets fetched Successfully"));
         } else {
-          toast.error(JSON.stringify(data));
+          // toast.error(JSON.stringify(data));
         }
       } catch (error) {
-        toast.error(JSON.stringify(error));
+        // toast.error(JSON.stringify(error));
       }
     }
   }
@@ -113,11 +113,11 @@ const Wallet = () => {
             // toast.error(JSON.stringify(data.message));
           }
         } catch (error) {
-          toast.error(JSON.stringify(error));
+          // toast.error(JSON.stringify(error));
         }
       },
       onError: (error, data) => {
-        toast.error(JSON.stringify(error));
+        // toast.error(JSON.stringify(error));
       },
     }
   );
