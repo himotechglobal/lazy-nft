@@ -256,7 +256,7 @@ updateNftNameOrDescription,{
                     <Grid>
                       <Stack spacing={2} direction="row" justifyContent="center">
                       <Box>
-                      { ((!!token && isConnected && address) && (data?.responseResult?.tokenOwner===address ||data?.responseResult?.tokenOwner=== "0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73")) &&
+                      { ((!!token && isConnected && address) && (data?.responseResult?.tokenOwner===address)) &&
                       <a variant="primary" onClick={handleShow} style={{textAlign:'center'}}>Edit</a>
                       }
                         <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${data?.responseResult?.tokenId}`} target="_blank">Veiw on OpenSea</a>

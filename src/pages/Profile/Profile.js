@@ -66,14 +66,14 @@ const Profile =  () => {
 
   })
   const Balance=async ()=>{
-    const balanceOf= await contract.balanceOf("0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73");
+    const balanceOf= await contract.balanceOf(address);
     return balanceOf
   }
 
  const  ArraysOfTokenId= async(balance)=>{
   var TokenIdList=[];
   for(let i=0;i<Number(balance)-273;i++){
-    const tokenId = await contract.tokenOfOwnerByIndex("0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73",i);
+    const tokenId = await contract.tokenOfOwnerByIndex(address,i);
     TokenIdList.push(tokenId?.toString());
   }
   return TokenIdList;
@@ -86,7 +86,7 @@ const MetaData= async (TokenIdList)=>{
   await Promise.all(TokenIdList?.map(async(tokenId)=>{
     const tokenUri=await contract.tokenURI(tokenId);
     const metadata=await getUserNFTByTokenURI(tokenUri);
-    await addorUpdateNftCollection({token:token,value:{tokenAddress:WOLFPUPS_NFT_address,tokenId:tokenId,tokenOwner:"0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73",metadata:metadata}})
+    await addorUpdateNftCollection({token:token,value:{tokenAddress:WOLFPUPS_NFT_address,tokenId:tokenId,tokenOwner:address,metadata:metadata}})
 
   }));
 }
@@ -118,7 +118,7 @@ if(address && isConnected && chain.mainnet){
 
 useEffect(()=>{
   if(!token){
-    console.log("gg");
+    // console.log("gg");
     refetch?.()
   }
 },[userName])

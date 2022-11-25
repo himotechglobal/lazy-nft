@@ -353,7 +353,7 @@ updateNftNameOrDescription,{
 
             {show ? (
               <Box className={classes.bag10}>
-              {  ((!!token && address && isConnected )&& (props?.data.tokenOwner===address || props?.data.tokenOwner === "0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73")) && (
+              {  ((!!token && address && isConnected )&& (props?.data.tokenOwner===address)) && (
                 <>
                 <p
                        
