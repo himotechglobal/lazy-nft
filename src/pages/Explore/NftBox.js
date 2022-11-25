@@ -1,4 +1,4 @@
-import React, { useState,useContext } from "react";
+import React, { useState,useContext,useRef } from "react";
 import { makeStyles } from "@mui/styles";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +20,7 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import useOnClick from "../../components/useOnclick";
 import {
   Box,
   Container,
@@ -33,6 +34,7 @@ import {
 } from "@mui/material";
 import {toggleLike} from "../../api/ApiCall/nftCollection/toggleLike";
 import {updateNftNameOrDescription} from "../../api/ApiCall/nftCollection/updateNftNameOrDescription"
+// import useOnClickOutSide from "../../components/useOnclick";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 const useStyle = makeStyles((theme) => ({
   wrap7: {
@@ -194,6 +196,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 const NftBox = (props) => {
+  const ref = useRef();
   const queryClient=useQueryClient();
   const [{userData,token}, dispatch] = useContext(UserContext);
   const {address,isConnected}=useAccount()
@@ -215,6 +218,7 @@ const NftBox = (props) => {
     }
   }
   )
+  
 // console.log(userData._id);
   const {mutateAsync:mutateAsyncEdit}=useMutation("updateNftNameOrDescription",
 updateNftNameOrDescription,{
@@ -316,15 +320,9 @@ updateNftNameOrDescription,{
 
   // const [shows, setShows] = useState(false);
   // const [show, setShow] = useState(false);
-  const toggleModal = (open) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
-    setShow(!open);
-  };
+  
+  useOnClick(ref, () => setShow(false));
+  
   return (
     <>
     <Container >
@@ -352,7 +350,7 @@ updateNftNameOrDescription,{
             </Box>
 
             {show ? (
-              <Box className={classes.bag10}>
+              <Box className={classes.bag10} ref={ref}>
               {  ((!!token && address && isConnected )&& (props?.data.tokenOwner===address)) && (
                 <>
                 <p
