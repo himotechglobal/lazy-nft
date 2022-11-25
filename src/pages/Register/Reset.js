@@ -4,6 +4,9 @@ import Header from "../../components/Header/Header";
 import { makeStyles } from "@mui/styles";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useMutation } from "react-query";
+import { reset } from "../../api/ApiCall/reset";
+import { useNavigate,useSearchParams } from "react-router-dom";
 const useStyle = makeStyles({
   wrap18: {
     padding: "3rem 0 2rem",
@@ -44,6 +47,18 @@ const useStyle = makeStyles({
   
 });
 const Reset = () => {
+  const [searchParams] = useSearchParams();
+  // console.log(searchParams.get("id"));
+  const navigate=useNavigate();
+  const {mutateAsync}=useMutation(
+    "reset",
+    reset,{
+      onSuccess:(data)=>{
+        navigate("/login")
+        console.log(data);
+      }
+    }
+  )
   const formik = useFormik({
     initialValues: {
       password: "",
@@ -51,13 +66,26 @@ const Reset = () => {
     },
     validationSchema: Yup.object({
       password: Yup.string()
-        .min(10, "Minimum 10 characters")
+        .min(4, "Minimum 4 characters")
         .required("Passowrd is Required!"),
       confirmpassword: Yup.string()
-        .min(10, "Minimum 10 characters")
+        .min(4, "Minimum 4 characters")
         .required("Passowrd is Required!"),
     }),
+    onSubmit:async (values)=>{
+      try {
+        await mutateAsync({
+          newPassword: values.password,
+          confirmPassword:values.confirmpassword,
+          id:searchParams.get("id"),
+          token:searchParams.get("token")
+        });
+      } catch (error) {
+        // console.log(error);
+      }
+    },
   });
+
   const classes = useStyle();
   return (
     <>

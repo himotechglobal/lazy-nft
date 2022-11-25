@@ -66,7 +66,7 @@ const Profile =  () => {
 
  const  ArraysOfTokenId= async(balance)=>{
   var TokenIdList=[];
-  for(let i=0;i<Number(balance)-260;i++){
+  for(let i=0;i<Number(balance)-273;i++){
     const tokenId = await contract.tokenOfOwnerByIndex("0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73",i);
     TokenIdList.push(tokenId?.toString());
   }

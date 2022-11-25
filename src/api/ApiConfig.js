@@ -6,6 +6,8 @@ const url = "http://localhost:5000";
 const ApiConfigs = {
   login: `${url}/api/v1/profile/login`,
   signup: `${url}/api/v1/profile/signup`,
+  forget:`${url}/api/v1/profile/forget`,
+  reset:`${url}/api/v1/profile/reset`,
   viewProfile: `${url}/api/v1/profile/viewProfile`,
   editProfile: `${url}/api/v1/profile/editProfile`,
   viewWallet: `${url}/api/v1/userWallet/view`,

@@ -4,6 +4,8 @@ import Header from "../../components/Header/Header";
 import { makeStyles } from "@mui/styles";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import {forget} from "../../api/ApiCall/forget"
+import { useMutation } from "react-query";
 const useStyle = makeStyles({
   wrap18: {
     padding: "6rem 0 2rem",
@@ -44,15 +46,30 @@ const useStyle = makeStyles({
   
 });
 const Reset = () => {
+  const {mutateAsync}=useMutation(
+    "forget",
+    forget,{
+      onSuccess:(data)=>{
+        console.log(data);
+      }
+    }
+  )
   const formik = useFormik({
     initialValues: {
         email: "",
     },
     validationSchema: Yup.object({
-        email: Yup.string()
-        .min(10, "Minimum 10 characters")
-        .required("Passowrd is Required!"),
+        email: Yup.string().email("Invalid email format").required("email is Required!"),
     }),
+    onSubmit:async (values)=>{
+      try {
+        await mutateAsync({
+          email: values.email
+        });
+      } catch (error) {
+        // console.log(error);
+      }
+    },
   });
   const classes = useStyle();
   return (
@@ -79,20 +96,19 @@ const Reset = () => {
                     InputProps={{
                       disableUnderline: true,
                     }}
-                    id="confirmpassword"
-                    name="confirmpassword"
-                    // label="confirm-password"
-                    placeholder="email"
+                    id="email"
+                    name="email"
+                    placeholder="Email"
                     type="email"
-                    value={formik.values.confirmpassword}
+                    value={formik.values.email}
                     onChange={formik.handleChange}
                     error={
-                      formik.touched.confirmpassword &&
-                      Boolean(formik.errors.confirmpassword)
+                      formik.touched.email &&
+                      Boolean(formik.errors.email)
                     }
                     helperText={
-                      formik.touched.confirmpassword &&
-                      formik.errors.confirmpassword
+                      formik.touched.email &&
+                      formik.errors.email
                     }
                   />
                   <Box className={classes.bag26}>
