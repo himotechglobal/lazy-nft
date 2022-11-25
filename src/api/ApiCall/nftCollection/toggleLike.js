@@ -5,7 +5,7 @@ export const toggleLike = async ({token,nftCollectionId}) => {
     try {
       const { data } = await axios({
         method:'PUT',
-        url:ApiConfigs.hideNft, 
+        url:ApiConfigs.toggleLike, 
         headers:{
           'authorization':`Bearer ${token}`,
         },

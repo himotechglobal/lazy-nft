@@ -1,4 +1,4 @@
-import React, { useState,useContext } from "react";
+import React, { useState, useContext } from "react";
 import {
   Container,
   Grid,
@@ -7,16 +7,17 @@ import {
   Checkbox,
   FormGroup,
   FormControlLabel,
-  CircularProgress
+  CircularProgress,
+  Button
 } from "@mui/material";
 import { makeStyles } from "@mui/styles"
 import { data } from "autoprefixer";
 import NftBox from "../../pages/Explore/NftBox";
-import {getMyNftCollection} from "../../api/ApiCall/nftCollection/getMyNftCollection"
-import { useQuery } from "react-query";
+import { getMyNftCollection } from "../../api/ApiCall/nftCollection/getMyNftCollection"
+import { useQuery,useInfiniteQuery } from "react-query";
 import { UserContext } from "../../context/User/UserContext";
 
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme) => ({
   wrap5: {
     padding: "2rem 0 ",
 
@@ -43,7 +44,7 @@ const useStyle = makeStyles({
       borderTopRightRadius: "5px",
     },
     "& p": {
-      fontSize: "1rem", fontWeight: "500", textAlign: "left", padding: "7px 26px ",margin:"0 0 4px 0"
+      fontSize: "1rem", fontWeight: "500", textAlign: "left", padding: "7px 26px ", margin: "0 0 4px 0"
     },
   },
   bag7: {
@@ -82,30 +83,53 @@ const useStyle = makeStyles({
     width: "13%",
     margin: "0 auto",
   },
-});
+}));
 const AllNFT = () => {
   const [show, setShow] = useState(false);
   const [show3, setShow3] = useState(true);
-  const [{token}, ] = useContext(UserContext);
-  const [nfts,setNfts]=useState([])
-  const {isLoading}=useQuery(
-    ["getMyNftCollection",token],
-    ()=>getMyNftCollection(token),
-    {
-      onSuccess:(data)=>{
-        if(data?.success===true){
-          setNfts(data?.responseResult);
-        }
+  const [{ token },] = useContext(UserContext);
+  // const [nfts, setNfts] = useState([])
+  // const {isLoading}=useQuery(
+  //   ["getMyNftCollection",token],
+  //   ()=>getMyNftCollection(token),
+  //   {
+  //     onSuccess:(data)=>{
+  //       if(data?.success===true){
+  //         setNfts(data?.responseResult);
+  //       }
+  //     }
+  //   }
+  // )
+
+  // infinite Scroll 
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isFetching
+  } = useInfiniteQuery(['getMyNftCollection',token],
+    ({pageParam=0}) => getMyNftCollection(pageParam,token), {
+    refetchOnWindowFocus: false,
+    getNextPageParam: (lastPage, pages) => {
+      if (pages.length < 4) {
+        return pages.length + 1
+      } else {
+        return undefined;
       }
+      // Here I'm assuming you have access to the total number of pages
+
+      // If there is not a next page, getNextPageParam will return undefined and the hasNextPage boolean will be set to 'false'
     }
-  )
+
+  })
   const classes = useStyle();
   return (
     <>
       <Box className={classes.wrap5}>
         <Container>
-          <Grid container spacing={3} justifyContent="center">
-            <Grid item md={12}>
+          <Grid container spacing={3}>
+            <Grid item md={12} sm={12}>
               <Typography variant="h2">All NFTs</Typography>
               <Box className={classes.bag11}>
                 <FormGroup>
@@ -118,26 +142,28 @@ const AllNFT = () => {
             </Grid>
             {show3 ? (
               <>
-                <Grid item md={12}>
-                  <Typography variant="h5">Ethereum NFTs</Typography>
+                <Grid item md={12} sm={12}>
+                  <Typography variant="h5" sx={{ textAlign: "center" }}>Ethereum NFTs</Typography>
                 </Grid>
-                { nfts.length>0 ?  (nfts.map((nft,index)=>{return (
-                  
-                   <Grid key={index} item md={4} sm={6} >
-                        <NftBox data={nft}/>
-                   </Grid>
-                )})):(
-                  <Container>
-                <Grid>
-                  <Grid>
-                  <Box sx={{ textAlign: 'center' }}>
-              <CircularProgress />
-              </Box>
-                  </Grid>
-                </Grid>
-             </Container>
+                <Grid container justifyContent="center">
+                {data?.pages[0] ?(
+                data?.pages.map((page, i) => 
+                   page?.responseResult.map((nfts,index)=>{
+                    return (
+                    <>
+                      <Grid item key={index} lg={4} md={4} sm={6}>
+                        <NftBox data={nfts} />
+                      </Grid>
+                    </>
+                  );
+                  })
                 )
-                }
+                ):(
+                  <CircularProgress color="primary" />
+                )}
+                {(isFetching && !!data?.pages[0]  && !isFetchingNextPage) ? <CircularProgress color="primary" />:null}
+                { data?.pages[0] && hasNextPage && <Button  variant="contained" disabled={!hasNextPage} onClick={() => fetchNextPage()}>Load More</Button>}
+                </Grid>
               </>
             ) : null}
           </Grid>

@@ -136,6 +136,12 @@ const PinnedNFT = () => {
               
               )
             }
+            { !data?.responseResult && <Container>
+              <Grid container md={12} justifyContent="center">
+              <Typography variant="h5">No Pinned NFTs Added Yet</Typography>
+              </Grid>
+              </Container>
+               }
           </Grid>
         </Container>
       </Box>

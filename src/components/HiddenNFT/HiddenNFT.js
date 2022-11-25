@@ -170,15 +170,15 @@ const HiddenNFT = () => {
               )
              )
             }
- 
-          </Grid>
-        </Container>
-        { !data?.responseResult && <Container>
+            { !data?.responseResult && <Container>
               <Grid container md={12} justifyContent="center">
               <Typography variant="h5">No Hidden NFTs Added Yet</Typography>
               </Grid>
               </Container>
                }
+          </Grid>
+          
+        </Container>
       </Box>
     </>
   );

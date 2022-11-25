@@ -1,13 +1,4 @@
 import React, { useState,useContext } from "react";
-import {
-  Box,
-  Container,
-  Grid,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  Typography,
-} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -19,13 +10,37 @@ import {pinnedToggleNft} from "../../api/ApiCall/pinnedNft/pinnedToggleNft"
 import {hideToggleNft} from "../../api/ApiCall/nftHide/hideToggleNft"
 import {WOLFPUPS_NFT_address} from "../../config/index";
 import { useAccount } from "wagmi";
-const useStyle = makeStyles({
+import Modal from "react-bootstrap/Modal";
+import Badge from "@mui/material/Badge";
+// import Checkbox from '@mui/material/Checkbox';
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import Favorite from "@mui/icons-material/Favorite";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import {
+  Box,
+  Container,
+  Grid,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Typography,
+  TextField,
+  TextareaAutosize,
+} from "@mui/material";
+import {toggleLike} from "../../api/ApiCall/nftCollection/toggleLike";
+import {updateNftNameOrDescription} from "../../api/ApiCall/nftCollection/updateNftNameOrDescription"
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
+const useStyle = makeStyles((theme) => ({
   wrap7: {
     // color:"#000",
     "& h3": {
       fontSize: "1.7rem",
       fontWeight: "bold",
-      color:"#000 !important",
+      color: "#000 !important",
     },
   },
   bag15: {
@@ -38,12 +53,15 @@ const useStyle = makeStyles({
     margin: "0",
     height: "auto",
     position: "relative",
+
+    // display:"flex",
+    // alignItems:"center",
     "& h6": {
       // margin:"1rem 0 0 0",
       //   textAlign: "center",
       fontWeight: "bold",
       fontSize: "1.3rem",
-      color:"#000",
+      color: "#000",
     },
     " & img": {
       margin: "1rem auto",
@@ -52,64 +70,137 @@ const useStyle = makeStyles({
       borderTopRightRadius: "5px",
     },
     "& p": {
-      fontSize: "1rem",
+      fontSize: "0.8rem",
       fontWeight: "500",
       textAlign: "left",
       padding: "10px  ",
       margin: "0 0 4px 0",
-      color:"#000",
+      color: "#000",
+      // display:"none"
+    },
+
+    bag90: {
+      display: "block",
+      border: "1px solid linen",
+      margin: "10px 0",
+      width: "100%",
+      padding: "13px",
+      borderRadius: "15px",
+      boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
+    },
+    bagr: {
+      "& button": {
+        width: "100%",
+        margin: "13px 0",
+        border: "1px solid #000",
+        padding: "10px",
+        borderRadius: "41px",
+      },
+      "& button:hover": {
+        backgroundColor: "#000",
+        color: "#fff",
+        transition:
+          "color 0.5s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out",
+      },
     },
   },
   bag7: {
-    position: "relative ",
-    zIndex: "1",
-    textAlign: "end",
-    left: "0",
-    right: "0",
+    // position: "relative ",
+    // zIndex: "1",
+    // textAlign: "end",
+    // left: "0",
+    // right: "0",
     // top:"6.5rem",
+    // display: "flex",
+    // alignItems: "center",
+    // margin: "0",
+    // justifyContent: "space-between",
+    // boxShadow:"0px 0px 10px #ccc",
+    textAlign: "end",
     "& button": {
       background: "#fff",
       color: "#000",
       border: "none",
       borderRadius: "50%",
       margin: "10px",
+      "& button:hover": {
+        backgroundColor: "#000 !imporatnt",
+        color: "#fff",
+      },
       "& i": {
         fontSize: "1.5rem",
         fontWeight: "bold",
       },
+      "& button:active": {
+        backgroundColor: "#000 !imporatnt",
+        color: "#fff",
+      },
     },
   },
   bag9: {
-    // position: "relative !important",
+    // // position: "relative !important",
     position: "absolute !important",
-    zIndex: "1",
-    // top:"14.6rem",
-    textAlign: "center",
-    left: "0",
-    right: "0",
+    // zIndex: "1",
+    // // top:"14.6rem",
+    // textAlign: "center",
+    // left: "0",
+    // right: "0",
+    width:"100%"
   },
   bag10: {
     width: "93%",
     background: "#fff",
     margin: "0 auto",
     borderRadius: "6px",
-    "& p":{
-      cursor:"pointer",
-    }
+    boxShadow: "0px 0px 10px #ccc",
+    [theme.breakpoints.down("sm")]: {
+      width: "100% !important",
+    },
+    "& p": {
+      cursor: "pointer",
+    },
   },
   bag11: {
     width: "13%",
     margin: "0 auto",
   },
-});
+
+  bag90: {
+    display: "block",
+    border: "1px solid linen",
+    margin: "10px 0",
+    width: "100%",
+    padding: "13px",
+    borderRadius: "15px",
+    boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
+  },
+  bagr: {
+    "& button": {
+      width: "100%",
+      margin: "13px 0",
+      border: "1px solid #000",
+      padding: "10px",
+      borderRadius: "41px",
+    },
+    "& button:hover": {
+      backgroundColor: "#000",
+      color: "#fff",
+      transition:
+        "color 0.5s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out",
+    },
+  },
+}));
 const NftBox = (props) => {
   const queryClient=useQueryClient();
-  const [, dispatch] = useContext(UserContext);
+  const [{userData}, dispatch] = useContext(UserContext);
   const {address,isConnected}=useAccount()
   const navigate = useNavigate()
   const [show, setShow] = useState(false);
   const classes = useStyle();
-  // console.log(props?.data._id);
+  const [shows, setShows] = useState(false);
+  const handleClose = () => setShows(false);
+  const handleShow = () => setShows(true);
+  // console.log(props);
   const clickable = (()=> {
     navigate(`/nftdetailpage/${props?.data._id}`)
   })
@@ -121,15 +212,32 @@ const NftBox = (props) => {
     }
   }
   )
+// console.log(userData._id);
+  const {mutateAsync:mutateAsyncEdit}=useMutation("updateNftNameOrDescription",
+updateNftNameOrDescription,{
+  onSuccess:(data)=>{
+    queryClient.invalidateQueries("getAllHideNft");
+    queryClient.invalidateQueries("getMyNftCollection")
+    queryClient.invalidateQueries("getAllPinnedNft");
+    queryClient.invalidateQueries("getAllNftCollection");
+    queryClient.invalidateQueries("recentlyListedNft");
+    queryClient.invalidateQueries("mostViewNft");
+    queryClient.invalidateQueries("mostLikeNft")
+  }
+}
+)
 
   const {mutateAsync:mutateAsyncPinnedToggleNft}=useMutation(
     "pinnedToggleNft",
     pinnedToggleNft,{
     onSuccess:(data)=>{
-      queryClient.invalidateQueries("getAllPinnedNft");
-      queryClient.invalidateQueries("getMyNftCollection")
       queryClient.invalidateQueries("getAllHideNft");
+      queryClient.invalidateQueries("getMyNftCollection")
+      queryClient.invalidateQueries("getAllPinnedNft");
       queryClient.invalidateQueries("getAllNftCollection");
+      queryClient.invalidateQueries("recentlyListedNft");
+      queryClient.invalidateQueries("mostViewNft");
+      queryClient.invalidateQueries("mostLikeNft")
     }
   }
   )
@@ -143,13 +251,77 @@ const NftBox = (props) => {
         queryClient.invalidateQueries("getMyNftCollection")
         queryClient.invalidateQueries("getAllPinnedNft");
         queryClient.invalidateQueries("getAllNftCollection");
+        queryClient.invalidateQueries("recentlyListedNft");
+        queryClient.invalidateQueries("mostViewNft");
+        queryClient.invalidateQueries("mostLikeNft")
         
       }
     }
   )
 
+  const {mutateAsync:mutateAsyncToggleLike,data}=useMutation(
+    "toggleLike",
+    toggleLike,{
+      onSuccess:(data)=>{
+        console.log(data?.responseResult);
+        queryClient.invalidateQueries("getAllHideNft");
+        queryClient.invalidateQueries("getMyNftCollection")
+        queryClient.invalidateQueries("getAllPinnedNft");
+        queryClient.invalidateQueries("getAllNftCollection");
+        queryClient.invalidateQueries("recentlyListedNft");
+        queryClient.invalidateQueries("mostViewNft");
+        queryClient.invalidateQueries("mostLikeNft");
+      
+        
+      }
+    }
+  )
+// console.log(props?.data?.likes);
+  const formik = useFormik({
+    initialValues: {
+      decs: "",
+      name: "",
+    },
+    validationSchema: yup.object({
+      decs: yup
+        .string()
+        .min(0, "Too Short!")
+        .max(160, "Too Long!")
+        .required("Required!"),
+      name: yup
+        .string()
+        .min(4, "Too Short!")
+        .max(20, "Too Long!")
+        .required("Required!"),
+    }),
+    onSubmit: async (values) => {
+      try {
+        await mutateAsyncEdit({
+          token: localStorage.getItem("token"),
+          nftCollectionId:props?.data._id,
+          value: {
+            lazyName:values.name,
+            lazyDescription:values.decs
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  });
+  const [count, setCount] = useState(0);
 
-
+  // const [shows, setShows] = useState(false);
+  // const [show, setShow] = useState(false);
+  const toggleModal = (open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setShow(!open);
+  };
   return (
     <>
     <Container >
@@ -180,6 +352,14 @@ const NftBox = (props) => {
               <Box className={classes.bag10}>
               { address && isConnected && props?.data.tokenOwner===address|| "fghj0x13deFBAC61a79761EB40B86E41B0fe3B9541aEFFkjhbv" && (
                 <>
+                <p
+                       
+                   onClick={handleShow}
+                       
+                    
+                     >
+                       Edit
+                     </p>
                <p onClick={async()=>{
                 try{
                   await mutateAsync({token:localStorage.getItem("token"),value:props.data.metadata.image.replace("ipfs://","https://ipfs.io/ipfs/")})
@@ -230,10 +410,10 @@ const NftBox = (props) => {
                </>
                )}
                <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "10px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
-               <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000"}}>Veiw on OpenSea</a>
+               <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>Veiw on OpenSea</a>
                </Box>
                <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "10px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
-               <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000"}}>Veiw on EtherScan</a>
+               <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>Veiw on EtherScan</a>
                </Box>
 
               </Box>
@@ -243,14 +423,102 @@ const NftBox = (props) => {
           <img src={props?.data.metadata.image?`${ props?.data.metadata.image.replace("ipfs://","https://ipfs.io/ipfs/")}`:""} alt=""  onClick={clickable}/>
           {/* </Link> */}
           {/* <img src={props.data1.img} alt="" /> */}
-          <Box onClick={clickable}>
-            <h6>#{props.data.tokenId}</h6>
-            <p>{props?.data.lazyName? props?.data.lazyName : props?.data.metadata.name}</p>
-          </Box>
+          <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Box onClick={clickable}>
+                  <h6>#{props.data.tokenId}</h6>
+                  <p>
+                    {props?.data.lazyName
+                      ? props?.data.lazyName
+                      : props?.data.metadata.name}
+                  </p>
+                  {/* <p>
+                    {props?.data.lazyDescription
+                      ? props?.data.lazyDescription
+                      : props?.data.metadata.description}
+                  </p> */}
+                </Box>
+                <Box sx={{ textAlign: "center" }}>
+                  <Badge badgeContent={`${(data?.responseResult?.likes?.length || props?.data?.likes?.length)??0}`} color="primary">
+                    <Checkbox
+                      onClick={async() => {
+                      
+                        try{
+                  await mutateAsyncToggleLike({token:localStorage.getItem("token"),nftCollectionId:props?.data._id})
+                }catch(error){
+
+                }
+                        
+                      }}
+                      {...label}
+                      icon={<FavoriteBorder />}
+                      checkedIcon={
+                        <Favorite
+                          indeterminateIcon
+                          sx={{ color: "red" }}
+                          // onClick={() => {
+                          //   setCount(count + 1);
+                          // }}
+                        />
+                      }
+                      checked={data?.responseResult?.likes?.includes(userData?._id) || props?.data?.likes?.includes(userData?._id)}
+                    />
+                  </Badge>
+                  <Typography variant="body2"><RemoveRedEyeIcon/>{" "}{props?.data.viewsCount}</Typography>
+                </Box>
+              </Box>
         </Box>
       </Grid>
       </Grid>
     </Container>
+
+
+    <Modal show={shows} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Box>
+            <Box>
+              <form className={classes.bagr} onSubmit={formik.handleSubmit}>
+                <TextField
+                  name="name"
+                  id="name"
+                  placeholder="Enter Name"
+                  className={classes.bag90}
+                  sx={{ width: "100%" }}
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  error={formik.touched.name && Boolean(formik.errors.name)}
+                  helperText={formik.touched.name && formik.errors.name}
+                />
+
+                <TextareaAutosize
+                  className={classes.bag90}
+                  // aria-label="minimum height"
+                  minRows={3}
+                  placeholder="Enter Description"
+                  // style={{ width: 200 }}
+                  onChange={formik.handleChange}
+                  id="decs"
+                  name="decs"
+                  value={formik.values.decs}
+                  error={formik.touched.decs && Boolean(formik.errors.decs)}
+                  helperText={formik.touched.decs && formik.errors.decs}
+                />
+                <button type="submit">Submit</button>
+
+                <button onClick={handleClose}>Close</button>
+              </form>
+            </Box>
+          </Box>
+        </Modal.Body>
+      </Modal>
 
     </>
   );

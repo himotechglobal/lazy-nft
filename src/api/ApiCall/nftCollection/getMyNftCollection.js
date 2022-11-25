@@ -1,7 +1,7 @@
 import axios from "axios";
 import ApiConfigs from "../../ApiConfig";
 
-export const getMyNftCollection = async (token) => {
+export const getMyNftCollection = async (page,token) => {
     try {
       const { data } = await axios({
         method:'GET',
@@ -9,6 +9,9 @@ export const getMyNftCollection = async (token) => {
         headers:{
           'authorization':`Bearer ${token}`,
         },
+        params:{
+          page:page
+        }
     });
     return data;
     } catch (error) {

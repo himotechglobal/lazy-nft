@@ -1,4 +1,4 @@
-import React, { useContext,useState } from "react";
+import React, { useContext,useState,useRef } from "react";
 import {
   Box,
   Button,
@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import { UserContext } from "../../context/User/UserContext";
 import {actionTypes} from "../../context/User/UserReducer";
+import Counter from "./Counter"
 const useStyle = makeStyles({
   //Wrap 3 Start
 
@@ -71,6 +72,14 @@ const useStyle = makeStyles({
   },
 
   bag8: {
+    "& input::placeholder": {
+      fontSize: "13px",
+      // padding:"0 10px"
+    },
+    "& input": {
+      fontSize: "13px",
+      padding:"10px 20px !important"
+    },
     " & p": {
       fontSize: "13px",
       color: "#000",
@@ -93,30 +102,51 @@ const useStyle = makeStyles({
     "& Form": {
       display: "block",
       padding: "10px",
+      "& input":{
+        display: "block",
+        border: "1px solid linen",
+        margin: "10px 0",
+        width: "100%",
+        padding: "13px",
+        borderRadius: "25px",
+        boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
+      },
       "&  h2": {
         fontSize: "1.5rem",
         fontWeight: "bold",
       },
       "& label": {
-        margin: "10px  0",
+        margin: "18px  0",
         fontSize: "1.3rem",
         fontWeight: "bolder",
       },
     },
   },
   bag9: {
-    display: "block",
-    border: "1px solid linen",
-    margin: "10px 0",
-    width: "100%",
-    padding: "13px",
-    borderRadius: "25px",
-    boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
+    // display: "block",
+    // border: "1px solid linen",
+    // margin: "10px 0",
+    // width: "100%",
+    // padding: "13px",
+    // borderRadius: "25px",
+    // boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
   },
 });
 
 const EditProfile = ({heading}) => {
   const [{userData}, dispatch] = useContext(UserContext);
+  const bodyRef = useRef()
+  // const [words, setWords] = useState("")
+
+  // const count = () => {
+  //  return  words.count();
+  // }
+  const [words, setWords] = useState(0)
+
+  const count = () => {
+    setWords(0 + bodyRef.current.value.length)
+  }
+
   const {isLoading, mutateAsync } = useMutation(
     "editProfile",
     editProfile,
@@ -150,10 +180,13 @@ const EditProfile = ({heading}) => {
       bio: Yup.string()
         .min(0, "Too Short!")
         .max(160, "Too Long!"),
-      twitterName: Yup.string().min(4, "Too Short!").max(12, "Too Long!").required("Required!"),
-      facebookName: Yup.string().min(4, "Too Short").max(12, "Too Long"),
-      personalURL: Yup.string().min(4, "Too Short").max(12, "Too Long"),
+      twitterName: Yup.string().required("Required!"),
+      facebookName: Yup.string().required("Required!"),
+      personalURL: Yup.string().required("Required!"),
     }),
+    validateOnChange:(values)=>{
+      setWords(values.bio)
+    },
     onSubmit: async (values) => {
       try {
         await mutateAsync({
@@ -176,6 +209,8 @@ const EditProfile = ({heading}) => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+ 
+   
   return (
     <>
       <Box className={classes.wrap3}>
@@ -213,7 +248,6 @@ const EditProfile = ({heading}) => {
           </Grid>
         </Container>
       </Box>
-
       <Modal show={show} onHide={handleClose}>
         {/* <Modal.Header closeButton></Modal.Header> */}
         <Modal.Body>
@@ -221,27 +255,34 @@ const EditProfile = ({heading}) => {
             <form onSubmit={formik.handleSubmit}>
               <Box className={classes.bag6}>
                 <h5>Bio</h5>
-                <h6>Character Count 0/160</h6>
+                <h6>Character Count {words}/160</h6>
+                {/* <h6>Character Count {count}/160</h6> */}
               </Box>
               <Box>
+              <Counter/>
                 <TextareaAutosize
+                 ref={bodyRef}
                   className={classes.bag7}
                   // aria-label="minimum height"
                   minRows={3}
+                  variant="standard"
                   placeholder="Enter Bio"
                   style={{ width: 200 }}
-                  onChange={formik.handleChange}
+                  onChange={count}
+                  // onChange={formik.handleChange}
                   id="bio"
-                  value={formik.values.bio}
-                  error={formik.touched.bio && Boolean(formik.errors.bio)}
-                  helperText={formik.touched.bio && formik.errors.bio}
+                  // value={formik.values.bio}
+                  // error={formik.touched.bio && Boolean(formik.errors.bio)}
+                  // helperText={formik.touched.bio && formik.errors.bio}
                 />
               </Box>
               <h2>Links</h2>
               <label htmlFor="bio">Twitter Name:</label>
               <TextField
+              fullWidth
                 name="twitterName"
                 id="twitterName"
+                variant="standard"
                 placeholder="Enter Twitter Name"
                 className={classes.bag9}
                 value={formik.values.twitterName}
@@ -254,13 +295,30 @@ const EditProfile = ({heading}) => {
                   formik.touched.twitterName && formik.errors.twitterName
                 }
               />
+               {/* <TextField
+                            fullWidth
+                            id="twitterName"
+                            name="twitterName"
+                            placeholder="xxx@gmail.com"
+                            variant="outlined"
+                            value={formik.values.twitterName}
+                            onChange={formik.handleChange}
+                            error={
+                              formik.touched.twitterName && Boolean(formik.errors.twitterName)
+                            }
+                            helperText={
+                              formik.touched.twitterName && formik.errors.twitterName
+                            }
+                          /> */}
 
               <label htmlFor="">Facebook Name:</label>
               <TextField
+              fullWidth
                 name="facebookName"
                 placeholder="Enter Facebook Name"
                 className={classes.bag9}
                 id="facebookName"
+                variant="standard"
                 value={formik.values.facebookName}
                 onChange={formik.handleChange}
                 error={
@@ -270,13 +328,16 @@ const EditProfile = ({heading}) => {
                 helperText={
                   formik.touched.facebookName && formik.errors.facebookName
                 }
+                
               />
 
               <label htmlFor="">Personal URL:</label>
               <TextField
+              fullWidth
                 name="personalURL"
                 type="text"
                 placeholder=" Website"
+                variant="standard"
                 id="personalURL"
                 className={classes.bag9}
                 value={formik.values.personalURL}
@@ -291,7 +352,7 @@ const EditProfile = ({heading}) => {
               />
 
               {/* <Box> */}
-              <p>
+              <p style={{marginTop:"1rem"}}>
                 Note: To change your profile picture, click on the "..." of the
                 NFT you'd like as your picture, and select "Make Profile
                 Picture"

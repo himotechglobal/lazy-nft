@@ -1,11 +1,15 @@
 import axios from "axios";
 import ApiConfigs from "../../ApiConfig";
 
-export const getAllNftCollection = async () => {
+export const getAllNftCollection = async (page) => {
     try {
       const { data } = await axios({
         method:'GET',
         url:ApiConfigs.getAllNftCollection, 
+        params:{
+          page:page,
+          limit:6
+        }
 
     });
     return data;

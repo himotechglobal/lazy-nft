@@ -172,7 +172,7 @@ import { makeStyles } from "@mui/styles";
 const useStyle = makeStyles({
   wrap1: {
     width: "100%",
-    padding: "1rem 0 ",
+    padding: "2rem 0 ",
     "& h1": {
       fontSize: "2rem",
       fontWeight: "bold",

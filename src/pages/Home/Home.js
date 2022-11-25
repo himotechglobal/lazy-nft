@@ -16,28 +16,35 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Modal from "react-bootstrap/Modal";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import ExploreNFT from "../../components/ExploreNFT/ExploreNFT";
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme)=>({
   wrap14: {
-    padding: "8rem 0 8rem",
+    padding: "7rem 0 8rem",
     "& h6": {
       textAlign: "center",
       fontSize: "2rem",
       fontWeight: "lighter",
+      [theme.breakpoints.down("sm")]: {
+       fontSize:"1rem",
+      },
     },
   },
   bag20: {
     padding: "7rem 0 2rem",
+  
+    
     "& img": {
       margin: "0 auto",
       width: "15%",
     },
     "& p": {
       textAlign: "center",
-      marginTop: "",
+      marginTop: "8px",
+      fontWeight:"500"
     },
-    // '@media (maxwidth: 575.98px)' : {
-
-    // },
+    [theme.breakpoints.down("sm")]: {
+      padding:"2rem 0 !important"
+    },
+   
 }
 
 //   '@media (maxwidth: 575.98px)' : {
@@ -53,7 +60,7 @@ const useStyle = makeStyles({
 //   },
 // '@media (maxwidth: 1199.98px)' : {
 //   },
-});
+}));
 const Home = () => {
   const classes = useStyle();
   return (

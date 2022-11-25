@@ -48,7 +48,7 @@ const Header = () => {
 
   return (
     <>
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", padding:"1rem 0" }}>
         <AppBar
           color="transparent"
           component="div"
