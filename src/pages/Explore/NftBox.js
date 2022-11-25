@@ -1,6 +1,5 @@
 import React, { useState,useContext,useRef } from "react";
 import { makeStyles } from "@mui/styles";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import {updateProfilePic} from "../../api/ApiCall/updateProfilePic"
 import { useMutation, useQueryClient } from "react-query";
@@ -15,8 +14,6 @@ import Badge from "@mui/material/Badge";
 // import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
@@ -25,8 +22,6 @@ import {
   Box,
   Container,
   Grid,
-  FormGroup,
-  FormControlLabel,
   Checkbox,
   Typography,
   TextField,
@@ -206,7 +201,6 @@ const NftBox = (props) => {
   const [shows, setShows] = useState(false);
   const handleClose = () => setShows(false);
   const handleShow = () => setShows(true);
-  // console.log(props);
   const clickable = (()=> {
     navigate(`/nftdetailpage/${props?.data._id}`)
   })
@@ -311,15 +305,14 @@ updateNftNameOrDescription,{
             lazyDescription:values.decs
           }
         });
+        handleClose()
       } catch (error) {
         console.log(error);
       }
     },
   });
-  const [count, setCount] = useState(0);
 
-  // const [shows, setShows] = useState(false);
-  // const [show, setShow] = useState(false);
+
   
   useOnClick(ref, () => setShow(false));
   
@@ -340,9 +333,10 @@ updateNftNameOrDescription,{
               <button
                 className="btn btn-primary"
                 onClick={() => setShow(!show)}
+                ref={ref}
               >
                 {show ? (
-                  <i class="bi bi-x-lg"></i>
+                  <i class="bi bi-x-lg" ></i>
                 ) : (
                   <i class="bi bi-three-dots"></i>
                 )}
@@ -350,7 +344,7 @@ updateNftNameOrDescription,{
             </Box>
 
             {show ? (
-              <Box className={classes.bag10} ref={ref}>
+              <Box className={classes.bag10} >
               {  ((!!token && address && isConnected )&& (props?.data.tokenOwner===address)) && (
                 <>
                 <p
@@ -528,6 +522,3 @@ updateNftNameOrDescription,{
 
 export default NftBox;
 
-
-
-// const metadata="{"name":"CHECK","description":"CHECK","properties":{"cover_url":null,"artist":null,"public_profile_link":null,"height":null,"breadth":null,"length":null,"weight":null,"tags":null},"image":"https://ipfs.io/ipfs/QmPVm6HMwVBRGsUH9HDCoaNMLciff361vwk3pT8w7MGQSQ","preview":"https://ipfs.io/ipfs/QmPVm6HMwVBRGsUH9HDCoaNMLciff361vwk3pT8w7MGQSQ"}"

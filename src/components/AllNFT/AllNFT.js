@@ -149,7 +149,7 @@ const AllNFT = ({ dataByUserName }) => {
             {show3 ? (
               <>
                 <Grid item md={12} sm={12}>
-                  <Typography variant="h5" sx={{ textAlign: "left",fontWeight:"bold" }}>
+                  <Typography variant="h5" sx={{ textAlign: "left", fontWeight: "bold" }}>
                     Ethereum NFTs
                   </Typography>
                 </Grid>
@@ -168,31 +168,34 @@ const AllNFT = ({ dataByUserName }) => {
                         })
                       )
                     ) : (
-                      <CircularProgress color="primary" />
-                    )}
+
+                          <Typography variant="h5">No NFTs Added Yet</Typography>
+               
+                    )
+                    }
                     {isFetching && !!data?.pages[0] && !isFetchingNextPage ? (
                       <CircularProgress color="primary" />
                     ) : null}
-                      <Box sx={{"display":"block","width":"100%","textAlign":"center",marginTop:"1rem"}}>
+                    <Box sx={{ "display": "block", "width": "100%", "textAlign": "center", marginTop: "1rem" }}>
                       {data?.pages[0] && hasNextPage && (
-                      <Button
-                        variant="contained"
-                        disabled={!hasNextPage}
-                        onClick={() => fetchNextPage()}
-                        sx={{
-                          background: "#000",
-                          color: "#fff",
-                          border: "none",
-                          borderRadius: "20px",
-                          margin: "10px",
-                          fontSize: "0.7rem",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        Load More
-                      </Button>
-                    )}
-                      </Box>
+                        <Button
+                          variant="contained"
+                          disabled={!hasNextPage}
+                          onClick={() => fetchNextPage()}
+                          sx={{
+                            background: "#000",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "20px",
+                            margin: "10px",
+                            fontSize: "0.7rem",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Load More
+                        </Button>
+                      )}
+                    </Box>
                   </Grid>
                 ) : (
                   <Grid container justifyContent="center">

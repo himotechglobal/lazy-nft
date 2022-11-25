@@ -9,15 +9,12 @@ import {
   TextareaAutosize,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 // import { Formik, Form, Field } from 'formik';
 import * as Yup from "yup";
 // import Button from 'react-bootstrap/Button';
 import Modal from "react-bootstrap/Modal";
-import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useMutation, useQuery } from "react-query";
 import { editProfile } from "../../api/ApiCall/editProfile";
-import { viewProfile } from "../../api/ApiCall/viewProfile";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import { UserContext } from "../../context/User/UserContext";
@@ -198,7 +195,7 @@ const EditProfile = ({heading}) => {
             personalURL: values.personalURL,
           },
         });
-        
+        handleClose()
       } catch (error) {
         console.log(error);
       }

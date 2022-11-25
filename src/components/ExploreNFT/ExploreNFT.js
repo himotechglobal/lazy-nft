@@ -270,7 +270,8 @@ const _mostLikeNft=useQuery(["mostLikeNft"],mostLikeNft,{});
           {filter===0 &&(
 
           <Grid container justifyContent="center">
-              {data?.pages &&
+          
+              {data?.pages[0] &&
                 data?.pages.map((page, i) => 
                    page?.responseResult.map((nfts,index)=>{
                     return (
@@ -281,7 +282,8 @@ const _mostLikeNft=useQuery(["mostLikeNft"],mostLikeNft,{});
                     </>
                   );
                   })
-                )}
+                )
+                }
                 {isFetching && !isFetchingNextPage ? <CircularProgress color="primary" />:null}
                 { data?.pages[0] && hasNextPage ? <Button  variant="contained" disabled={!hasNextPage} onClick={() => fetchNextPage()}   sx={{
                         background: "#000",
@@ -343,6 +345,12 @@ const _mostLikeNft=useQuery(["mostLikeNft"],mostLikeNft,{});
             </Grid>
             )
           }
+          { !data?.pages[0] && <Container>
+              <Grid container md={12} justifyContent="center">
+              <Typography variant="h5">No NFTs Added Yet</Typography>
+              </Grid>
+              </Container>
+               }
             
           {/* <Container>
                 <Grid container>

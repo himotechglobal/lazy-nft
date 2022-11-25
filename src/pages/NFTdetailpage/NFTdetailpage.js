@@ -218,8 +218,9 @@ updateNftNameOrDescription,{
             lazyDescription:values.decs
           }
         });
+        handleClose()
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
 
