@@ -113,7 +113,7 @@ const Share = () => {
               </Box>
               <Box className={classes.bag5}>
                 <Button variant="contained" sx={{mt:{lg:"auto",xs:"15px",textTransform:"none"}}}>
-                  <Link to={`/${userData?.userName}`} style={{color:"#000"}}>http://localhost:3000/{userData?.userName}</Link>
+                  <Link to={`/${userData?.userName}`} style={{color:"#000"}}>https://d2ubgtumno6dlw.cloudfront.net/{userData?.userName}</Link>
                 </Button>
               </Box>
             </Grid>
