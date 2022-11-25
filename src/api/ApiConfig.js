@@ -1,6 +1,6 @@
 // const url = "http://172.16.1.240:8008/";
-const url = "http://localhost:5000";
-// const url ="https://d2ugm2w8bdhvj3.cloudfront.net"
+// const url = "http://localhost:5000";
+const url ="https://d2ugm2w8bdhvj3.cloudfront.net"
 
 
 const ApiConfigs = {
