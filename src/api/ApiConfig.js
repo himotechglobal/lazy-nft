@@ -19,6 +19,7 @@ const ApiConfigs = {
   getAllNftCollection:`${url}/api/v1/nftCollection/getAllNft`,
   getMyNftCollection:`${url}/api/v1/nftCollection/getMyNft`,
   getNftByNftCollectionId:`${url}/api/v1/nftCollection/getNftByNftCollectionId`,
+  getAllNftByUserName:`${url}/api/v1/nftCollection/getAllNftByUserName`,
   hideToggleNft:`${url}/api/v1/nftCollection/hideToggleNft`,
   getAllHideNft:`${url}/api/v1/nftCollection/getAllHideNft`,
   pinnedToggleNft:`${url}/api/v1/nftCollection/pinnedToggleNft`,

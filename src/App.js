@@ -49,7 +49,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<UserGuard><Home /></UserGuard>} />
-          <Route exact path="/:userName" element={<AuthGuard><Profile /></AuthGuard>} />
+          <Route exact path="/:userName" element={<Profile />} />
           <Route exact path="/hidden-nft" element={<AuthGuard><HiddenNFT /></AuthGuard>} />
           <Route exact path="/explore" element={<AuthGuard><Explore/></AuthGuard>} />
           <Route exact path="/wallet" element={<AuthGuard><Wallet /></AuthGuard>} />

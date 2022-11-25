@@ -84,7 +84,7 @@ const useStyle = makeStyles((theme) => ({
     margin: "0 auto",
   },
 }));
-const AllNFT = () => {
+const AllNFT = ({dataByUserName}) => {
   const [show, setShow] = useState(false);
   const [show3, setShow3] = useState(true);
   const [{ token },] = useContext(UserContext);
@@ -145,6 +145,7 @@ const AllNFT = () => {
                 <Grid item md={12} sm={12}>
                   <Typography variant="h5" sx={{ textAlign: "center" }}>Ethereum NFTs</Typography>
                 </Grid>
+                {!!token ?(
                 <Grid container justifyContent="center">
                 {data?.pages[0] ?(
                 data?.pages.map((page, i) => 
@@ -164,6 +165,21 @@ const AllNFT = () => {
                 {(isFetching && !!data?.pages[0]  && !isFetchingNextPage) ? <CircularProgress color="primary" />:null}
                 { data?.pages[0] && hasNextPage && <Button  variant="contained" disabled={!hasNextPage} onClick={() => fetchNextPage()}>Load More</Button>}
                 </Grid>
+            ):(
+              <Grid container justifyContent="center">
+                { dataByUserName?.responseResult &&
+                  dataByUserName?.responseResult.map((nfts,index)=>{
+                    return (
+                    <>
+                      <Grid item key={index} lg={4} md={4} sm={6}>
+                        <NftBox data={nfts} />
+                      </Grid>
+                    </>
+                  );
+                  })
+                }
+                </Grid>
+            )}
               </>
             ) : null}
           </Grid>

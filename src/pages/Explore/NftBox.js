@@ -192,7 +192,7 @@ const useStyle = makeStyles((theme) => ({
 }));
 const NftBox = (props) => {
   const queryClient=useQueryClient();
-  const [{userData}, dispatch] = useContext(UserContext);
+  const [{userData,token}, dispatch] = useContext(UserContext);
   const {address,isConnected}=useAccount()
   const navigate = useNavigate()
   const [show, setShow] = useState(false);
@@ -350,7 +350,7 @@ updateNftNameOrDescription,{
 
             {show ? (
               <Box className={classes.bag10}>
-              { address && isConnected && props?.data.tokenOwner===address|| "fghj0x13deFBAC61a79761EB40B86E41B0fe3B9541aEFFkjhbv" && (
+              {  ((!!token && address && isConnected )&& (props?.data.tokenOwner===address || props?.data.tokenOwner === "0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73")) && (
                 <>
                 <p
                        
@@ -359,7 +359,7 @@ updateNftNameOrDescription,{
                     
                      >
                        Edit
-                     </p>
+                </p>
                <p onClick={async()=>{
                 try{
                   await mutateAsync({token:localStorage.getItem("token"),value:props.data.metadata.image.replace("ipfs://","https://ipfs.io/ipfs/")})

@@ -12,7 +12,9 @@ import WOLFPUPS_NFT_ABI from "../../config/WOLFPUPS_NFT_ABI.json"
 import {WOLFPUPS_NFT_address} from "../../config/index";
 import { useContractRead,useContract,useProvider } from "wagmi";
 import {getUserNFTByTokenURI} from "../../api/ApiCall/getNftByTokenURI";
-import {addorUpdateNftCollection} from "../../api/ApiCall/nftCollection/addorUpdateNftCollection"
+import {addorUpdateNftCollection} from "../../api/ApiCall/nftCollection/addorUpdateNftCollection";
+import {getAllNftByUserName} from "../../api/ApiCall/nftCollection/getAllNftByUserName"
+import { useParams } from "react-router-dom";
 
 const useStyle = makeStyles((theme)=>({
   wrap5: {
@@ -46,6 +48,8 @@ const useStyle = makeStyles((theme)=>({
   }
 }));
 const Profile =  () => {
+  const {userName}=useParams()
+  // console.log(userName);
   const provider = useProvider()
   const queryClient=useQueryClient();
   const {address,isConnected}=useAccount()
@@ -53,6 +57,8 @@ const Profile =  () => {
   const [{userData,userUpdateData,updatePic,token}, ] = useContext(UserContext);
   const [NFTBalance,SetNFTBalance]=useState(0)
   const [tokenIdList,setTokenIdList]=useState([]);
+
+  
   const contract=  useContract({
     address: WOLFPUPS_NFT_address,
     abi: WOLFPUPS_NFT_ABI,
@@ -76,7 +82,7 @@ const Profile =  () => {
 
 
 const MetaData= async (TokenIdList)=>{
-  console.log({TokenIdList});
+  // console.log({TokenIdList});
   await Promise.all(TokenIdList?.map(async(tokenId)=>{
     const tokenUri=await contract.tokenURI(tokenId);
     const metadata=await getUserNFTByTokenURI(tokenUri);
@@ -94,6 +100,9 @@ const metadataFunc=async()=>{
   await queryClient.invalidateQueries("getMyNftCollection")
 }
 
+
+
+
  useEffect( ()=>{
 if(address && isConnected && chain.mainnet){
   metadataFunc();
@@ -101,13 +110,30 @@ if(address && isConnected && chain.mainnet){
 
  },[]);
 
+ const {data:dataByUserName,refetch}=useQuery(
+  ["getAllNftByUserName",userName],
+  ()=>getAllNftByUserName(userName),{
+  }
+)
+
+useEffect(()=>{
+  if(!token){
+    console.log("gg");
+    refetch?.()
+  }
+},[userName])
+
+
+
+
   return (
     <>
       <Header />
-      { (!address ) && 
+      { (!address && token ) && 
       <EditProfile />
       }
-      { ( isConnected  && address) ?(
+      {!!token ?(
+      (isConnected  && address) ?(
         <>
       <Box className={classes.wrap5}>
         <Container >
@@ -144,7 +170,36 @@ if(address && isConnected && chain.mainnet){
             </Grid>
           </Grid>
         </Container>
-     )}
+     )
+      ):(
+        <>
+        <Box className={classes.wrap5}>
+        <Container >
+          <Grid container spacing={2} className={classes.wer}>
+            <Grid item md={12}>
+              <div>
+                <img
+                  src={ dataByUserName?.responseResult[0]?.metadata?.["image"]?`${dataByUserName?.responseResult[0]?.metadata?.["image"].replace("ipfs://","https://ipfs.io/ipfs/")}`:"https://lh3.googleusercontent.com/rRuk-xtEg28mkFYfLAnClC-UNrCGc2mPqvA_72fcUFM-zy6XTNkuFs9uWG8klzkRCyQRkDdmc-5AAqG-9EY-D4R1W865MhJnA6TFGg" }
+                  alt=""
+                />
+                <h6>@{dataByUserName?.responseResult[0].userId["userName"] ?? "demo"}</h6>
+                { !!NFTBalance &&
+                <h6>Total NFTs Owned{" "}{NFTBalance ?? " "}</h6>
+                }
+                <p>
+                { (dataByUserName?.responseResult[0].userId["bio"]) ??
+                 " NFTs are the future and I primarily use them for their utility, as well as investment."
+                }
+                </p>
+              </div>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+      <PinnedNFT dataByUserName={dataByUserName}/>
+      </>
+      )
+      }
     </>
   );
 };

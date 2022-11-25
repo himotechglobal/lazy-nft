@@ -25,6 +25,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {updateNftNameOrDescription} from "../../api/ApiCall/nftCollection/updateNftNameOrDescription"
 import {getNftByNftCollectionId} from "../../api/ApiCall/nftCollection/getNftByNftCollectionId"
+import { UserContext } from "../../context/User/UserContext";
 
 
 const useStyle = makeStyles({
@@ -162,6 +163,7 @@ const useStyle = makeStyles({
 
 const NFTdetailpage = () => {
   // const provider = useProvider()
+  const [{token},]=useContext(UserContext)
   const {address,isConnected}=useAccount()
   const [show, setShow] = useState(false);
   const classes = useStyle();
@@ -254,7 +256,7 @@ updateNftNameOrDescription,{
                     <Grid>
                       <Stack spacing={2} direction="row" justifyContent="center">
                       <Box>
-                      { isConnected && address && data?.responseResult?.tokenOwner===address || "0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73" &&
+                      { ((!!token && isConnected && address) && (data?.responseResult?.tokenOwner===address ||data?.responseResult?.tokenOwner=== "0x8fFAeBAcbc3bA0869098Fc0D20cA292dC1e94a73")) &&
                       <a variant="primary" onClick={handleShow} style={{textAlign:'center'}}>Edit</a>
                       }
                         <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${data?.responseResult?.tokenId}`} target="_blank">Veiw on OpenSea</a>

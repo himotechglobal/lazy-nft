@@ -18,15 +18,16 @@ import {
 import { UserContext } from "../../context/User/UserContext";
 import {actionTypes} from "../../context/User/UserReducer"
 const drawerWidth = 300;
-const sideBar = [
-  { sidebarName: "Explore", path: "/explore" },
-  { sidebarName: "My Settings", path: "/wallet" },
-  { sidebarName: "My Portfolio", path: "/profile" },
-  { sidebarName: "Hidden NFTs", path: "/hidden-nft" },
-];
+
 
 const Header = () => {
-  const [{token}, dispatch] = useContext(UserContext);
+  const [{token,userData}, dispatch] = useContext(UserContext);
+  const sideBar = [
+    { sidebarName: "Explore", path: "/explore" },
+    { sidebarName: "My Settings", path: "/wallet" },
+    { sidebarName: "My Portfolio", path: `/${userData?.userName}` },
+    { sidebarName: "Hidden NFTs", path: "/hidden-nft" },
+  ];
   const navigate = useNavigate();
   const logout = (e) => {
     e.preventDefault();
