@@ -283,7 +283,15 @@ const _mostLikeNft=useQuery(["mostLikeNft"],mostLikeNft,{});
                   })
                 )}
                 {isFetching && !isFetchingNextPage ? <CircularProgress color="primary" />:null}
-                { data?.pages[0] && hasNextPage ? <Button  variant="contained" disabled={!hasNextPage} onClick={() => fetchNextPage()}>Load More</Button>:null}
+                { data?.pages[0] && hasNextPage ? <Button  variant="contained" disabled={!hasNextPage} onClick={() => fetchNextPage()}   sx={{
+                        background: "#000",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "20px",
+                        margin: "10px",
+                        fontSize: "0.7rem",
+                        fontWeight: "bold",
+                      }}>Load More</Button>:null}
             </Grid>
             )}
             { filter===1 &&(

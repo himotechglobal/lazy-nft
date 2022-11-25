@@ -53,7 +53,8 @@ const useStyle = makeStyles((theme) => ({
     margin: "0",
     height: "auto",
     position: "relative",
-
+    backgroundColor: "#fff",
+    boxShadow: "0 2px 16px 0 rgb(0 0 0 / 5%)",
     // display:"flex",
     // alignItems:"center",
     "& h6": {
@@ -66,14 +67,16 @@ const useStyle = makeStyles((theme) => ({
     " & img": {
       margin: "1rem auto",
       width: "100%",
-      borderTopLeftRadius: "5px",
-      borderTopRightRadius: "5px",
+      // borderTopLeftRadius: "5px",
+      // borderTopRightRadius: "5px",
+      borderRadius:"12px",
     },
     "& p": {
       fontSize: "0.8rem",
       fontWeight: "500",
       textAlign: "left",
-      padding: "10px  ",
+      // padding: "10px  ",
+      padding: "6px",
       margin: "0 0 4px 0",
       color: "#000",
       // display:"none"
@@ -145,7 +148,7 @@ const useStyle = makeStyles((theme) => ({
     // textAlign: "center",
     // left: "0",
     // right: "0",
-    width:"100%"
+    width: "100%",
   },
   bag10: {
     width: "93%",
@@ -409,10 +412,10 @@ updateNftNameOrDescription,{
               
                </>
                )}
-               <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "10px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
+               <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
                <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>Veiw on OpenSea</a>
                </Box>
-               <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "10px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
+               <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
                <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>Veiw on EtherScan</a>
                </Box>
 
@@ -428,6 +431,7 @@ updateNftNameOrDescription,{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
+                  padding:"1rem"
                 }}
               >
                 <Box onClick={clickable}>

@@ -29,10 +29,6 @@
 .css-1ptx2yq-MuiInputBase-root-MuiInput-root::before{
 
 }
-.css-1d1r5q-MuiFormHelperText-root.Mui-error{
-    position: absolute !important;
-    top: 43px !important;
-}
 
 .makeStyles-bag8-18 img{
 
@@ -99,7 +95,8 @@
     border-bottom: 0px transparent !important;  
  }
  .css-1d1r5q-MuiFormHelperText-root.Mui-error{
-    top: 52px !important;
+    top: 32px !important;
+    position: absolute !important;
  }
  .css-htnf0n-MuiAvatar-root{
     background-color: #000 !important;
