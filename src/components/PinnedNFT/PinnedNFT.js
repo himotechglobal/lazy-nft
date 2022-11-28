@@ -4,7 +4,7 @@ import { makeStyles } from "@mui/styles";
 import { fontWeight } from "@mui/system";
 import AllNFT from "../AllNFT/AllNFT";
 import NftBox from "../../pages/Explore/NftBox";
-import {getAllPinnedNft} from "../../api/ApiCall/pinnedNft/getAllPinnedNft"
+import {getAllPinnedNftByUserName} from "../../api/ApiCall/pinnedNft/getAllPinnedNftByUserName"
 import { useQueries, useQuery } from "react-query";
 import { UserContext } from "../../context/User/UserContext";
 
@@ -73,12 +73,12 @@ const useStyle = makeStyles({
     padding: "11px",
   },
 });
-const PinnedNFT = ({dataByUserName}) => {
+const PinnedNFT = ({userName}) => {
   const classes = useStyle();
-  const [{token}, ] = useContext(UserContext);
+  const [{token,userData}, ] = useContext(UserContext);
   const {data,isLoading}=useQuery(
-    ["getAllPinnedNft",token],
-    ()=>getAllPinnedNft(token),{
+    ["getAllPinnedNftByUserName",userName??userData?.userName],
+    ()=>getAllPinnedNftByUserName(userName??userData?.userName),{
       staleTime:2000,
     }
   )
@@ -93,7 +93,7 @@ const PinnedNFT = ({dataByUserName}) => {
             <Grid item md={12}>
               <Typography variant="h2">Pinned NFTs</Typography>
             </Grid>
-            { token ? (isLoading  ? (
+            { isLoading  ? (
              <Container>
                 <Grid>
                   <Grid>
@@ -112,30 +112,10 @@ const PinnedNFT = ({dataByUserName}) => {
                 )
               })
               
-              )
-            ):(  dataByUserName?.isLoading ?(
-             <Container>
-                <Grid>
-                  <Grid>
-                  <Box sx={{ textAlign: 'center' }}>
-              <CircularProgress />
-              </Box>
-                  </Grid>
-                </Grid>
-             </Container>
-            ):(
-              dataByUserName?.responseResult && dataByUserName?.responseResult?.map((nft, index) => {
-                return (
-                  <Grid key={index} item md={4} sm={6}>
-                    <NftBox  data={nft} />
-                  </Grid>
-                )
-              })
               
-              )
             )
             }
-            { (!data?.responseResult && !dataByUserName?.responseResult) && <Container>
+            { (!data?.responseResult) && <Container>
               <Grid container md={12} justifyContent="center">
               <Typography variant="h5">No Pinned NFTs Added Yet</Typography>
               </Grid>
@@ -145,7 +125,7 @@ const PinnedNFT = ({dataByUserName}) => {
         </Container>
       </Box>
 
-      <AllNFT dataByUserName={dataByUserName} />
+      <AllNFT userName={userName} />
     </>
   );
 };

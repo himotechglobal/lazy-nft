@@ -150,18 +150,18 @@ const EditProfile = ({heading}) => {
     {
       onSuccess: (data) => {
         try {
-          if (data) {
+          if (data?.data) {
             dispatch({ type: actionTypes.UPDATE_USER, value:data?.data});
             toast.success(JSON.stringify("You Profile Update Successfully"));
           } else {
-            toast.error(JSON.stringify(data.responseMessage));
+            toast.error(JSON.stringify(data?.message));
           }
         } catch (error) {
           toast.error(JSON.stringify(error.message));
         }
       },
       onError: (error, data) => {
-        toast.error(JSON.stringify(data.responseMessage));
+        toast.error(JSON.stringify(data?.message));
       },
     }
   );
@@ -177,9 +177,9 @@ const EditProfile = ({heading}) => {
       bio: Yup.string()
         .min(0, "Too Short!")
         .max(160, "Too Long!"),
-      twitterName: Yup.string().required("Required!"),
-      facebookName: Yup.string().required("Required!"),
-      personalURL: Yup.string().required("Required!"),
+      twitterName: Yup.string(),
+      facebookName: Yup.string(),
+      personalURL: Yup.string()
     }),
     validateOnChange:(values)=>{
       setWords(values.bio)
@@ -189,17 +189,17 @@ const EditProfile = ({heading}) => {
         await mutateAsync({
           token: localStorage.getItem("token"),
           value: {
-            bio: values.bio,
-            twitterName: values.twitterName,
-            facebookName: values.facebookName,
-            personalURL: values.personalURL,
+            bio: bodyRef.current.value,
+            twitterName: values?.twitterName,
+            facebookName: values?.facebookName,
+            personalURL: values?.personalURL,
           },
         });
-        handleClose()
+        handleClose();
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
-    setShow(true)
+    // setShow(true)
     },
   });
 

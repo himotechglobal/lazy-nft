@@ -5,10 +5,10 @@ import { Box, Container, Grid,Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PinnedNFT from "../../components/PinnedNFT/PinnedNFT";
 import { UserContext } from "../../context/User/UserContext";
-import { chain, useAccount } from "wagmi";
+import { useNetwork, useSwitchNetwork, useAccount } from "wagmi";
 import {useQuery, useQueryClient } from "react-query";
 import WOLFPUPS_NFT_ABI from "../../config/WOLFPUPS_NFT_ABI.json"
-import {WOLFPUPS_NFT_address} from "../../config/index";
+import {WOLFPUPS_NFT_address, WOLFPUPS_NFT_address_BSC} from "../../config/index";
 import {useContract,useProvider } from "wagmi";
 import {getUserNFTByTokenURI} from "../../api/ApiCall/getNftByTokenURI";
 import {addorUpdateNftCollection} from "../../api/ApiCall/nftCollection/addorUpdateNftCollection";
@@ -49,6 +49,8 @@ const useStyle = makeStyles((theme)=>({
 const Profile =  () => {
   const {userName}=useParams()
   // console.log(userName);
+  const { chain } = useNetwork()
+  const { chains, switchNetwork } =useSwitchNetwork()
   const provider = useProvider()
   const queryClient=useQueryClient();
   const {address,isConnected}=useAccount()
@@ -56,16 +58,32 @@ const Profile =  () => {
   const [{userData,userUpdateData,updatePic,token}, ] = useContext(UserContext);
   const [NFTBalance,SetNFTBalance]=useState(0)
   const [tokenIdList,setTokenIdList]=useState([]);
+  const [contractAddress,setContractAddress]=useState();
+  const [contractAbi,setContractAbi]=useState();
 
-  
+useEffect(()=>{
+  if( chain?.name==="Ethereum" && isConnected && address){
+    // console.log("yoyo");
+    setContractAddress(WOLFPUPS_NFT_address);
+    setContractAbi(WOLFPUPS_NFT_ABI);
+  }
+  if( chain?.name==="BSC Testnet" &&  isConnected && address){
+    // console.log("yo");
+    setContractAddress(WOLFPUPS_NFT_address_BSC);
+    setContractAbi(WOLFPUPS_NFT_ABI);
+  }
+},[chain?.name,address,isConnected,contractAddress,contractAbi])
+
+  console.log(contractAddress,chain?.name);
   const contract=  useContract({
-    address: WOLFPUPS_NFT_address,
-    abi: WOLFPUPS_NFT_ABI,
+    address: contractAddress,
+    abi:  contractAbi,
     signerOrProvider: provider,
 
   })
   const Balance=async ()=>{
-    const balanceOf= await contract.balanceOf(address);
+    const balanceOf= await contract?.balanceOf(address);
+    console.log(balanceOf);
     return balanceOf
   }
 
@@ -85,7 +103,8 @@ const MetaData= async (TokenIdList)=>{
   await Promise.all(TokenIdList?.map(async(tokenId)=>{
     const tokenUri=await contract.tokenURI(tokenId);
     const metadata=await getUserNFTByTokenURI(tokenUri);
-    await addorUpdateNftCollection({token:token,value:{tokenAddress:WOLFPUPS_NFT_address,tokenId:tokenId,tokenOwner:address,metadata:metadata}})
+    // console.log(metadata);
+    await addorUpdateNftCollection({token:token,value:{tokenAddress:contractAddress,tokenId:tokenId,tokenOwner:address,chainName:chain?.name,metadata:metadata}})
 
   }));
 }
@@ -96,18 +115,18 @@ const metadataFunc=async()=>{
   const arr =await ArraysOfTokenId?.(balance);
   setTokenIdList([...arr])
   await MetaData?.([...arr]);
-  await queryClient.invalidateQueries("getMyNftCollection")
+  await queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
 }
 
 
 
 
  useEffect( ()=>{
-if(address && isConnected && chain.mainnet){
+if(address && isConnected && (chain?.name==="Ethereum" || chain?.name==="BSC Testnet")){
   metadataFunc();
 }
 
- },[]);
+ },[chain?.name,contractAddress,contractAbi]);
 
  const {data:dataByUserName,refetch}=useQuery(
   ["getAllNftByUserName",userName],
@@ -119,9 +138,9 @@ useEffect(()=>{
   if(!token){
     refetch?.()
   }
-},[userName])
+},[])
 
-
+// console.log(dataByUserName);
 
   return (
     <>
@@ -155,22 +174,25 @@ useEffect(()=>{
                 Twitter
                 </p> */}
                 <Box sx={{"display":"flex","justifyContent":"center","gap":"2rem",flex:"wrap"}}>
-                <a href={`https://twitter.com/${userData?.twitterName}`} target="_blank" style={{color:"#000"}}>
+                {(userData?.twitterName || userUpdateData?.twitterName) && <a href={`https://twitter.com/${userUpdateData?.twitterName??userData?.twitterName}`} target="_blank" style={{color:"#000"}}>
                 <i class="bi bi-twitter" style={{marginRight:"8px",color:"gray"}}></i>
                 Twitter
                 </a>
-               
-               
-                <a href={`https://twitter.com/${userData?.facebookName}`}  style={{color:"#000"}}>
+               }
+               {
+                (userData?.facebookName || userUpdateData?.facebookName) &&
+                <a href={`https://twitter.com/${userUpdateData?.facebookName??userData?.facebookName}`}  style={{color:"#000"}}>
                 <i class="bi bi-facebook" style={{marginRight:"8px",color:"gray"}}></i>
                 Facebook
                 </a>
-               
-              
-                <a  href={`https://twitter.com/${userData?.personalURL}`} style={{color:"#000"}}>
+               }
+               {
+                (userData?.personalURL || userUpdateData?.personalURL) &&
+                <a  href={`https://twitter.com/${userUpdateData?.personalURL??userData?.personalURL}`} style={{color:"#000"}}>
                 <i class="bi bi-globe" style={{marginRight:"8px",color:"gray"}}></i>
                 Personal URL
                 </a>
+               }
                
                </Box>
                
@@ -179,7 +201,7 @@ useEffect(()=>{
           </Grid>
         </Container>
       </Box>
-      <PinnedNFT/>
+      <PinnedNFT userName={userName}/>
       </>
      ):(
         <Container>
@@ -215,21 +237,21 @@ useEffect(()=>{
              
               </div>
                 <Box sx={{"display":"flex","justifyContent":"center","gap":"2rem",flex:"wrap"}}>
-               {userData?.twitterName && <a href={`https://twitter.com/${userData?.twitterName}`} target="_blank" style={{color:"#000"}}>
+               {dataByUserName?.responseResult[0].userId["twitterName"] && <a href={`https://twitter.com/${dataByUserName?.responseResult[0].userId["twitterName"]}`} target="_blank" style={{color:"#000"}}>
                 <i class="bi bi-twitter" style={{marginRight:"8px",color:"gray"}}></i>
                 Twitter
                 </a>
                }
                {
-                userData?.facebookName &&
-                <a href={`https://twitter.com/${userData?.facebookName}`}  style={{color:"#000"}}>
+                dataByUserName?.responseResult[0].userId["facebookName"] &&
+                <a href={`https://twitter.com/${dataByUserName?.responseResult[0].userId["facebookName"]}`}  style={{color:"#000"}}>
                 <i class="bi bi-facebook" style={{marginRight:"8px",color:"gray"}}></i>
                 Facebook
                 </a>
                }
                {
-                userData?.personalURL &&
-                <a  href={`https://twitter.com/${userData?.personalURL}`} style={{color:"#000"}}>
+                dataByUserName?.responseResult[0].userId["personalURL"] &&
+                <a  href={`https://twitter.com/${dataByUserName?.responseResult[0].userId["personalURL"]}`} style={{color:"#000"}}>
                 <i class="bi bi-globe" style={{marginRight:"8px",color:"gray"}}></i>
                 Personal URL
                 </a>
@@ -239,7 +261,7 @@ useEffect(()=>{
           </Grid>
         </Container>
       </Box>
-      <PinnedNFT dataByUserName={dataByUserName}/>
+      <PinnedNFT  userName={userName}/>
       </>
       )
       }

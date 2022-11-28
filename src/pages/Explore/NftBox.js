@@ -1,6 +1,6 @@
 import React, { useState,useContext,useRef } from "react";
 import { makeStyles } from "@mui/styles";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import {updateProfilePic} from "../../api/ApiCall/updateProfilePic"
 import { useMutation, useQueryClient } from "react-query";
 import { UserContext } from "../../context/User/UserContext";
@@ -216,11 +216,11 @@ const NftBox = (props) => {
 // console.log(userData._id);
   const {mutateAsync:mutateAsyncEdit}=useMutation("updateNftNameOrDescription",
 updateNftNameOrDescription,{
-  onSuccess:(data)=>{
+  onSuccess:(data,error)=>{
     queryClient.invalidateQueries("getAllHideNft");
-    queryClient.invalidateQueries("getMyNftCollection")
-    queryClient.invalidateQueries("getAllPinnedNft");
-    queryClient.invalidateQueries("getAllNftCollection");
+    queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
+    queryClient.invalidateQueries("getAllPinnedNftByUserName");
+    queryClient.invalidateQueries("getAllNftByChainName");
     queryClient.invalidateQueries("recentlyListedNft");
     queryClient.invalidateQueries("mostViewNft");
     queryClient.invalidateQueries("mostLikeNft")
@@ -233,8 +233,8 @@ updateNftNameOrDescription,{
     pinnedToggleNft,{
     onSuccess:(data)=>{
       queryClient.invalidateQueries("getAllHideNft");
-      queryClient.invalidateQueries("getMyNftCollection")
-      queryClient.invalidateQueries("getAllPinnedNft");
+      queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
+      queryClient.invalidateQueries("getAllPinnedNftByUserName");
       queryClient.invalidateQueries("getAllNftCollection");
       queryClient.invalidateQueries("recentlyListedNft");
       queryClient.invalidateQueries("mostViewNft");
@@ -249,8 +249,8 @@ updateNftNameOrDescription,{
     hideToggleNft,{
       onSuccess:(data)=>{
         queryClient.invalidateQueries("getAllHideNft");
-        queryClient.invalidateQueries("getMyNftCollection")
-        queryClient.invalidateQueries("getAllPinnedNft");
+        queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
+        queryClient.invalidateQueries("getAllPinnedNftByUserName");
         queryClient.invalidateQueries("getAllNftCollection");
         queryClient.invalidateQueries("recentlyListedNft");
         queryClient.invalidateQueries("mostViewNft");
@@ -266,8 +266,8 @@ updateNftNameOrDescription,{
       onSuccess:(data)=>{
         console.log(data?.responseResult);
         queryClient.invalidateQueries("getAllHideNft");
-        queryClient.invalidateQueries("getMyNftCollection")
-        queryClient.invalidateQueries("getAllPinnedNft");
+        queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
+        queryClient.invalidateQueries("getAllPinnedNftByUserName");
         queryClient.invalidateQueries("getAllNftCollection");
         queryClient.invalidateQueries("recentlyListedNft");
         queryClient.invalidateQueries("mostViewNft");
@@ -311,7 +311,6 @@ updateNftNameOrDescription,{
 
   
   useOnClick(ref, () => setShow(false));
-  console.log("rdtyg",props?.data.tokenId)
   return (
     <>
     <Container  ref={ref}>
@@ -401,10 +400,10 @@ updateNftNameOrDescription,{
                </>
                )}
                <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
-               <Link to={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on OpenSea</Link>
+               <a href={`https://opensea.io/assets/ethereum/${props?.data.tokenAddress}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on OpenSea</a>
                </Box>
                <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
-               <Link to={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on EtherScan</Link>
+               <a href={`https://etherscan.io/nft//${props?.data.tokenAddress}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on EtherScan</a>
                </Box>
 
               </Box>
@@ -483,7 +482,7 @@ updateNftNameOrDescription,{
                   id="name"
                   placeholder="Enter Name"
                   className={classes.bag90}
-                  sx={{ width: "100%" }}
+                  // sx={{ width: "100%" }}
                   value={formik.values.name}
                   onChange={formik.handleChange}
                   error={formik.touched.name && Boolean(formik.errors.name)}

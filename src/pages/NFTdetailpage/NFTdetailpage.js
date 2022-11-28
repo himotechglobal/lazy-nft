@@ -256,8 +256,8 @@ updateNftNameOrDescription,{
                       { ((!!token && isConnected && address) && (data?.responseResult?.tokenOwner===address)) &&
                       <a variant="primary" onClick={handleShow} style={{textAlign:'center'}}>Edit</a>
                       }
-                        <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${data?.responseResult?.tokenId}`} target="_blank">View on OpenSea</a>
-                        <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${data?.responseResult?.tokenId}`} target="_blank">View on EtherScan</a>
+                        <a href={`https://opensea.io/assets/ethereum/${data?.responseResult?.tokenAddress}/${data?.responseResult?.tokenId}`} target="_blank">View on OpenSea</a>
+                        <a href={`https://etherscan.io/nft//${data?.responseResult?.tokenAddress}/${data?.responseResult?.tokenId}`} target="_blank">View on EtherScan</a>
 
                       </Box>
 
@@ -350,7 +350,7 @@ updateNftNameOrDescription,{
                 id="name"
                 placeholder="Enter Name"
                 className={classes.bag90  }
-                sx={{width:"100%"}}
+                // sx={{width:"100%"}}
                 value={formik.values.name}
                 onChange={formik.handleChange}
                 error={

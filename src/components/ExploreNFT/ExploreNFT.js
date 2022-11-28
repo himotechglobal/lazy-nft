@@ -34,6 +34,8 @@ import { mostViewNft } from "../../api/ApiCall/nftCollection/mostViewNft";
 import { mostLikeNft } from "../../api/ApiCall/nftCollection/mostLikeNft";
 
 import { useQuery, useInfiniteQuery } from "react-query";
+import { WOLFPUPS_NFT_address, WOLFPUPS_NFT_address_BSC } from "../../config";
+import { getAllNftByChainName } from "../../api/ApiCall/nftCollection/getAllNftByChainName";
 const useStyle = makeStyles((theme) => ({
   wrap7: {
     "& h3": {
@@ -118,19 +120,23 @@ const useStyle = makeStyles((theme) => ({
 }));
 const ExploreNFT = () => {
   const [show, setShow] = useState(true);
-  const [show1, setShow1] = useState(true);
-  const [show2, setShow2] = useState(true);
-  const [show3, setShow3] = useState(true);
-  const [show4, setShow4] = useState(true);
+  const [show1, setShow1] = useState(false);
+  // const [show2, setShow2] = useState(true);
+  // const [show3, setShow3] = useState(true);
+  // const [show4, setShow4] = useState(true);
+  const [chainName,setChainName]=useState({Ethereum:"Ethereum",BSC_Testnet:""})
+
   const Active = () => {
     setShow(!show);
+
     // setTimeout(() => {
     //   setShow(!show)
     // }, 1000);
   };
-  // const inActive = () => {
-  //   setShow1(!show1);
-  // };
+  const inActive = () => {
+    setChainName({Ethereum:"Ethereum",BSC_Testnet:"BSC Testnet"})
+    setShow1(!show1);
+  };
   // const DisActive = () => {
   //   setShow2(!show2);
   // };
@@ -141,20 +147,32 @@ const ExploreNFT = () => {
   //   setShow4(!show4);
   // };
 
-  // const { data, isLoading } = useQuery(
-  //   "getAllNftCollection",
-  //   getAllNftCollection,
-  //   {
-  //     onSuccess: (data) => {
-  //       // console.log(data?.responseResult);
-  //     },
-  //   }
-  // );
+ 
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } =
+  // const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } =
+  //   useInfiniteQuery(
+  //     ["getAllNftCollection"],
+  //     ({ pageParam = 0 }) => getAllNftCollection(pageParam),
+  //     {
+  //       refetchOnWindowFocus: false,
+  //       getNextPageParam: (lastPage, pages) => {
+  //         if (pages.length < 4) {
+  //           return pages.length + 1;
+  //         } else {
+  //           return undefined;
+  //         }
+  //         // Here I'm assuming you have access to the total number of pages
+
+  //         // If there is not a next page, getNextPageParam will return undefined and the hasNextPage boolean will be set to 'false'
+  //       },
+
+  //     }
+  //   );
+
+    const { data:dataEthereum, fetchNextPage:fetchNextPageEthereum, hasNextPage:hasNextPageEthereum ,isFetchingNextPage:isFetchingNextPageEthereum, isFetching:isFetchingEthereum } =
     useInfiniteQuery(
-      ["getAllNftCollection"],
-      ({ pageParam = 0 }) => getAllNftCollection(pageParam),
+      ["getAllNftByChainName",chainName?.Ethereum],
+      ({ pageParam = 0 }) => getAllNftByChainName(pageParam,chainName?.Ethereum),
       {
         refetchOnWindowFocus: false,
         getNextPageParam: (lastPage, pages) => {
@@ -167,6 +185,27 @@ const ExploreNFT = () => {
 
           // If there is not a next page, getNextPageParam will return undefined and the hasNextPage boolean will be set to 'false'
         },
+
+      }
+    );
+
+    const { data:dataBsc_Testnet, fetchNextPage:fetchNextPageBsc_Testnet, hasNextPage:hasNextPageBsc_Testnet ,isFetchingNextPage:isFetchingNextPageBsc_Testnet, isFetching:isFetchingBsc_Testnet } =
+    useInfiniteQuery(
+      ["getAllNftByChainName",chainName?.BSC_Testnet],
+      ({ pageParam = 0 }) => getAllNftByChainName(pageParam,chainName?.BSC_Testnet),
+      {
+        refetchOnWindowFocus: false,
+        getNextPageParam: (lastPage, pages) => {
+          if (pages.length < 4) {
+            return pages.length + 1;
+          } else {
+            return undefined;
+          }
+          // Here I'm assuming you have access to the total number of pages
+
+          // If there is not a next page, getNextPageParam will return undefined and the hasNextPage boolean will be set to 'false'
+        },
+
       }
     );
 
@@ -193,10 +232,17 @@ const ExploreNFT = () => {
           <Grid item md={12}>
             <Box>
               <Box className={classes.bag15}>
+              
                 <FormGroup>
                   <FormControlLabel
                     control={<Checkbox defaultChecked onClick={Active} />}
                     label="Ethereum"
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox  onClick={inActive} />}
+                    label="Binance"
                   />
                 </FormGroup>
               </Box>
@@ -216,7 +262,7 @@ const ExploreNFT = () => {
             >
               {/* <Box> */}
               {/* <Typography variant="h3">Ethereum Feature Nfts</Typography> */}
-              <Typography variant="h3">Featured Wolf Pups:</Typography>
+              <Typography variant="h3">Featured Wolf Pups</Typography>
               <FormControl sx={{ m: 1, minWidth: 150 }}>
                 <Select
                   value={filter}
@@ -225,7 +271,7 @@ const ExploreNFT = () => {
                   inputProps={{ "aria-label": "Without label" }}
                 >
                   <MenuItem value={0} disableRipple>
-                    All
+                    Default
                   </MenuItem>
                   <MenuItem value={1} disableRipple>
                     Recently listed
@@ -247,9 +293,9 @@ const ExploreNFT = () => {
             <Box>
               {filter === 0 && (
                 <Grid container justifyContent="center">
-                  {data?.pages[0] &&
-                    data?.pages.map((page, i) =>
-                      page?.responseResult.map((nfts, index) => {
+                  {dataEthereum?.pages[0] &&
+                    dataEthereum?.pages.map( (page, i) =>
+                     page?.responseResult?.map((nfts, index) => {
                         return (
                           <>
                             <Grid item key={index} lg={4} md={4} sm={6}>
@@ -259,14 +305,15 @@ const ExploreNFT = () => {
                         );
                       })
                     )}
-                  {isFetching && !isFetchingNextPage ? (
+                {isFetchingEthereum && !isFetchingNextPageEthereum ? (
                     <CircularProgress color="primary" />
                   ) : null}
-                  {data?.pages[0] && hasNextPage ? (
+                  <Box sx={{ "display": "block", "width": "100%", "textAlign": "center", marginTop: "1rem" }}>
+                  {(dataEthereum?.pages[0] && hasNextPageEthereum ) && (
                     <Button
                       variant="contained"
-                      disabled={!hasNextPage}
-                      onClick={() => fetchNextPage()}
+                      disabled={!hasNextPageEthereum}
+                      onClick={() => fetchNextPageEthereum()}
                       sx={{
                         background: "#000",
                         color: "#fff",
@@ -279,7 +326,9 @@ const ExploreNFT = () => {
                     >
                       Load More
                     </Button>
-                  ) : null}
+                    
+                  )}
+                  </Box>
                 </Grid>
               )}
               {filter === 1 && (
@@ -328,7 +377,7 @@ const ExploreNFT = () => {
             </Box>
           ) : null}
 
-          {!data?.pages[0] && (
+          {!dataEthereum?.pages[0] && (
             <Container>
               <Grid container md={12} justifyContent="center">
                 <Typography variant="h5">No NFTs Added Yet</Typography>
@@ -336,20 +385,58 @@ const ExploreNFT = () => {
             </Container>
           )}
 
-          {/* <Container>
-                <Grid container>
-                  {Data1 &&
-                    Data1.map((e) => {
-                      return (
-                        <>
-                          <Grid item md={4} sm={6}>
-                            <Polygon data1={e} dfg={show1} />
-                          </Grid>
-                        </>
-                      );
-                    })}
+
+
+          <Container>
+  
+          {show1 ? (
+            <>
+            <Typography variant="h3">Featured Binance Wolf Pups</Typography>
+            <Box>
+                <Grid container justifyContent="center">
+                  {dataBsc_Testnet?.pages[0] &&
+                    dataBsc_Testnet?.pages.map( (page, i) =>
+                     page?.responseResult?.map((nfts, index) => {
+                        return (
+                          <>
+                            <Grid item key={index} lg={4} md={4} sm={6}>
+                              <NftBox data={nfts} />
+                            </Grid>
+                          </>
+                        );
+                      })
+                    )}
+                <Box>
+                {isFetchingBsc_Testnet && !isFetchingNextPageBsc_Testnet ? (
+                    <CircularProgress color="primary" />
+                  ) : null}
+                  {dataBsc_Testnet?.pages[0] && hasNextPageBsc_Testnet ? (
+                    <Button
+                      variant="contained"
+                      disabled={!hasNextPageBsc_Testnet}
+                      onClick={() => fetchNextPageBsc_Testnet()}
+                      sx={{
+                        background: "#000",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "20px",
+                        margin: "10px",
+                        fontSize: "0.7rem",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Load More
+                    </Button>
+                  ) : null}
+                </Box>
                 </Grid>
-              </Container> */}
+
+    
+            </Box>
+            </>
+          ) : null}
+        
+              </Container>
           {/* <Container>
                 <Grid container>
                   {Data2 &&

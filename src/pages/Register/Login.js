@@ -73,7 +73,7 @@ const Login = () => {
       onSuccess: (data) => {
         try {
           if (data.responseCode === 200) {
-            console.log(data?.responseResult);
+            // console.log(data?.responseResult);
             navigate("/explore");
             dispatch({ type: actionTypes.SET_TOKEN, value: data.token });
             localStorage.setItem("token", data.token);
