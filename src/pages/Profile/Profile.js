@@ -150,10 +150,30 @@ useEffect(()=>{
                  " NFTs are the future and I primarily use them for their utility, as well as investment."
                 }
                 </p>
-                <p >
+                {/* <p >
                 <i class="bi bi-twitter" style={{marginRight:"8px",color:"gray"}}></i>
                 Twitter
-                </p>
+                </p> */}
+                <Box sx={{"display":"flex","justifyContent":"center","gap":"2rem",flex:"wrap"}}>
+                <a href={`https://twitter.com/${userData?.twitterName}`} target="_blank" style={{color:"#000"}}>
+                <i class="bi bi-twitter" style={{marginRight:"8px",color:"gray"}}></i>
+                Twitter
+                </a>
+               
+               
+                <a href={`https://twitter.com/${userData?.facebookName}`}  style={{color:"#000"}}>
+                <i class="bi bi-facebook" style={{marginRight:"8px",color:"gray"}}></i>
+                Facebook
+                </a>
+               
+              
+                <a  href={`https://twitter.com/${userData?.personalURL}`} style={{color:"#000"}}>
+                <i class="bi bi-globe" style={{marginRight:"8px",color:"gray"}}></i>
+                Personal URL
+                </a>
+               
+               </Box>
+               
               </div>
             </Grid>
           </Grid>
@@ -192,11 +212,29 @@ useEffect(()=>{
                  " NFTs are the future and I primarily use them for their utility, as well as investment."
                 }
                 </p>
-                <p >
+             
+              </div>
+                <Box sx={{"display":"flex","justifyContent":"center","gap":"2rem",flex:"wrap"}}>
+               {userData?.twitterName && <a href={`https://twitter.com/${userData?.twitterName}`} target="_blank" style={{color:"#000"}}>
                 <i class="bi bi-twitter" style={{marginRight:"8px",color:"gray"}}></i>
                 Twitter
-                </p>
-              </div>
+                </a>
+               }
+               {
+                userData?.facebookName &&
+                <a href={`https://twitter.com/${userData?.facebookName}`}  style={{color:"#000"}}>
+                <i class="bi bi-facebook" style={{marginRight:"8px",color:"gray"}}></i>
+                Facebook
+                </a>
+               }
+               {
+                userData?.personalURL &&
+                <a  href={`https://twitter.com/${userData?.personalURL}`} style={{color:"#000"}}>
+                <i class="bi bi-globe" style={{marginRight:"8px",color:"gray"}}></i>
+                Personal URL
+                </a>
+               }
+               </Box>
             </Grid>
           </Grid>
         </Container>

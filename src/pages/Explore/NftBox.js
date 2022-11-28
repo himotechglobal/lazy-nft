@@ -1,6 +1,6 @@
 import React, { useState,useContext,useRef } from "react";
 import { makeStyles } from "@mui/styles";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {updateProfilePic} from "../../api/ApiCall/updateProfilePic"
 import { useMutation, useQueryClient } from "react-query";
 import { UserContext } from "../../context/User/UserContext";
@@ -287,13 +287,9 @@ updateNftNameOrDescription,{
       decs: yup
         .string()
         .min(0, "Too Short!")
-        .max(160, "Too Long!")
-        .required("Required!"),
+        .max(160, "Too Long!"),
       name: yup
-        .string()
-        .min(4, "Too Short!")
-        .max(20, "Too Long!")
-        .required("Required!"),
+        .string(),
     }),
     onSubmit: async (values) => {
       try {
@@ -315,10 +311,10 @@ updateNftNameOrDescription,{
 
   
   useOnClick(ref, () => setShow(false));
-  
+  console.log("rdtyg",props?.data.tokenId)
   return (
     <>
-    <Container >
+    <Container  ref={ref}>
     <Grid container spacing={3} >
       <Grid item lg={12} >
       <Box>
@@ -333,7 +329,7 @@ updateNftNameOrDescription,{
               <button
                 className="btn btn-primary"
                 onClick={() => setShow(!show)}
-                ref={ref}
+                
               >
                 {show ? (
                   <i class="bi bi-x-lg" ></i>
@@ -405,10 +401,10 @@ updateNftNameOrDescription,{
                </>
                )}
                <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
-               <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>Veiw on OpenSea</a>
+               <Link to={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on OpenSea</Link>
                </Box>
                <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
-               <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>Veiw on EtherScan</a>
+               <Link to={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on EtherScan</Link>
                </Box>
 
               </Box>

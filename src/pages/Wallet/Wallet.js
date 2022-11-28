@@ -294,7 +294,7 @@ const Wallet = () => {
 
       <EditProfile heading="My Profile" />
       <Swap />
-      <Newsletter />
+      {/* <Newsletter /> */}
       <Share />
     </>
   );

@@ -6,6 +6,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import {forget} from "../../api/ApiCall/forget"
 import { useMutation } from "react-query";
+import { toast } from "react-toastify";
 const useStyle = makeStyles({
   wrap18: {
     padding: "6rem 0 2rem",
@@ -50,7 +51,15 @@ const Reset = () => {
     "forget",
     forget,{
       onSuccess:(data)=>{
-        console.log(data);
+        if(data?.responseCode===200){
+          toast.success(JSON.stringify("Check your mail for reset password"));
+        }
+        else if(data?.responseCode===404){
+          toast.error(JSON.stringify("Email not exits"));
+        }
+        else if(data?.responseCode===501){
+          toast.error(JSON.stringify("Something went wrong"));
+        }
       }
     }
   )
@@ -117,6 +126,7 @@ const Reset = () => {
                     </button>
                   </Box>
                 </form>
+               
               </Box>
             </Grid>
           </Grid>
