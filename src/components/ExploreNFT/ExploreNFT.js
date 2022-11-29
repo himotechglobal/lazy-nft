@@ -41,6 +41,10 @@ const useStyle = makeStyles((theme) => ({
     "& h3": {
       fontSize: "1.7rem",
       fontWeight: "bold",
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "1rem",
+        marginTop:"1rem"
+      },
     },
   },
   bag15: {
@@ -117,14 +121,26 @@ const useStyle = makeStyles((theme) => ({
       display: "flex",
     },
   },
+  bin1:{
+    [theme.breakpoints.down("sm")]: {
+      display: "flex",
+      justifyContent:"flex-start !important",
+    },
+    "& h5":{
+      
+      [theme.breakpoints.down("sm")]: {
+        fontSize:"1rem"
+      },
+    }
+  }
 }));
 const ExploreNFT = () => {
   const [show, setShow] = useState(true);
-  const [show1, setShow1] = useState(false);
+  const [show1, setShow1] = useState(true);
   // const [show2, setShow2] = useState(true);
   // const [show3, setShow3] = useState(true);
   // const [show4, setShow4] = useState(true);
-  const [chainName,setChainName]=useState({Ethereum:"Ethereum",BSC_Testnet:""})
+  const [chainName,setChainName]=useState({Ethereum:"Ethereum",BSC_Testnet:"BSC Testnet"})
 
   const Active = () => {
     setShow(!show);
@@ -206,6 +222,10 @@ const ExploreNFT = () => {
           // If there is not a next page, getNextPageParam will return undefined and the hasNextPage boolean will be set to 'false'
         },
 
+        // onSuccess:(data)=>{
+        //   setLoading(true)
+        // }
+
       }
     );
 
@@ -224,6 +244,9 @@ const ExploreNFT = () => {
     setFilter(event.target.value);
   };
   const classes = useStyle();
+
+
+  
   return (
     <>
       <Box className={classes.wrap7}>
@@ -241,7 +264,7 @@ const ExploreNFT = () => {
                 </FormGroup>
                 <FormGroup>
                   <FormControlLabel
-                    control={<Checkbox  onClick={inActive} />}
+                    control={<Checkbox  onClick={inActive} defaultChecked />}
                     label="Binance"
                   />
                 </FormGroup>
@@ -269,8 +292,9 @@ const ExploreNFT = () => {
                   onChange={handleChange}
                   displayEmpty
                   inputProps={{ "aria-label": "Without label" }}
+                  
                 >
-                  <MenuItem value={0} disableRipple>
+                  <MenuItem value={0} disableRipple >
                     Default
                   </MenuItem>
                   <MenuItem value={1} disableRipple>
@@ -378,22 +402,29 @@ const ExploreNFT = () => {
           ) : null}
 
           {!dataEthereum?.pages[0] && (
-            <Container>
-              <Grid container md={12} justifyContent="center">
+       
+              <Grid container md={12} justifyContent="center" className={classes.bin1}>
                 <Typography variant="h5">No NFTs Added Yet</Typography>
               </Grid>
-            </Container>
+            
           )}
 
 
 
-          <Container>
+          {/* <Container> */}
   
           {show1 ? (
             <>
+          <Box>
+            {/* <Container> */}
+            <Grid item md={12}>
             <Typography variant="h3">Featured Binance Wolf Pups</Typography>
+            </Grid>
+            {/* </Container> */}
+          </Box>
             <Box>
-                <Grid container justifyContent="center">
+            {filter===0 &&(
+              <Grid container justifyContent="center">
                   {dataBsc_Testnet?.pages[0] &&
                     dataBsc_Testnet?.pages.map( (page, i) =>
                      page?.responseResult?.map((nfts, index) => {
@@ -420,9 +451,10 @@ const ExploreNFT = () => {
                         color: "#fff",
                         border: "none",
                         borderRadius: "20px",
-                        margin: "10px",
+                        // margin: "10px",
                         fontSize: "0.7rem",
                         fontWeight: "bold",
+                        margin:"50px 0"
                       }}
                     >
                       Load More
@@ -430,8 +462,8 @@ const ExploreNFT = () => {
                   ) : null}
                 </Box>
                 </Grid>
+            )}
 
-    
             </Box>
             </>
           ) : null}
@@ -480,7 +512,7 @@ const ExploreNFT = () => {
                 </Grid>
               </Container> */}
           {/* </Grid> */}
-        </Container>
+        {/* </Container> */}
       </Box>
     </>
   );

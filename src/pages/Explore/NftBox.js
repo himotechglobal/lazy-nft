@@ -26,6 +26,7 @@ import {
   Typography,
   TextField,
   TextareaAutosize,
+  CircularProgress,
 } from "@mui/material";
 import {toggleLike} from "../../api/ApiCall/nftCollection/toggleLike";
 import {updateNftNameOrDescription} from "../../api/ApiCall/nftCollection/updateNftNameOrDescription"
@@ -76,6 +77,8 @@ const useStyle = makeStyles((theme) => ({
       padding: "6px",
       margin: "0 0 4px 0",
       color: "#000",
+      display:"flex",
+      justifyContent:"space-between"
       // display:"none"
     },
 
@@ -204,7 +207,7 @@ const NftBox = (props) => {
   const clickable = (()=> {
     navigate(`/nftdetailpage/${props?.data._id}`)
   })
-  const {mutateAsync}=useMutation(
+  const {mutateAsync,isLoading:isLoadingUpdateProfilePic}=useMutation(
     "updateProfilePic",
     updateProfilePic,{
     onSuccess:(data)=>{
@@ -214,11 +217,12 @@ const NftBox = (props) => {
   )
   
 // console.log(userData._id);
-  const {mutateAsync:mutateAsyncEdit}=useMutation("updateNftNameOrDescription",
+  const {mutateAsync:mutateAsyncEdit, isLoading:isLoadingupdateNftNameOrDescription}=useMutation("updateNftNameOrDescription",
 updateNftNameOrDescription,{
   onSuccess:(data,error)=>{
     queryClient.invalidateQueries("getAllHideNft");
     queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
+    queryClient.invalidateQueries("getAllNftByChainName")
     queryClient.invalidateQueries("getAllPinnedNftByUserName");
     queryClient.invalidateQueries("getAllNftByChainName");
     queryClient.invalidateQueries("recentlyListedNft");
@@ -228,30 +232,34 @@ updateNftNameOrDescription,{
 }
 )
 
-  const {mutateAsync:mutateAsyncPinnedToggleNft}=useMutation(
+  const {mutateAsync:mutateAsyncPinnedToggleNft,  isLoading:isLoadingpinnedToggleNft}=useMutation(
     "pinnedToggleNft",
     pinnedToggleNft,{
     onSuccess:(data)=>{
       queryClient.invalidateQueries("getAllHideNft");
       queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
+      queryClient.invalidateQueries("getAllNftByChainName")
       queryClient.invalidateQueries("getAllPinnedNftByUserName");
-      queryClient.invalidateQueries("getAllNftCollection");
+      // queryClient.invalidateQueries("getAllNftCollection");
       queryClient.invalidateQueries("recentlyListedNft");
       queryClient.invalidateQueries("mostViewNft");
       queryClient.invalidateQueries("mostLikeNft")
+      
+  
     }
   }
   )
 
 
-  const {mutateAsync:mutateAsyncHideToggleNft}=useMutation(
+  const {mutateAsync:mutateAsyncHideToggleNft, isLoading:isLoadinghideToggleNft}=useMutation(
     "hideToggleNft",
     hideToggleNft,{
       onSuccess:(data)=>{
         queryClient.invalidateQueries("getAllHideNft");
         queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
+        queryClient.invalidateQueries("getAllNftByChainName")
         queryClient.invalidateQueries("getAllPinnedNftByUserName");
-        queryClient.invalidateQueries("getAllNftCollection");
+        // queryClient.invalidateQueries("getAllNftCollection");
         queryClient.invalidateQueries("recentlyListedNft");
         queryClient.invalidateQueries("mostViewNft");
         queryClient.invalidateQueries("mostLikeNft")
@@ -260,15 +268,17 @@ updateNftNameOrDescription,{
     }
   )
 
-  const {mutateAsync:mutateAsyncToggleLike,data}=useMutation(
+  const {mutateAsync:mutateAsyncToggleLike,data,isLoading:isLoadingtoggleLike}=useMutation(
     "toggleLike",
     toggleLike,{
       onSuccess:(data)=>{
-        console.log(data?.responseResult);
+        // console.log(data?.responseResult);
+    
         queryClient.invalidateQueries("getAllHideNft");
         queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
+        queryClient.invalidateQueries("getAllNftByChainName")
         queryClient.invalidateQueries("getAllPinnedNftByUserName");
-        queryClient.invalidateQueries("getAllNftCollection");
+        // queryClient.invalidateQueries("getAllNftCollection");
         queryClient.invalidateQueries("recentlyListedNft");
         queryClient.invalidateQueries("mostViewNft");
         queryClient.invalidateQueries("mostLikeNft");
@@ -357,6 +367,7 @@ updateNftNameOrDescription,{
 
                 }
                }}>
+               
                Make Profile Picture</p>
 
                {props?.data.pinnedStatus==="PINNED" ? (
@@ -368,7 +379,7 @@ updateNftNameOrDescription,{
 
                 }
                }}
-               >Unpinned Nft</p>
+               >Unpin Nft  {isLoadingpinnedToggleNft &&   <CircularProgress color="primary" size="sm"/>}</p>   
                ):(
                 <p onClick={async()=>{
                 try{
@@ -376,7 +387,7 @@ updateNftNameOrDescription,{
                 }catch(error){
 
                 }
-               }}>Pinned Nft</p>
+               }}>Pin Nft {isLoadingpinnedToggleNft &&   <CircularProgress color="primary" size="sm"/>}</p>
                )}
                { props?.data.status==="HIDE" ?(
                <p onClick={async()=>{
@@ -386,7 +397,7 @@ updateNftNameOrDescription,{
 
                 }
                }}
-               >Unhide Nft</p>
+               >Unhide Nft  {isLoadinghideToggleNft &&   <CircularProgress color="primary" size="sm"/>}</p>
                ):(
                 <p onClick={async()=>{
                 try{
@@ -394,7 +405,7 @@ updateNftNameOrDescription,{
                 }catch(error){
 
                 }
-               }}>Hide Nft</p>
+               }}>Hide Nft {isLoadinghideToggleNft &&   <CircularProgress color="primary" size="sm"/>}</p>
                )}
               
                </>
@@ -460,7 +471,12 @@ updateNftNameOrDescription,{
                       checked={data?.responseResult?.likes?.includes(userData?._id) || props?.data?.likes?.includes(userData?._id)}
                     />
                   </Badge>
-                  <Typography variant="body2"><RemoveRedEyeIcon/>{" "}{props?.data.viewsCount}</Typography>
+                 
+                  <Typography variant="body2"> <Badge badgeContent={props?.data.viewsCount} color="primary">
+                  <RemoveRedEyeIcon/>
+                 
+                  </Badge></Typography>
+                  {/* <Typography variant="body2"><RemoveRedEyeIcon/>{" "}{props?.data.viewsCount}</Typography> */}
                 </Box>
               </Box>
         </Box>

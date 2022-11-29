@@ -94,9 +94,9 @@ const useStyle = makeStyles((theme) => ({
 }));
 const AllNFT = ({userName}) => {
   const [show, setShow] = useState(true);
-  const [show1, setShow1] = useState(false);
+  const [show1, setShow1] = useState(true);
   const [{ token,userData }] = useContext(UserContext);
-  const [chainName,setChainName]=useState({Ethereum:"Ethereum",BSC_Testnet:""})
+  const [chainName,setChainName]=useState({Ethereum:"Ethereum",BSC_Testnet:"BSC Testnet"})
   const Active = () => {
     setShow(!show);
 
@@ -210,6 +210,7 @@ const AllNFT = ({userName}) => {
                   <FormControlLabel
                     control={
                       <Checkbox
+                      defaultChecked
                       onClick={inActive} 
                       />
                     }
@@ -260,9 +261,10 @@ const AllNFT = ({userName}) => {
                             color: "#fff",
                             border: "none",
                             borderRadius: "20px",
-                            margin: "10px",
+                            // margin: "10px",
                             fontSize: "0.7rem",
                             fontWeight: "bold",
+                            margin:"50px 0"
                           }}
                         >
                           Load More
