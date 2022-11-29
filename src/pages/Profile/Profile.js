@@ -83,7 +83,7 @@ useEffect(()=>{
   })
   const Balance=async ()=>{
     const balanceOf= await contract?.balanceOf(address);
-    console.log(balanceOf);
+    // console.log(balanceOf);
     return balanceOf
   }
 
@@ -157,7 +157,7 @@ useEffect(()=>{
             <Grid item md={12}>
               <div>
                 <img
-                  src={ updatePic?.profilePic ?? userData?.profilePic ??"https://lh3.googleusercontent.com/rRuk-xtEg28mkFYfLAnClC-UNrCGc2mPqvA_72fcUFM-zy6XTNkuFs9uWG8klzkRCyQRkDdmc-5AAqG-9EY-D4R1W865MhJnA6TFGg"}
+                  src={ updatePic?.profilePic ?? userData?.profilePic ??"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"}
                   alt=""
                 />
                 <h6>@{userData?.userName ?? "demo"}</h6>
@@ -222,7 +222,7 @@ useEffect(()=>{
             <Grid item md={12}>
               <div>
                 <img
-                  src={ dataByUserName?.responseResult[0]?.metadata?.["image"]?`${dataByUserName?.responseResult[0]?.metadata?.["image"].replace("ipfs://","https://ipfs.io/ipfs/")}`:"https://lh3.googleusercontent.com/rRuk-xtEg28mkFYfLAnClC-UNrCGc2mPqvA_72fcUFM-zy6XTNkuFs9uWG8klzkRCyQRkDdmc-5AAqG-9EY-D4R1W865MhJnA6TFGg" }
+                  src={ dataByUserName?.responseResult[0]?.metadata?.["image"]?`${dataByUserName?.responseResult[0]?.metadata?.["image"].replace("ipfs://","https://ipfs.io/ipfs/")}`:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png" }
                   alt=""
                 />
                 <h6>@{dataByUserName?.responseResult[0].userId["userName"] ?? "demo"}</h6>
