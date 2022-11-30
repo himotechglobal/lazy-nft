@@ -91,6 +91,11 @@ const useStyle = makeStyles((theme) => ({
     // width: "13%",
     // margin: "0 auto",
   },
+  alert:{
+[theme.breakpoints.down("sm")]:{
+  fontSize:"10.5px !important" ,
+}
+  }
 }));
 const AllNFT = ({userName}) => {
   const [show, setShow] = useState(true);
@@ -242,9 +247,10 @@ const AllNFT = ({userName}) => {
                         })
                       )
                     ) : (
-
-                      <Typography variant="h5">No NFTs Added Yet</Typography>
-               
+                      <Box sx={{display:"flex",flexDirection:"column",alignItems:"center",padding:"0 10px 0 15px",textAlign:"center"}}>
+                      <Typography variant="h5"> No NFTs Added Yet </Typography>
+                      <Typography variant="body1" className={classes.alert}> (Please note, it may take 30-40 minutes initially to show up your data)</Typography>
+                      </Box>
                     )
                     }
                     {isFetchingEthereum && !!dataEthereum?.pages[0] && !isFetchingNextPageEthereum ? (
@@ -303,7 +309,10 @@ const AllNFT = ({userName}) => {
                       )
                     ) : (
 
-                          <Typography variant="h5">No NFTs Added Yet</Typography>
+                      <Box sx={{display:"flex",flexDirection:"column",alignItems:"center",padding:"0 10px 0 15px",textAlign:"center"}}>
+                      <Typography variant="h5"> No NFTs Added Yet </Typography>
+                      <Typography variant="body1" className={classes.alert}> (Please note, it may take 30-40 minutes initially to show up your data)</Typography>
+                      </Box>
                
                     )
                     }

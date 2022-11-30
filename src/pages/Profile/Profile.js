@@ -14,6 +14,8 @@ import {getUserNFTByTokenURI} from "../../api/ApiCall/getNftByTokenURI";
 import {addorUpdateNftCollection} from "../../api/ApiCall/nftCollection/addorUpdateNftCollection";
 import {getAllNftByUserName} from "../../api/ApiCall/nftCollection/getAllNftByUserName"
 import { useParams } from "react-router-dom";
+import { actionTypes } from "../../context/User/UserReducer";
+import { viewWallet } from "../../api/ApiCall/viewWallet";
 
 const useStyle = makeStyles((theme)=>({
   wrap5: {
@@ -55,88 +57,41 @@ const Profile =  () => {
   const queryClient=useQueryClient();
   const {address,isConnected}=useAccount()
   const classes = useStyle();
-  const [{userData,userUpdateData,updatePic,token}, ] = useContext(UserContext);
-  const [NFTBalance,SetNFTBalance]=useState(0)
-  const [tokenIdList,setTokenIdList]=useState([]);
-  const [contractAddress,setContractAddress]=useState();
-  const [contractAbi,setContractAbi]=useState();
+  const [{userData,userUpdateData,updatePic,token},] = useContext(UserContext);
 
-useEffect(()=>{
-  if( chain?.name==="Ethereum" && isConnected && address){
-    // console.log("yoyo");
-    setContractAddress(WOLFPUPS_NFT_address);
-    setContractAbi(WOLFPUPS_NFT_ABI);
-  }
-  if( chain?.name==="BSC Testnet" &&  isConnected && address){
-    // console.log("yo");
-    setContractAddress(WOLFPUPS_NFT_address_BSC);
-    setContractAbi(WOLFPUPS_NFT_ABI);
-  }
-},[chain?.name,address,isConnected,contractAddress,contractAbi])
+ 
 
-  console.log(contractAddress,chain?.name);
-  const contract=  useContract({
-    address: contractAddress,
-    abi:  contractAbi,
-    signerOrProvider: provider,
-
-  })
-  const Balance=async ()=>{
-    const balanceOf= await contract?.balanceOf(address);
-    // console.log(balanceOf);
-    return balanceOf
-  }
-
- const  ArraysOfTokenId= async(balance)=>{
-  var TokenIdList=[];
-  for(let i=0;i<Number(balance)-0;i++){
-    const tokenId = await contract.tokenOfOwnerByIndex(address,i);
-    TokenIdList.push(tokenId?.toString());
-  }
-  return TokenIdList;
-
- }
-
-
-const MetaData= async (TokenIdList)=>{
-  // console.log({TokenIdList});
-  await Promise.all(TokenIdList?.map(async(tokenId)=>{
-    const tokenUri=await contract.tokenURI(tokenId);
-    const metadata=await getUserNFTByTokenURI(tokenUri);
-    // console.log(metadata);
-    await addorUpdateNftCollection({token:token,value:{tokenAddress:contractAddress,tokenId:tokenId,tokenOwner:address,chainName:chain?.name,metadata:metadata}})
-
-  }));
-}
-
-const metadataFunc=async()=>{
-  const balance = await Balance();
-  SetNFTBalance(balance.toString());
-  const arr =await ArraysOfTokenId?.(balance);
-  setTokenIdList([...arr])
-  await MetaData?.([...arr]);
-  await queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
-}
-
-
-
-
- useEffect( ()=>{
-if(address && isConnected && (chain?.name==="Ethereum" || chain?.name==="BSC Testnet")){
-  metadataFunc();
-}
-
- },[chain?.name,contractAddress,contractAbi]);
-
- const {data:dataByUserName,refetch}=useQuery(
+ const {data:dataByUserName}=useQuery(
   ["getAllNftByUserName",userName],
   ()=>getAllNftByUserName(userName),{
-  }
+
+  },
+  
 )
 
+const {
+  data,
+  isLoading: walletLoading,
+} = useQuery(["viewWallet"], viewWallet, {
+  onSuccess: (data) => {
+    try {
+      if (data?.success === true) {
+        // console.log(data.responseResult[0]?.wallets[0]);
+        // dispatch({ type: actionTypes.SET_WALLET, value: data?.responseResult[0]?.wallets });
+        // toast.success(JSON.stringify("You wallets fetched Successfully"));
+      } else {
+        // toast.error(JSON.stringify(data));
+      }
+    } catch (error) {
+      // toast.error(JSON.stringify(error));
+    }
+  },
+});
+
 useEffect(()=>{
-  if(!token){
-    refetch?.()
+  if(!token || token){
+    queryClient?.invalidateQueries("getAllNftByUserName")
+    queryClient?.invalidateQueries("viewWallet")
   }
 },[])
 
@@ -145,11 +100,11 @@ useEffect(()=>{
   return (
     <>
       <Header />
-      { (!address && token ) && 
+      {  (!data?.responseResult[0]?.wallets?.[0]?.address && token)  && 
       <EditProfile />
       }
       {!!token ?(
-      (isConnected  && address) ?(
+        (data?.responseResult[0]?.wallets?.[0]?.address && token) ?(
         <>
       <Box className={classes.wrap5}>
         <Container >
@@ -161,8 +116,8 @@ useEffect(()=>{
                   alt=""
                 />
                 <h6>@{userData?.userName ?? "demo"}</h6>
-                { !!NFTBalance &&
-                <h6>Total NFTs Owned{" "}{NFTBalance ?? 0}</h6>
+                { !!dataByUserName?.responseResult &&
+                <h6>Total NFTs Owned{" "}{dataByUserName?.responseResult.length ?? 0}</h6>
                 }
                 <p>
                 { (userUpdateData?.bio ||userData?.bio) ??

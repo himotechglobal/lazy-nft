@@ -231,7 +231,7 @@ updateNftNameOrDescription,{
                 <Grid container >
                   <Grid md={12}>
                     <Box className={classes.bag15}>
-                      <img src={data?.responseResult?.metadata?.image?`${ data?.responseResult?.metadata?.image.replace("ipfs://","https://ipfs.io/ipfs/")}`:""}alt="" />
+                      <img src={data?.responseResult?.metadata?.image?`${ data?.responseResult?.metadata?.image.replace("ipfs://","https://wizard.infura-ipfs.io/ipfs/")}`:""}alt="" />
                       {/* <h1>{elz.title}</h1> */}
                     </Box>
                   </Grid>

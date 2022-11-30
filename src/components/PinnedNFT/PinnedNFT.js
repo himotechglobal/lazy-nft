@@ -9,13 +9,14 @@ import { useQueries, useQuery } from "react-query";
 import { UserContext } from "../../context/User/UserContext";
 
 
-const useStyle = makeStyles({
+const useStyle = makeStyles((theme)=>({
   wrap5: {
     padding: "2rem 0 ",
 
     "& h2": {
       fontSize: "2rem",
-      fontWeight: "bold"
+      fontWeight: "bold",
+      // textAlign:"left"
     },
   },
   bag8: {
@@ -72,7 +73,7 @@ const useStyle = makeStyles({
     borderRadius: "6px",
     padding: "11px",
   },
-});
+}));
 const PinnedNFT = ({userName}) => {
   const classes = useStyle();
   const [{token,userData}, ] = useContext(UserContext);
@@ -89,8 +90,8 @@ const PinnedNFT = ({userName}) => {
     <>
       <Box className={classes.wrap5}>
         <Container>
-          <Grid container spacing={3} justifyContent="center">
-            <Grid item md={12}>
+          <Grid container spacing={3} >
+            <Grid item md={12} sm={12}>
               <Typography variant="h2">Pinned NFTs</Typography>
             </Grid>
             { isLoading  ? (

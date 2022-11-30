@@ -362,7 +362,7 @@ updateNftNameOrDescription,{
                 </p>
                <p onClick={async()=>{
                 try{
-                  await mutateAsync({token:localStorage.getItem("token"),value:props.data.metadata.image.replace("ipfs://","https://ipfs.io/ipfs/")})
+                  await mutateAsync({token:localStorage.getItem("token"),value:props.data.metadata.image.replace("ipfs://","https://wizard.infura-ipfs.io/ipfs/")})
                 }catch(error){
 
                 }
@@ -421,7 +421,7 @@ updateNftNameOrDescription,{
             ) : null}
           </Box>
           {/* <Link to={`/nftdetailpage/${props.data.id}`}> */}
-          <img src={props?.data.metadata.image?`${ props?.data.metadata.image.replace("ipfs://","https://ipfs.io/ipfs/")}`:""} alt=""  onClick={clickable}/>
+          <img src={props?.data.metadata.image?`${ props?.data.metadata.image.replace("ipfs://","https://wizard.infura-ipfs.io/ipfs/")}`:""} alt=""  onClick={clickable}/>
           {/* </Link> */}
           {/* <img src={props.data1.img} alt="" /> */}
           <Box
