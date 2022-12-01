@@ -101,9 +101,11 @@ const Wallet = () => {
         // toast.error(JSON.stringify(error));
       }
     },
-  });
+    // refetchOnWindowFocus: false,
+  }
+  );
 
-  const { isError, error, isLoading, mutateAsync, isSuccess } = useMutation(
+  const { isError, error, mutateAsync } = useMutation(
     "addWallet",
     addWallet,
     {
@@ -112,7 +114,7 @@ const Wallet = () => {
           if (data.success === true) {
             refetch();
           } else {
-            // toast.error(JSON.stringify(data.message));
+            toast.error(JSON.stringify(data.message));
           }
         } catch (error) {
           // toast.error(JSON.stringify(error));
@@ -121,6 +123,7 @@ const Wallet = () => {
       onError: (error, data) => {
         // toast.error(JSON.stringify(error));
       },
+      
     }
   );
 
@@ -140,7 +143,9 @@ const Wallet = () => {
     if (status === "connected") {
       addWallets?.();
     }
-  }, [chain?.name, address, status === "connecting"]);
+  }, [chain?.name,address]);
+
+ 
 
   const { mutateAsync: mutateAsyncRemoveWallet } = useMutation(
     "removeWallet",
@@ -235,7 +240,7 @@ const Wallet = () => {
           {data?.responseResult ? (
             <>
               {data?.responseResult &&
-                data?.responseResult[0]?.wallets.map(
+                data?.responseResult.map(
                   ({ networkName, address, _id }, index) => {
                     return (
                       <Grid

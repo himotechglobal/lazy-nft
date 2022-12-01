@@ -76,7 +76,7 @@ const {
   onSuccess: (data) => {
     try {
       if (data?.success === true) {
-        // console.log(data.responseResult[0]?.wallets[0]);
+        // console.log(data?.responseResult);
         // dispatch({ type: actionTypes.SET_WALLET, value: data?.responseResult[0]?.wallets });
         // toast.success(JSON.stringify("You wallets fetched Successfully"));
       } else {
@@ -100,11 +100,11 @@ useEffect(()=>{
   return (
     <>
       <Header />
-      {  (!data?.responseResult[0]?.wallets?.[0]?.address && token)  && 
+      {  (!data?.responseResult[0]?.address && token)  && 
       <EditProfile />
       }
       {!!token ?(
-        (data?.responseResult[0]?.wallets?.[0]?.address && token) ?(
+        (data?.responseResult[0]?.address) ?(
         <>
       <Box className={classes.wrap5}>
         <Container >
