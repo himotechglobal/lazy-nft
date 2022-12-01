@@ -320,14 +320,14 @@ updateNftNameOrDescription,{
     },
   });
 
- const {data:imageData}=useQuery(
-  ["getUserNFTByTokenURI",props?.data.metadata.image],
-  ()=>getUserNFTByTokenURI(props?.data.metadata.image),{
+//  const {data:imageData}=useQuery(
+//   ["getUserNFTByTokenURI",props?.data.metadata.image],
+//   ()=>getUserNFTByTokenURI(props?.data.metadata.image),{
 
-  }
- )
+//   }
+//  )
 
- console.log(imageData);
+//  console.log(imageData);
   
   useOnClick(ref, () => setShow(false));
   return (
@@ -443,17 +443,17 @@ updateNftNameOrDescription,{
                 }}
               >
                 <Box onClick={clickable}>
-                  <h6>#{props.data.tokenId}</h6>
-                  <p>
+                  {/* <h6>#{props.data.tokenId}</h6> */}
+                  <h6>
                     {props?.data.lazyName
                       ? props?.data.lazyName
                       : props?.data.metadata.name}
-                  </p>
-                  {/* <p>
+                  </h6>
+                  <p>
                     {props?.data.lazyDescription
                       ? props?.data.lazyDescription
                       : props?.data.metadata.description}
-                  </p> */}
+                  </p>
                 </Box>
                 <Box sx={{ textAlign: "center" }}>
                   <Badge badgeContent={`${(data?.responseResult?.likes?.length || props?.data?.likes?.length)??0}`} color="primary">

@@ -36,7 +36,6 @@ import { mostLikeNft } from "../../api/ApiCall/nftCollection/mostLikeNft";
 import { useQuery, useInfiniteQuery } from "react-query";
 import { WOLFPUPS_NFT_address, WOLFPUPS_NFT_address_BSC } from "../../config";
 import { getAllNftByChainName } from "../../api/ApiCall/nftCollection/getAllNftByChainName";
-import ExploreNFTSingle from "./ExploreNFTSingle";
 const useStyle = makeStyles((theme) => ({
   wrap7: {
     "& h3": {
@@ -135,13 +134,13 @@ const useStyle = makeStyles((theme) => ({
     }
   }
 }));
-const ExploreNFT = () => {
+const ExploreNFTSingle = (props) => {
   const [show, setShow] = useState(true);
   const [show1, setShow1] = useState(true);
   // const [show2, setShow2] = useState(true);
   // const [show3, setShow3] = useState(true);
   // const [show4, setShow4] = useState(true);
-  const [chainName,setChainName]=useState({Ethereum:"Ethereum",BSC_Testnet:"BSC Testnet"})
+  const [chainName,setChainName]=useState({BSC_Testnet:"BSC Testnet"})
 
   const Active = () => {
     setShow(!show);
@@ -188,8 +187,8 @@ const ExploreNFT = () => {
 
     const { data:dataEthereum, fetchNextPage:fetchNextPageEthereum, hasNextPage:hasNextPageEthereum ,isFetchingNextPage:isFetchingNextPageEthereum, isFetching:isFetchingEthereum } =
     useInfiniteQuery(
-      ["getAllNftByChainName",chainName?.Ethereum],
-      ({ pageParam = 0 }) => getAllNftByChainName(pageParam,chainName?.Ethereum),
+      ["getAllNftByChainName",props.network,props.filter],
+      ({ pageParam = 0 }) => getAllNftByChainName(pageParam,props.network,props.filter),
       {
         refetchOnWindowFocus: false,
         getNextPageParam: (lastPage, pages) => {
@@ -205,159 +204,113 @@ const ExploreNFT = () => {
 
       }
     );
-
-    const { data:dataBsc_Testnet, fetchNextPage:fetchNextPageBsc_Testnet, hasNextPage:hasNextPageBsc_Testnet ,isFetchingNextPage:isFetchingNextPageBsc_Testnet, isFetching:isFetchingBsc_Testnet } =
-    useInfiniteQuery(
-      ["getAllNftByChainName",chainName?.BSC_Testnet],
-      ({ pageParam = 0 }) => getAllNftByChainName(pageParam,chainName?.BSC_Testnet),
-      {
-        refetchOnWindowFocus: false,
-        getNextPageParam: (lastPage, pages) => {
-          if (pages.length < 4) {
-            return pages.length + 1;
-          } else {
-            return undefined;
-          }
-          // Here I'm assuming you have access to the total number of pages
-
-          // If there is not a next page, getNextPageParam will return undefined and the hasNextPage boolean will be set to 'false'
-        },
-
-        // onSuccess:(data)=>{
-        //   setLoading(true)
-        // }
-
-      }
-    );
+ 
 
   const [filter, setFilter] = useState(0);
   // console.log(filter);
 
-  const _recentlyListedNft = useQuery(
-    ["recentlyListedNft"],
-    recentlyListedNft,
-    {}
-  );
-  const _mostViewNft = useQuery(["mostViewNft"], mostViewNft, {});
-  const _mostLikeNft = useQuery(["mostLikeNft"], mostLikeNft, {});
+  // const _recentlyListedNft = useQuery(
+  //   ["recentlyListedNft"],
+  //   recentlyListedNft,
+  //   {}
+  // );
+  // const _mostViewNft = useQuery(["mostViewNft"], mostViewNft, {});
+  // const _mostLikeNft = useQuery(["mostLikeNft"], mostLikeNft, {});
 
   const handleChange = (event) => {
     setFilter(event.target.value);
   };
   const classes = useStyle();
 
-  const netWorkArray = [{
-    "value" : "Ethereum",
-    "label" : "Ethereum"
-  },
-  {
-    "value" : "BSC Testnet",
-    "label" : "Binance Testnet"
-  }
-];
 
-const networkLabels = {
-  "BSC Testnet" : "Binance Testnet",
-  "Ethereum" : "Ethereum",
-}
-
-
-const [activeNetworks,setActiveNetworks] = useState(["Ethereum","BSC Testnet"])
   
-const toggleActiveNetwork = (_v) => {
-  let _activeNetworks = activeNetworks ; 
-  if(_activeNetworks.includes(_v)){
-    let _temp = [];
-    activeNetworks.map((v,i) => {
-      if(v != _v){
-        _temp.push(v);
-      }
-    })
-    setActiveNetworks(_temp);
-  }
-  else{
-    // alert("here")
-    _activeNetworks.push(_v);
-    console.log(_activeNetworks)
-    setActiveNetworks(_activeNetworks);
-  
-
-  }
-}
   return (
     <>
       <Box className={classes.wrap7}>
         <Container>
-          {/* <Grid container className={classes.hjk}> */}
-          <Grid item md={12}>
-              <Box   sx={{
+         
+
+          <Grid item lg={6}>
+            <Box
+              sx={{
                 textAlign: "center",
                 margin: "1rem 0",
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "space-between",
                 alignItems: "center",
                 flexWrap: "wrap",
-              }} >
-            <Box className={classes.bag15}>
-              {
-                netWorkArray.map((v,i) => {
-                  return (
-                    <FormGroup>
-                    <FormControlLabel
-                      control={<Checkbox defaultChecked onClick={() => toggleActiveNetwork(v.value)} />}
-                      label={v.label}
-                    />
-                  </FormGroup>
-                  )
-                })
-              }
-              
+              }}
+            >
+              {/* <Box> */}
+              {/* <Typography variant="h3">Ethereum Feature Nfts</Typography> */}
+         
+                <Typography variant="h3">Featured {props.label}</Typography>
+           
              
             </Box>
-
-                <FormControl sx={{ m: 1, minWidth: 150 }}>
-                <Select
-                  value={filter}
-                  onChange={handleChange}
-                  displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
-                  
-                >
-                  <MenuItem value={0} disableRipple >
-                    Default
-                  </MenuItem>
-                  <MenuItem value={1} disableRipple>
-                    Recently listed
-                  </MenuItem>
-                  {/* <MenuItem value={10}>recently listed</MenuItem> */}
-                  <MenuItem disableRipple value={2}>
-                    Most viewed
-                  </MenuItem>
-                  <MenuItem disableRipple value={3}>
-                    Most liked
-                  </MenuItem>
-                </Select>
-                {/* <FormHelperText>Without label</FormHelperText> */}
-              </FormControl>
-              </Box>
           </Grid>
+ 
+            <Box>
+              {filter === 0 && (
+                <Grid container justifyContent="center">
+                  {dataEthereum?.pages[0] &&
+                    dataEthereum?.pages.map( (page, i) =>
+                     page?.responseResult?.map((nfts, index) => {
+                        return (
+                          <>
+                            <Grid item key={index} lg={4} md={4} sm={6}>
+                              <NftBox data={nfts} />
+                            </Grid>
+                          </>
+                        );
+                      })
+                    )}
+                {isFetchingEthereum && !isFetchingNextPageEthereum ? (
+                    <CircularProgress color="primary" />
+                  ) : null}
+                  <Box sx={{ "display": "block", "width": "100%", "textAlign": "center", marginTop: "1rem" }}>
+                  {(dataEthereum?.pages[0] && hasNextPageEthereum ) && (
+                    <Button
+                      variant="contained"
+                      disabled={!hasNextPageEthereum}
+                      onClick={() => fetchNextPageEthereum()}
+                      sx={{
+                        background: "#000",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "20px",
+                        margin: "10px",
+                        fontSize: "0.7rem",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Load More
+                    </Button>
+                    
+                  )}
+                  </Box>
+                </Grid>
+              )}
 
-              {
-                netWorkArray.length > 0 && netWorkArray.map((v,i) => {
-                  if(activeNetworks.includes(v.value)){
-                  return (
-                    <ExploreNFTSingle label={v.label} network={v.value} filter={filter} />
-                  )
-                  }
-                })
-              }
-              
+            </Box>
+      
+
+          {!dataEthereum?.pages[0] && show && (
+       
+              <Grid container md={12} justifyContent="center" className={classes.bin1}>
+                <Typography variant="h5">No NFTs Added Yet</Typography>
+              </Grid>
+            
+          )}
+
+ 
+   
         
               </Container>
-           
+         
       </Box>
     </>
   );
 };
 
-export default ExploreNFT;
+export default ExploreNFTSingle;

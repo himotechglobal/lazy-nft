@@ -139,11 +139,11 @@ const Wallet = () => {
     }
   };
 
-  useEffect(() => {
-    if (status === "connected") {
-      addWallets?.();
-    }
-  }, [chain?.name,address]);
+  // useEffect(() => {
+  //   if (status === "connected") {
+  //     addWallets?.();
+  //   }
+  // }, [chain?.name,address]);
 
  
 
@@ -217,27 +217,30 @@ const Wallet = () => {
               <Box className={classes.bag4}>
                 {isConnected && address ? (
                   <Button
-                    onClick={openChainModal}
+                    onClick={addWallets}
                     size="large"
                     variant="contained"
                     sx={{ borderRadius: 50, textTransform: "none" }}
                   >
                     Add Wallet
                   </Button>
-                ) : (
+                ) : 
+                (
                   <Button
                     onClick={() => isDisconnected && openConnectModal()}
                     size="large"
                     variant="contained"
                     sx={{ borderRadius: 50, textTransform: "none" }}
                   >
-                    Add Wallet
+                    Connect Wallet
                   </Button>
-                )}
+                )
+                
+              }
               </Box>
             </Grid>
           </Grid>
-          {data?.responseResult ? (
+          {data?.responseResult.length > 0  ? (
             <>
               {data?.responseResult &&
                 data?.responseResult.map(
@@ -290,7 +293,7 @@ const Wallet = () => {
             <Grid item md={12} sx={{ marginTop: 5 }}>
               <Box className={classes.bag5}>
                 <Typography component={"div"} variant="h6">
-                  No Wallets Added Yets{" "}
+                  No Wallets Added Yet{" "}
                 </Typography>
               </Box>
             </Grid>

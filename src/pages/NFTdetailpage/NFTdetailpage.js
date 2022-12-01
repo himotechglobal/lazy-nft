@@ -231,7 +231,7 @@ updateNftNameOrDescription,{
                 <Grid container >
                   <Grid md={12}>
                     <Box className={classes.bag15}>
-                      <img src={data?.responseResult?.metadata?.image?`${ data?.responseResult?.metadata?.image.replace("ipfs://","https://wizard.infura-ipfs.io/ipfs/")}`:""}alt="" />
+                      <img src={data?.responseResult?.metadata?.image?`${ data?.responseResult?.metadata?.image.replace("ipfs://","https://ipfs.io/ipfs/")}`:""}alt="" />
                       {/* <h1>{elz.title}</h1> */}
                     </Box>
                   </Grid>
@@ -244,7 +244,7 @@ updateNftNameOrDescription,{
                 <Grid>
                   <Grid md={6}>
                     <Box>
-                    <Typography variant="h4">#{data?.responseResult?.tokenId}</Typography>
+                    {/* <Typography variant="h4">#{data?.responseResult?.tokenId}</Typography> */}
                       <Typography variant="h4">{data?.responseResult?.lazyName? data?.responseResult?.lazyName :data?.responseResult?.metadata?.name}</Typography>
                       <p>{data?.responseResult?.lazyDescription? data?.responseResult?.lazyDescription :data?.responseResult?.metadata?.description}</p>
                     </Box>
@@ -351,6 +351,7 @@ updateNftNameOrDescription,{
                 placeholder="Enter Name"
                 className={classes.bag90  }
                 // sx={{width:"100%"}}
+               
                 value={formik.values.name}
                 onChange={formik.handleChange}
                 error={
