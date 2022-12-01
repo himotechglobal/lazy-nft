@@ -8,7 +8,7 @@ import {actionTypes} from "../../context/User/UserReducer";
 import {pinnedToggleNft} from "../../api/ApiCall/pinnedNft/pinnedToggleNft"
 import {hideToggleNft} from "../../api/ApiCall/nftHide/hideToggleNft"
 import {WOLFPUPS_NFT_address} from "../../config/index";
-import { useAccount } from "wagmi";
+import { useAccount, useQuery } from "wagmi";
 import Modal from "react-bootstrap/Modal";
 import Badge from "@mui/material/Badge";
 // import Checkbox from '@mui/material/Checkbox';
@@ -18,6 +18,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import useOnClick from "../../components/useOnclick";
+ 
 import {
   Box,
   Container,
@@ -30,6 +31,7 @@ import {
 } from "@mui/material";
 import {toggleLike} from "../../api/ApiCall/nftCollection/toggleLike";
 import {updateNftNameOrDescription} from "../../api/ApiCall/nftCollection/updateNftNameOrDescription"
+import { getUserNFTByTokenURI } from "../../api/ApiCall/getNftByTokenURI";
 // import useOnClickOutSide from "../../components/useOnclick";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 const useStyle = makeStyles((theme) => ({
@@ -318,7 +320,14 @@ updateNftNameOrDescription,{
     },
   });
 
+ const {data:imageData}=useQuery(
+  ["getUserNFTByTokenURI",props?.data.metadata.image],
+  ()=>getUserNFTByTokenURI(props?.data.metadata.image),{
 
+  }
+ )
+
+ console.log(imageData);
   
   useOnClick(ref, () => setShow(false));
   return (
@@ -421,7 +430,8 @@ updateNftNameOrDescription,{
             ) : null}
           </Box>
           {/* <Link to={`/nftdetailpage/${props.data.id}`}> */}
-          <img src={props?.data.metadata.image?`${ props?.data.metadata.image.replace("ipfs://","https://wizard.infura-ipfs.io/ipfs/")}`:""} alt=""  onClick={clickable}/>
+          {/* {props?.data.metadata.image ?  props?.data.metadata.image.replace("ipfs://","https://wizard.infura-ipfs.io/ipfs/") : "" } */}
+          <img src={imageData} alt=""  onClick={clickable}/>
           {/* </Link> */}
           {/* <img src={props.data1.img} alt="" /> */}
           <Box

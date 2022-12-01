@@ -23,6 +23,8 @@
     "discord-buttons": "^4.0.0-deprecated",
     "ethers": "^5.7.2",
     "formik": "^2.2.9",
+    "immer": "^9.0.16",
+    "jotai-immer": "^0.1.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-dom": "^18.2.0",

@@ -7,10 +7,21 @@ export const getUserNFTByTokenURI = async (tokenURI) => {
         method:'GET',
         url:tokenUri, 
         headers:{
-          origin:"http://localhost:3000"
+          origin:"http://localhost:3001",
+          "content-type": "image/png"
         }
     });
-    return data;
+    // var reader=new FileReader();
+    // reader.onloadend=function(){
+    //   // callback(data);
+  // }
+  // let blob = new Blob(
+    // [data]
+  // )
+  // let image = URL.createObjectURL(blob)
+  return data
+    // return data;
+    // return data;
     } catch (error) {
       // console.log(error,"hk");
     }
