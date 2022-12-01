@@ -7,7 +7,7 @@ export const getUserNFTByTokenURI = async (tokenURI) => {
         method:'GET',
         url:tokenUri, 
         headers:{
-          origin:"http://localhost:3001",
+          origin:"https://d2ubgtumno6dlw.cloudfront.net/",
           "content-type": "image/png"
         }
     });
