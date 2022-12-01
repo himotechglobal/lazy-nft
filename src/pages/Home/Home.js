@@ -72,27 +72,30 @@ const Home = () => {
             <Grid item lg={12} sm={12} md={12}>
               <Box>
                 <Typography variant="h6">
-                  The lazy way to show off your NFTs.
+                  Every pup deserve a name and a story. Show off and share yours.
                 </Typography>
               </Box>
             </Grid>
             <Grid item md={4} lg={4} sm={12} flexWrap="wrap">
               <Box className={classes.bag20}>
-                <img src="https://lazy.com/create-account.png" alt="" />
+                {/* <img src="https://lazy.com/create-account.png" alt="" /> */}
+                <img src="http://cdn.onlinewebfonts.com/svg/img_303225.png" alt="" />
                 <p>Create an account</p>
               </Box>
             </Grid>
             <Grid item md={4} lg={4} sm={12} flexWrap="wrap">
               <Box className={classes.bag20}>
-                <img src="https://lazy.com/wallet.png" alt="" />
+                {/* <img src="https://lazy.com/wallet.png" alt="" /> */}
+                <img src="https://cdn-icons-png.flaticon.com/512/76/76238.png" alt="" />
                 <p>Connect your wallets</p>
               </Box>
             </Grid>
             <Grid item md={4} lg={4} sm={12} flexWrap="wrap">
               <Box className={classes.bag20}>
-                <img src="https://lazy.com/share.png" alt="" />
+                {/* <img src="https://lazy.com/share.png" alt="" /> */}
+                <img src="https://static.vecteezy.com/system/resources/previews/006/229/455/original/social-people-network-networking-connect-connecting-referral-program-icon-social-media-connection-free-vector.jpg" alt="" />
                 <p>
-                  Add your unique lazy.com URL to your Instagram and social
+                  Add your unique Wolf Pup Registry to your Instagram and social
                   media bios. Tell your friends!
                 </p>
               </Box>

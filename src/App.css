@@ -106,3 +106,7 @@
  .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root{
     padding: 0 !important;
  }
+
+ .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input{
+    padding: 7.5px 32px 7.5px 0px !important;
+ }

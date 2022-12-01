@@ -92,6 +92,7 @@ const Wallet = () => {
       try {
         if (data.success === true) {
           // console.log(data.responseResult[0]?.wallets[0]);
+          // dispatch({ type: actionTypes.SET_WALLET, value: data?.responseResult[0]?.wallets });
           // toast.success(JSON.stringify("You wallets fetched Successfully"));
         } else {
           // toast.error(JSON.stringify(data));
@@ -294,7 +295,7 @@ const Wallet = () => {
 
       <EditProfile heading="My Profile" />
       <Swap />
-      <Newsletter />
+      {/* <Newsletter /> */}
       <Share />
     </>
   );

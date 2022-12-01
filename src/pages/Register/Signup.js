@@ -91,7 +91,8 @@ const Signup = () => {
     },
     validationSchema: Yup.object({
       email: Yup.string().email("Invalid email format").required("Required!"),
-      userName: Yup.string()
+      userName: Yup.string() .trim('The contact name cannot include leading and trailing spaces')
+      .strict(true)
         .min(4, "Minimum 4 characters")
         .required("Required!"),
       password: Yup.string()

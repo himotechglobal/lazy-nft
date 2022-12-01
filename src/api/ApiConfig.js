@@ -1,4 +1,3 @@
-// const url = "http://172.16.1.240:8008/";
 // const url = "http://localhost:5000";
 const url ="https://d2ugm2w8bdhvj3.cloudfront.net"
 
@@ -17,13 +16,15 @@ const ApiConfigs = {
   addorUpdateNftCollection:`${url}/api/v1/nftCollection/addorUpdate`,
   updateNftNameOrDescription:`${url}/api/v1/nftCollection/updateNftNameOrDescription`,
   getAllNftCollection:`${url}/api/v1/nftCollection/getAllNft`,
+  getAllNftByChainName:`${url}/api/v1/nftCollection/getAllNftByChainName`,
   getMyNftCollection:`${url}/api/v1/nftCollection/getMyNft`,
+  getNftCollectionByChainNameAndUserName:`${url}/api/v1/nftCollection/getNftCollectionByChainNameAndUserName`,
   getNftByNftCollectionId:`${url}/api/v1/nftCollection/getNftByNftCollectionId`,
   getAllNftByUserName:`${url}/api/v1/nftCollection/getAllNftByUserName`,
   hideToggleNft:`${url}/api/v1/nftCollection/hideToggleNft`,
   getAllHideNft:`${url}/api/v1/nftCollection/getAllHideNft`,
   pinnedToggleNft:`${url}/api/v1/nftCollection/pinnedToggleNft`,
-  getAllPinnedNft:`${url}/api/v1/nftCollection/getAllPinnedNft`,
+  getAllPinnedNftByUserName:`${url}/api/v1/nftCollection/getAllPinnedNftByUserName`,
   toggleLike:`${url}/api/v1/nftCollection/toggleLike`,
   mostLikeNft:`${url}/api/v1/nftCollection/mostLikeNft`,
   mostViewNft:`${url}/api/v1/nftCollection/mostViewNft`,

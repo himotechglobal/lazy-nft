@@ -1,7 +1,6 @@
 import React, { useState,useContext,useRef } from "react";
 import { makeStyles } from "@mui/styles";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import {updateProfilePic} from "../../api/ApiCall/updateProfilePic"
 import { useMutation, useQueryClient } from "react-query";
 import { UserContext } from "../../context/User/UserContext";
@@ -15,8 +14,6 @@ import Badge from "@mui/material/Badge";
 // import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
@@ -25,12 +22,11 @@ import {
   Box,
   Container,
   Grid,
-  FormGroup,
-  FormControlLabel,
   Checkbox,
   Typography,
   TextField,
   TextareaAutosize,
+  CircularProgress,
 } from "@mui/material";
 import {toggleLike} from "../../api/ApiCall/nftCollection/toggleLike";
 import {updateNftNameOrDescription} from "../../api/ApiCall/nftCollection/updateNftNameOrDescription"
@@ -81,6 +77,8 @@ const useStyle = makeStyles((theme) => ({
       padding: "6px",
       margin: "0 0 4px 0",
       color: "#000",
+      display:"flex",
+      justifyContent:"space-between"
       // display:"none"
     },
 
@@ -206,11 +204,10 @@ const NftBox = (props) => {
   const [shows, setShows] = useState(false);
   const handleClose = () => setShows(false);
   const handleShow = () => setShows(true);
-  // console.log(props);
   const clickable = (()=> {
     navigate(`/nftdetailpage/${props?.data._id}`)
   })
-  const {mutateAsync}=useMutation(
+  const {mutateAsync,isLoading:isLoadingUpdateProfilePic}=useMutation(
     "updateProfilePic",
     updateProfilePic,{
     onSuccess:(data)=>{
@@ -220,13 +217,14 @@ const NftBox = (props) => {
   )
   
 // console.log(userData._id);
-  const {mutateAsync:mutateAsyncEdit}=useMutation("updateNftNameOrDescription",
+  const {mutateAsync:mutateAsyncEdit, isLoading:isLoadingupdateNftNameOrDescription}=useMutation("updateNftNameOrDescription",
 updateNftNameOrDescription,{
-  onSuccess:(data)=>{
+  onSuccess:(data,error)=>{
     queryClient.invalidateQueries("getAllHideNft");
-    queryClient.invalidateQueries("getMyNftCollection")
-    queryClient.invalidateQueries("getAllPinnedNft");
-    queryClient.invalidateQueries("getAllNftCollection");
+    queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
+    queryClient.invalidateQueries("getAllNftByChainName")
+    queryClient.invalidateQueries("getAllPinnedNftByUserName");
+    queryClient.invalidateQueries("getAllNftByChainName");
     queryClient.invalidateQueries("recentlyListedNft");
     queryClient.invalidateQueries("mostViewNft");
     queryClient.invalidateQueries("mostLikeNft")
@@ -234,30 +232,34 @@ updateNftNameOrDescription,{
 }
 )
 
-  const {mutateAsync:mutateAsyncPinnedToggleNft}=useMutation(
+  const {mutateAsync:mutateAsyncPinnedToggleNft,  isLoading:isLoadingpinnedToggleNft}=useMutation(
     "pinnedToggleNft",
     pinnedToggleNft,{
     onSuccess:(data)=>{
       queryClient.invalidateQueries("getAllHideNft");
-      queryClient.invalidateQueries("getMyNftCollection")
-      queryClient.invalidateQueries("getAllPinnedNft");
-      queryClient.invalidateQueries("getAllNftCollection");
+      queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
+      queryClient.invalidateQueries("getAllNftByChainName")
+      queryClient.invalidateQueries("getAllPinnedNftByUserName");
+      // queryClient.invalidateQueries("getAllNftCollection");
       queryClient.invalidateQueries("recentlyListedNft");
       queryClient.invalidateQueries("mostViewNft");
       queryClient.invalidateQueries("mostLikeNft")
+      
+  
     }
   }
   )
 
 
-  const {mutateAsync:mutateAsyncHideToggleNft}=useMutation(
+  const {mutateAsync:mutateAsyncHideToggleNft, isLoading:isLoadinghideToggleNft}=useMutation(
     "hideToggleNft",
     hideToggleNft,{
       onSuccess:(data)=>{
         queryClient.invalidateQueries("getAllHideNft");
-        queryClient.invalidateQueries("getMyNftCollection")
-        queryClient.invalidateQueries("getAllPinnedNft");
-        queryClient.invalidateQueries("getAllNftCollection");
+        queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
+        queryClient.invalidateQueries("getAllNftByChainName")
+        queryClient.invalidateQueries("getAllPinnedNftByUserName");
+        // queryClient.invalidateQueries("getAllNftCollection");
         queryClient.invalidateQueries("recentlyListedNft");
         queryClient.invalidateQueries("mostViewNft");
         queryClient.invalidateQueries("mostLikeNft")
@@ -266,15 +268,17 @@ updateNftNameOrDescription,{
     }
   )
 
-  const {mutateAsync:mutateAsyncToggleLike,data}=useMutation(
+  const {mutateAsync:mutateAsyncToggleLike,data,isLoading:isLoadingtoggleLike}=useMutation(
     "toggleLike",
     toggleLike,{
       onSuccess:(data)=>{
-        console.log(data?.responseResult);
+        // console.log(data?.responseResult);
+    
         queryClient.invalidateQueries("getAllHideNft");
-        queryClient.invalidateQueries("getMyNftCollection")
-        queryClient.invalidateQueries("getAllPinnedNft");
-        queryClient.invalidateQueries("getAllNftCollection");
+        queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
+        queryClient.invalidateQueries("getAllNftByChainName")
+        queryClient.invalidateQueries("getAllPinnedNftByUserName");
+        // queryClient.invalidateQueries("getAllNftCollection");
         queryClient.invalidateQueries("recentlyListedNft");
         queryClient.invalidateQueries("mostViewNft");
         queryClient.invalidateQueries("mostLikeNft");
@@ -293,13 +297,9 @@ updateNftNameOrDescription,{
       decs: yup
         .string()
         .min(0, "Too Short!")
-        .max(160, "Too Long!")
-        .required("Required!"),
+        .max(160, "Too Long!"),
       name: yup
-        .string()
-        .min(4, "Too Short!")
-        .max(20, "Too Long!")
-        .required("Required!"),
+        .string(),
     }),
     onSubmit: async (values) => {
       try {
@@ -311,21 +311,19 @@ updateNftNameOrDescription,{
             lazyDescription:values.decs
           }
         });
+        handleClose()
       } catch (error) {
         console.log(error);
       }
     },
   });
-  const [count, setCount] = useState(0);
 
-  // const [shows, setShows] = useState(false);
-  // const [show, setShow] = useState(false);
+
   
   useOnClick(ref, () => setShow(false));
-  
   return (
     <>
-    <Container >
+    <Container  ref={ref}>
     <Grid container spacing={3} >
       <Grid item lg={12} >
       <Box>
@@ -340,9 +338,10 @@ updateNftNameOrDescription,{
               <button
                 className="btn btn-primary"
                 onClick={() => setShow(!show)}
+                
               >
                 {show ? (
-                  <i class="bi bi-x-lg"></i>
+                  <i class="bi bi-x-lg" ></i>
                 ) : (
                   <i class="bi bi-three-dots"></i>
                 )}
@@ -350,7 +349,7 @@ updateNftNameOrDescription,{
             </Box>
 
             {show ? (
-              <Box className={classes.bag10} ref={ref}>
+              <Box className={classes.bag10} >
               {  ((!!token && address && isConnected )&& (props?.data.tokenOwner===address)) && (
                 <>
                 <p
@@ -363,11 +362,12 @@ updateNftNameOrDescription,{
                 </p>
                <p onClick={async()=>{
                 try{
-                  await mutateAsync({token:localStorage.getItem("token"),value:props.data.metadata.image.replace("ipfs://","https://ipfs.io/ipfs/")})
+                  await mutateAsync({token:localStorage.getItem("token"),value:props.data.metadata.image.replace("ipfs://","https://wizard.infura-ipfs.io/ipfs/")})
                 }catch(error){
 
                 }
                }}>
+               
                Make Profile Picture</p>
 
                {props?.data.pinnedStatus==="PINNED" ? (
@@ -379,7 +379,7 @@ updateNftNameOrDescription,{
 
                 }
                }}
-               >Unpinned Nft</p>
+               >Unpin Nft  {isLoadingpinnedToggleNft &&   <CircularProgress color="primary" size="sm"/>}</p>   
                ):(
                 <p onClick={async()=>{
                 try{
@@ -387,7 +387,7 @@ updateNftNameOrDescription,{
                 }catch(error){
 
                 }
-               }}>Pinned Nft</p>
+               }}>Pin Nft {isLoadingpinnedToggleNft &&   <CircularProgress color="primary" size="sm"/>}</p>
                )}
                { props?.data.status==="HIDE" ?(
                <p onClick={async()=>{
@@ -397,7 +397,7 @@ updateNftNameOrDescription,{
 
                 }
                }}
-               >Unhide Nft</p>
+               >Unhide Nft  {isLoadinghideToggleNft &&   <CircularProgress color="primary" size="sm"/>}</p>
                ):(
                 <p onClick={async()=>{
                 try{
@@ -405,23 +405,23 @@ updateNftNameOrDescription,{
                 }catch(error){
 
                 }
-               }}>Hide Nft</p>
+               }}>Hide Nft {isLoadinghideToggleNft &&   <CircularProgress color="primary" size="sm"/>}</p>
                )}
               
                </>
                )}
                <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
-               <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>Veiw on OpenSea</a>
+               <a href={`https://opensea.io/assets/ethereum/${props?.data.tokenAddress}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on OpenSea</a>
                </Box>
                <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
-               <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>Veiw on EtherScan</a>
+               <a href={`https://etherscan.io/nft//${props?.data.tokenAddress}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on EtherScan</a>
                </Box>
 
               </Box>
             ) : null}
           </Box>
           {/* <Link to={`/nftdetailpage/${props.data.id}`}> */}
-          <img src={props?.data.metadata.image?`${ props?.data.metadata.image.replace("ipfs://","https://ipfs.io/ipfs/")}`:""} alt=""  onClick={clickable}/>
+          <img src={props?.data.metadata.image?`${ props?.data.metadata.image.replace("ipfs://","https://wizard.infura-ipfs.io/ipfs/")}`:""} alt=""  onClick={clickable}/>
           {/* </Link> */}
           {/* <img src={props.data1.img} alt="" /> */}
           <Box
@@ -471,7 +471,12 @@ updateNftNameOrDescription,{
                       checked={data?.responseResult?.likes?.includes(userData?._id) || props?.data?.likes?.includes(userData?._id)}
                     />
                   </Badge>
-                  <Typography variant="body2"><RemoveRedEyeIcon/>{" "}{props?.data.viewsCount}</Typography>
+                 
+                  <Typography variant="body2"> <Badge badgeContent={props?.data.viewsCount} color="primary">
+                  <RemoveRedEyeIcon/>
+                 
+                  </Badge></Typography>
+                  {/* <Typography variant="body2"><RemoveRedEyeIcon/>{" "}{props?.data.viewsCount}</Typography> */}
                 </Box>
               </Box>
         </Box>
@@ -493,7 +498,7 @@ updateNftNameOrDescription,{
                   id="name"
                   placeholder="Enter Name"
                   className={classes.bag90}
-                  sx={{ width: "100%" }}
+                  // sx={{ width: "100%" }}
                   value={formik.values.name}
                   onChange={formik.handleChange}
                   error={formik.touched.name && Boolean(formik.errors.name)}
@@ -528,6 +533,3 @@ updateNftNameOrDescription,{
 
 export default NftBox;
 
-
-
-// const metadata="{"name":"CHECK","description":"CHECK","properties":{"cover_url":null,"artist":null,"public_profile_link":null,"height":null,"breadth":null,"length":null,"weight":null,"tags":null},"image":"https://ipfs.io/ipfs/QmPVm6HMwVBRGsUH9HDCoaNMLciff361vwk3pT8w7MGQSQ","preview":"https://ipfs.io/ipfs/QmPVm6HMwVBRGsUH9HDCoaNMLciff361vwk3pT8w7MGQSQ"}"

@@ -9,15 +9,12 @@ import {
   TextareaAutosize,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 // import { Formik, Form, Field } from 'formik';
 import * as Yup from "yup";
 // import Button from 'react-bootstrap/Button';
 import Modal from "react-bootstrap/Modal";
-import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useMutation, useQuery } from "react-query";
 import { editProfile } from "../../api/ApiCall/editProfile";
-import { viewProfile } from "../../api/ApiCall/viewProfile";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import { UserContext } from "../../context/User/UserContext";
@@ -153,18 +150,18 @@ const EditProfile = ({heading}) => {
     {
       onSuccess: (data) => {
         try {
-          if (data) {
+          if (data?.data) {
             dispatch({ type: actionTypes.UPDATE_USER, value:data?.data});
             toast.success(JSON.stringify("You Profile Update Successfully"));
           } else {
-            toast.error(JSON.stringify(data.responseMessage));
+            toast.error(JSON.stringify(data?.message));
           }
         } catch (error) {
           toast.error(JSON.stringify(error.message));
         }
       },
       onError: (error, data) => {
-        toast.error(JSON.stringify(data.responseMessage));
+        toast.error(JSON.stringify(data?.message));
       },
     }
   );
@@ -180,9 +177,9 @@ const EditProfile = ({heading}) => {
       bio: Yup.string()
         .min(0, "Too Short!")
         .max(160, "Too Long!"),
-      twitterName: Yup.string().required("Required!"),
-      facebookName: Yup.string().required("Required!"),
-      personalURL: Yup.string().required("Required!"),
+      twitterName: Yup.string(),
+      facebookName: Yup.string(),
+      personalURL: Yup.string()
     }),
     validateOnChange:(values)=>{
       setWords(values.bio)
@@ -192,17 +189,17 @@ const EditProfile = ({heading}) => {
         await mutateAsync({
           token: localStorage.getItem("token"),
           value: {
-            bio: values.bio,
-            twitterName: values.twitterName,
-            facebookName: values.facebookName,
-            personalURL: values.personalURL,
+            bio: bodyRef.current.value,
+            twitterName: values?.twitterName,
+            facebookName: values?.facebookName,
+            personalURL: values?.personalURL,
           },
         });
-        
+        handleClose();
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
-    setShow(true)
+    // setShow(true)
     },
   });
 

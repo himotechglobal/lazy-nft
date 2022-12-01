@@ -16,6 +16,7 @@ import NftBox from "../../pages/Explore/NftBox";
 import { getMyNftCollection } from "../../api/ApiCall/nftCollection/getMyNftCollection";
 import { useQuery, useInfiniteQuery } from "react-query";
 import { UserContext } from "../../context/User/UserContext";
+import { getNftCollectionByChainNameAndUserName } from "../../api/ApiCall/nftCollection/getNftCollectionByChainNameAndUserName";
 
 const useStyle = makeStyles((theme) => ({
   wrap5: {
@@ -84,14 +85,36 @@ const useStyle = makeStyles((theme) => ({
     borderRadius: "6px",
   },
   bag11: {
-    width: "13%",
-    margin: "0 auto",
+    display:"flex",
+    justifyContent:"center",
+    flexWrap: "wrap",
+    // width: "13%",
+    // margin: "0 auto",
   },
+  alert:{
+[theme.breakpoints.down("sm")]:{
+  fontSize:"10.5px !important" ,
+}
+  }
 }));
-const AllNFT = ({ dataByUserName }) => {
-  const [show, setShow] = useState(false);
-  const [show3, setShow3] = useState(true);
-  const [{ token }] = useContext(UserContext);
+const AllNFT = ({userName}) => {
+  const [show, setShow] = useState(true);
+  const [show1, setShow1] = useState(true);
+  const [{ token,userData }] = useContext(UserContext);
+  const [chainName,setChainName]=useState({Ethereum:"Ethereum",BSC_Testnet:"BSC Testnet"})
+  const Active = () => {
+    setShow(!show);
+
+    // setTimeout(() => {
+    //   setShow(!show)
+    // }, 1000);
+  };
+  const inActive = () => {
+    setChainName({Ethereum:"Ethereum",BSC_Testnet:"BSC Testnet"})
+    setShow1(!show1);
+  };
+
+
   // const [nfts, setNfts] = useState([])
   // const {isLoading}=useQuery(
   //   ["getMyNftCollection",token],
@@ -106,24 +129,67 @@ const AllNFT = ({ dataByUserName }) => {
   // )
 
   // infinite Scroll
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } =
-    useInfiniteQuery(
-      ["getMyNftCollection", token],
-      ({ pageParam = 0 }) => getMyNftCollection(pageParam, token),
-      {
-        refetchOnWindowFocus: false,
-        getNextPageParam: (lastPage, pages) => {
-          if (pages.length < 4) {
-            return pages.length + 1;
-          } else {
-            return undefined;
-          }
-          // Here I'm assuming you have access to the total number of pages
+  // const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } =
+  //   useInfiniteQuery(
+  //     ["getMyNftCollection", token],
+  //     ({ pageParam = 0 }) => getMyNftCollection(pageParam, token),
+  //     {
+  //       refetchOnWindowFocus: false,
+  //       getNextPageParam: (lastPage, pages) => {
+  //         if (pages.length < 4) {
+  //           return pages.length + 1;
+  //         } else {
+  //           return undefined;
+  //         }
+  //         // Here I'm assuming you have access to the total number of pages
 
-          // If there is not a next page, getNextPageParam will return undefined and the hasNextPage boolean will be set to 'false'
-        },
-      }
-    );
+  //         // If there is not a next page, getNextPageParam will return undefined and the hasNextPage boolean will be set to 'false'
+  //       },
+  //     }
+  //   );
+
+
+  const { data:dataEthereum, fetchNextPage:fetchNextPageEthereum, hasNextPage:hasNextPageEthereum ,isFetchingNextPage:isFetchingNextPageEthereum, isFetching:isFetchingEthereum } =
+  useInfiniteQuery(
+    ["getNftCollectionByChainNameAndUserName",chainName?.Ethereum,userName??userData?.userName],
+    ({ pageParam = 0 }) => getNftCollectionByChainNameAndUserName(pageParam,chainName?.Ethereum,userName??userData?.userName),
+    {
+      refetchOnWindowFocus: false,
+      getNextPageParam: (lastPage, pages) => {
+        if (pages.length < 4) {
+          return pages.length + 1;
+        } else {
+          return undefined;
+        }
+        // Here I'm assuming you have access to the total number of pages
+
+        // If there is not a next page, getNextPageParam will return undefined and the hasNextPage boolean will be set to 'false'
+      },
+
+    }
+  );
+
+  const { data:dataBsc_Testnet, fetchNextPage:fetchNextPageBsc_Testnet, hasNextPage:hasNextPageBsc_Testnet ,isFetchingNextPage:isFetchingNextPageBsc_Testnet, isFetching:isFetchingBsc_Testnet } =
+  useInfiniteQuery(
+    ["getNftCollectionByChainNameAndUserName",chainName?.BSC_Testnet,userName??userData?.userName],
+    ({ pageParam = 0 }) => getNftCollectionByChainNameAndUserName(pageParam,chainName?.BSC_Testnet,userName??userData?.userName),
+    {
+      refetchOnWindowFocus: false,
+      getNextPageParam: (lastPage, pages) => {
+        if (pages.length < 4) {
+          return pages.length + 1;
+        } else {
+          return undefined;
+        }
+        // Here I'm assuming you have access to the total number of pages
+
+        // If there is not a next page, getNextPageParam will return undefined and the hasNextPage boolean will be set to 'false'
+      },
+
+    }
+  );
+
+
   const classes = useStyle();
   return (
     <>
@@ -138,25 +204,38 @@ const AllNFT = ({ dataByUserName }) => {
                     control={
                       <Checkbox
                         defaultChecked
-                        onClick={() => setShow3(!show3)}
+                        onClick={Active}
                       />
                     }
                     label="Ethereum"
                   />
                 </FormGroup>
+
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                      defaultChecked
+                      onClick={inActive} 
+                      />
+                    }
+                    label="Binance"
+                  />
+                </FormGroup>
+              
               </Box>
             </Grid>
-            {show3 ? (
+            {show ? (
               <>
                 <Grid item md={12} sm={12}>
-                  <Typography variant="h5" sx={{ textAlign: "left",fontWeight:"bold" }}>
+                  <Typography variant="h5" sx={{ textAlign: "left", fontWeight: "bold" }}>
                     Ethereum NFTs
                   </Typography>
                 </Grid>
-                {!!token ? (
+                { (
                   <Grid container justifyContent="center">
-                    {data?.pages[0] ? (
-                      data?.pages.map((page, i) =>
+                    {dataEthereum?.pages[0] ? (
+                      dataEthereum?.pages.map((page, i) =>
                         page?.responseResult.map((nfts, index) => {
                           return (
                             <>
@@ -168,45 +247,100 @@ const AllNFT = ({ dataByUserName }) => {
                         })
                       )
                     ) : (
-                      <CircularProgress color="primary" />
-                    )}
-                    {isFetching && !!data?.pages[0] && !isFetchingNextPage ? (
+                      <Box sx={{display:"flex",flexDirection:"column",alignItems:"center",padding:"0 10px 0 15px",textAlign:"center"}}>
+                      <Typography variant="h5"> No NFTs Added Yet </Typography>
+                      <Typography variant="body1" className={classes.alert}> (Please note, it may take 30-40 minutes initially to show up your data)</Typography>
+                      </Box>
+                    )
+                    }
+                    {isFetchingEthereum && !!dataEthereum?.pages[0] && !isFetchingNextPageEthereum ? (
                       <CircularProgress color="primary" />
                     ) : null}
-                      <Box sx={{"display":"block","width":"100%","textAlign":"center",marginTop:"1rem"}}>
-                      {data?.pages[0] && hasNextPage && (
-                      <Button
-                        variant="contained"
-                        disabled={!hasNextPage}
-                        onClick={() => fetchNextPage()}
-                        sx={{
-                          background: "#000",
-                          color: "#fff",
-                          border: "none",
-                          borderRadius: "20px",
-                          margin: "10px",
-                          fontSize: "0.7rem",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        Load More
-                      </Button>
-                    )}
-                      </Box>
+                    <Box sx={{ "display": "block", "width": "100%", "textAlign": "center", marginTop: "1rem" }}>
+                      {dataEthereum?.pages[0] && hasNextPageEthereum && (
+                        <Button
+                          variant="contained"
+                          disabled={!hasNextPageEthereum}
+                          onClick={() => fetchNextPageEthereum()}
+                          sx={{
+                            background: "#000",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "20px",
+                            // margin: "10px",
+                            fontSize: "0.7rem",
+                            fontWeight: "bold",
+                            margin:"50px 0"
+                          }}
+                        >
+                          Load More
+                        </Button>
+                      )}
+                    </Box>
                   </Grid>
-                ) : (
+                
+                 ) 
+  
+               }
+               </>
+            ) :null
+            }
+
+            {show1 ? (
+              <>
+                <Grid item md={12} sm={12}>
+                  <Typography variant="h5" sx={{ textAlign: "left", fontWeight: "bold" }}>
+                    Binance NFTs
+                  </Typography>
+                </Grid>
+                { (
                   <Grid container justifyContent="center">
-                    {dataByUserName?.responseResult &&
-                      dataByUserName?.responseResult.map((nfts, index) => {
-                        return (
-                          <>
-                            <Grid item key={index} lg={4} md={4} sm={6}>
-                              <NftBox data={nfts} />
-                            </Grid>
-                          </>
-                        );
-                      })}
+                    {dataBsc_Testnet?.pages[0] ? (
+                      dataBsc_Testnet?.pages.map((page, i) =>
+                        page?.responseResult.map((nfts, index) => {
+                          return (
+                            <>
+                              <Grid item key={index} lg={4} md={4} sm={6}>
+                                <NftBox data={nfts} />
+                              </Grid>
+                            </>
+                          );
+                        })
+                      )
+                    ) : (
+
+                      <Box sx={{display:"flex",flexDirection:"column",alignItems:"center",padding:"0 10px 0 15px",textAlign:"center"}}>
+                      <Typography variant="h5"> No NFTs Added Yet </Typography>
+                      <Typography variant="body1" className={classes.alert}> (Please note, it may take 30-40 minutes initially to show up your data)</Typography>
+                      </Box>
+               
+                    )
+                    }
+                    {isFetchingBsc_Testnet && !!dataBsc_Testnet?.pages[0] && !isFetchingNextPageBsc_Testnet ? (
+                      <CircularProgress color="primary" />
+                    ) : null}
+                    <Box sx={{ "display": "block", "width": "100%", "textAlign": "center", marginTop: "1rem" }}>
+                      {dataBsc_Testnet?.pages[0] && hasNextPageBsc_Testnet && (
+                        <Button
+                          variant="contained"
+                          disabled={!hasNextPageBsc_Testnet}
+                          onClick={() => fetchNextPageBsc_Testnet()}
+                          sx={{
+                            background: "#000",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "20px",
+                            margin: "10px",
+                            fontSize: "0.7rem",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Load More
+                        </Button>
+                      )}
+                    </Box>
                   </Grid>
+                
                 )}
               </>
             ) : null}

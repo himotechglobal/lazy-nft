@@ -33,12 +33,18 @@ import { recentlyListedNft } from "../../api/ApiCall/nftCollection/recentlyListe
 import { mostViewNft } from "../../api/ApiCall/nftCollection/mostViewNft";
 import { mostLikeNft } from "../../api/ApiCall/nftCollection/mostLikeNft";
 
-import { useQuery ,useInfiniteQuery} from "react-query";
+import { useQuery, useInfiniteQuery } from "react-query";
+import { WOLFPUPS_NFT_address, WOLFPUPS_NFT_address_BSC } from "../../config";
+import { getAllNftByChainName } from "../../api/ApiCall/nftCollection/getAllNftByChainName";
 const useStyle = makeStyles((theme) => ({
   wrap7: {
     "& h3": {
       fontSize: "1.7rem",
       fontWeight: "bold",
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "1rem",
+        marginTop:"1rem"
+      },
     },
   },
   bag15: {
@@ -115,77 +121,132 @@ const useStyle = makeStyles((theme) => ({
       display: "flex",
     },
   },
+  bin1:{
+    [theme.breakpoints.down("sm")]: {
+      display: "flex",
+      justifyContent:"flex-start !important",
+    },
+    "& h5":{
+      
+      [theme.breakpoints.down("sm")]: {
+        fontSize:"1rem"
+      },
+    }
+  }
 }));
 const ExploreNFT = () => {
   const [show, setShow] = useState(true);
   const [show1, setShow1] = useState(true);
-  const [show2, setShow2] = useState(true);
-  const [show3, setShow3] = useState(true);
-  const [show4, setShow4] = useState(true);
+  // const [show2, setShow2] = useState(true);
+  // const [show3, setShow3] = useState(true);
+  // const [show4, setShow4] = useState(true);
+  const [chainName,setChainName]=useState({Ethereum:"Ethereum",BSC_Testnet:"BSC Testnet"})
+
   const Active = () => {
     setShow(!show);
+
     // setTimeout(() => {
     //   setShow(!show)
     // }, 1000);
   };
   const inActive = () => {
+    setChainName({Ethereum:"Ethereum",BSC_Testnet:"BSC Testnet"})
     setShow1(!show1);
   };
-  const DisActive = () => {
-    setShow2(!show2);
-  };
-  const unActive = () => {
-    setShow3(!show3);
-  };
-  const DActive = () => {
-    setShow4(!show4);
-  };
+  // const DisActive = () => {
+  //   setShow2(!show2);
+  // };
+  // const unActive = () => {
+  //   setShow3(!show3);
+  // };
+  // const DActive = () => {
+  //   setShow4(!show4);
+  // };
 
-  // const { data, isLoading } = useQuery(
-  //   "getAllNftCollection",
-  //   getAllNftCollection,
-  //   {
-  //     onSuccess: (data) => {
-  //       // console.log(data?.responseResult);
-  //     },
-  //   }
-  // );
+ 
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isFetching
-} = useInfiniteQuery(['getAllNftCollection'], 
-({pageParam=0})=> getAllNftCollection(pageParam), {
-  refetchOnWindowFocus: false,
-  getNextPageParam: (lastPage,pages) => {
-    if  (pages.length<4){ return pages.length+1
-    }else{
-    return undefined ;
-    }
-     // Here I'm assuming you have access to the total number of pages
+  // const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } =
+  //   useInfiniteQuery(
+  //     ["getAllNftCollection"],
+  //     ({ pageParam = 0 }) => getAllNftCollection(pageParam),
+  //     {
+  //       refetchOnWindowFocus: false,
+  //       getNextPageParam: (lastPage, pages) => {
+  //         if (pages.length < 4) {
+  //           return pages.length + 1;
+  //         } else {
+  //           return undefined;
+  //         }
+  //         // Here I'm assuming you have access to the total number of pages
 
-     // If there is not a next page, getNextPageParam will return undefined and the hasNextPage boolean will be set to 'false'
-  }
-  
-})
+  //         // If there is not a next page, getNextPageParam will return undefined and the hasNextPage boolean will be set to 'false'
+  //       },
 
+  //     }
+  //   );
 
+    const { data:dataEthereum, fetchNextPage:fetchNextPageEthereum, hasNextPage:hasNextPageEthereum ,isFetchingNextPage:isFetchingNextPageEthereum, isFetching:isFetchingEthereum } =
+    useInfiniteQuery(
+      ["getAllNftByChainName",chainName?.Ethereum],
+      ({ pageParam = 0 }) => getAllNftByChainName(pageParam,chainName?.Ethereum),
+      {
+        refetchOnWindowFocus: false,
+        getNextPageParam: (lastPage, pages) => {
+          if (pages.length < 4) {
+            return pages.length + 1;
+          } else {
+            return undefined;
+          }
+          // Here I'm assuming you have access to the total number of pages
+
+          // If there is not a next page, getNextPageParam will return undefined and the hasNextPage boolean will be set to 'false'
+        },
+
+      }
+    );
+
+    const { data:dataBsc_Testnet, fetchNextPage:fetchNextPageBsc_Testnet, hasNextPage:hasNextPageBsc_Testnet ,isFetchingNextPage:isFetchingNextPageBsc_Testnet, isFetching:isFetchingBsc_Testnet } =
+    useInfiniteQuery(
+      ["getAllNftByChainName",chainName?.BSC_Testnet],
+      ({ pageParam = 0 }) => getAllNftByChainName(pageParam,chainName?.BSC_Testnet),
+      {
+        refetchOnWindowFocus: false,
+        getNextPageParam: (lastPage, pages) => {
+          if (pages.length < 4) {
+            return pages.length + 1;
+          } else {
+            return undefined;
+          }
+          // Here I'm assuming you have access to the total number of pages
+
+          // If there is not a next page, getNextPageParam will return undefined and the hasNextPage boolean will be set to 'false'
+        },
+
+        // onSuccess:(data)=>{
+        //   setLoading(true)
+        // }
+
+      }
+    );
 
   const [filter, setFilter] = useState(0);
   // console.log(filter);
 
-const _recentlyListedNft=useQuery(["recentlyListedNft"],recentlyListedNft,{});
-const _mostViewNft =useQuery(["mostViewNft"],mostViewNft,{});
-const _mostLikeNft=useQuery(["mostLikeNft"],mostLikeNft,{});
-
+  const _recentlyListedNft = useQuery(
+    ["recentlyListedNft"],
+    recentlyListedNft,
+    {}
+  );
+  const _mostViewNft = useQuery(["mostViewNft"], mostViewNft, {});
+  const _mostLikeNft = useQuery(["mostLikeNft"], mostLikeNft, {});
 
   const handleChange = (event) => {
     setFilter(event.target.value);
   };
   const classes = useStyle();
+
+
+  
   return (
     <>
       <Box className={classes.wrap7}>
@@ -194,36 +255,19 @@ const _mostLikeNft=useQuery(["mostLikeNft"],mostLikeNft,{});
           <Grid item md={12}>
             <Box>
               <Box className={classes.bag15}>
+              
                 <FormGroup>
                   <FormControlLabel
                     control={<Checkbox defaultChecked onClick={Active} />}
                     label="Ethereum"
                   />
                 </FormGroup>
-                {/* <FormGroup>
-                      <FormControlLabel
-                        control={<Checkbox defaultChecked  onClick={inActive} />}
-                        label="Polygon"
-                      />
-                    </FormGroup> */}
-                {/* <FormGroup>
-                      <FormControlLabel
-                        control={<Checkbox  onClick={DisActive} />}
-                        label="Solana"
-                      />
-                    </FormGroup>
-                    <FormGroup>
-                      <FormControlLabel
-                        control={<Checkbox  onClick={unActive} />}
-                        label="Wax"
-                      />
-                    </FormGroup>
-                    <FormGroup>
-                      <FormControlLabel
-                        control={<Checkbox  onClick={DActive} />}
-                        label="Tezos"
-                      />
-                    </FormGroup> */}
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox  onClick={inActive} defaultChecked />}
+                    label="Binance"
+                  />
+                </FormGroup>
               </Box>
             </Box>
           </Grid>
@@ -240,16 +284,18 @@ const _mostLikeNft=useQuery(["mostLikeNft"],mostLikeNft,{});
               }}
             >
               {/* <Box> */}
-              <Typography variant="h3">Ethereum Feature Nfts</Typography>
+              {/* <Typography variant="h3">Ethereum Feature Nfts</Typography> */}
+              <Typography variant="h3">Featured Wolf Pups</Typography>
               <FormControl sx={{ m: 1, minWidth: 150 }}>
                 <Select
                   value={filter}
                   onChange={handleChange}
                   displayEmpty
                   inputProps={{ "aria-label": "Without label" }}
+                  
                 >
-                  <MenuItem value={0} disableRipple>
-                    All
+                  <MenuItem value={0} disableRipple >
+                    Default
                   </MenuItem>
                   <MenuItem value={1} disableRipple>
                     Recently listed
@@ -267,23 +313,32 @@ const _mostLikeNft=useQuery(["mostLikeNft"],mostLikeNft,{});
             </Box>
           </Grid>
 
-          {filter===0 &&(
-
-          <Grid container justifyContent="center">
-              {data?.pages &&
-                data?.pages.map((page, i) => 
-                   page?.responseResult.map((nfts,index)=>{
-                    return (
-                    <>
-                      <Grid item key={index} lg={4} md={4} sm={6}>
-                        <NftBox data={nfts} />
-                      </Grid>
-                    </>
-                  );
-                  })
-                )}
-                {isFetching && !isFetchingNextPage ? <CircularProgress color="primary" />:null}
-                { data?.pages[0] && hasNextPage ? <Button  variant="contained" disabled={!hasNextPage} onClick={() => fetchNextPage()}   sx={{
+          {show ? (
+            <Box>
+              {filter === 0 && (
+                <Grid container justifyContent="center">
+                  {dataEthereum?.pages[0] &&
+                    dataEthereum?.pages.map( (page, i) =>
+                     page?.responseResult?.map((nfts, index) => {
+                        return (
+                          <>
+                            <Grid item key={index} lg={4} md={4} sm={6}>
+                              <NftBox data={nfts} />
+                            </Grid>
+                          </>
+                        );
+                      })
+                    )}
+                {isFetchingEthereum && !isFetchingNextPageEthereum ? (
+                    <CircularProgress color="primary" />
+                  ) : null}
+                  <Box sx={{ "display": "block", "width": "100%", "textAlign": "center", marginTop: "1rem" }}>
+                  {(dataEthereum?.pages[0] && hasNextPageEthereum ) && (
+                    <Button
+                      variant="contained"
+                      disabled={!hasNextPageEthereum}
+                      onClick={() => fetchNextPageEthereum()}
+                      sx={{
                         background: "#000",
                         color: "#fff",
                         border: "none",
@@ -291,73 +346,129 @@ const _mostLikeNft=useQuery(["mostLikeNft"],mostLikeNft,{});
                         margin: "10px",
                         fontSize: "0.7rem",
                         fontWeight: "bold",
-                      }}>Load More</Button>:null}
-            </Grid>
-            )}
-            { filter===1 &&(
-              <Grid container justifyContent="center">
-              { _recentlyListedNft?.data.nfts &&
-                _recentlyListedNft?.data.nfts.map((nft,index)=>{
-                    return (
-                    <>
-                      <Grid item key={index} lg={4} md={4} sm={6}>
-                        <NftBox data={nft} />
-                      </Grid>
-                    </>
-                  );
-                  })
-              }
-            </Grid>
-            )
-          }
-          { filter===2 &&(
-              <Grid container justifyContent="center">
-              { _mostViewNft?.data.nfts &&
-                _mostViewNft?.data.nfts.map((nft,index)=>{
-                    return (
-                    <>
-                      <Grid item key={index} lg={4} md={4} sm={6}>
-                        <NftBox data={nft} />
-                      </Grid>
-                    </>
-                  );
-                  })
-              }
-            </Grid>
-            )
-          }
-
-          { filter===3 &&(
-              <Grid container justifyContent="center">
-              { _mostLikeNft?.data.nfts &&
-                _mostLikeNft?.data.nfts.map((nft,index)=>{
-                    return (
-                    <>
-                      <Grid item key={index} lg={4} md={4} sm={6}>
-                        <NftBox data={nft} />
-                      </Grid>
-                    </>
-                  );
-                  })
-              }
-            </Grid>
-            )
-          }
-            
-          {/* <Container>
-                <Grid container>
-                  {Data1 &&
-                    Data1.map((e) => {
+                      }}
+                    >
+                      Load More
+                    </Button>
+                    
+                  )}
+                  </Box>
+                </Grid>
+              )}
+              {filter === 1 && (
+                <Grid container justifyContent="center">
+                  {_recentlyListedNft?.data.nfts &&
+                    _recentlyListedNft?.data.nfts.map((nft, index) => {
                       return (
                         <>
-                          <Grid item md={4} sm={6}>
-                            <Polygon data1={e} dfg={show1} />
+                          <Grid item key={index} lg={4} md={4} sm={6}>
+                            <NftBox data={nft} />
                           </Grid>
                         </>
                       );
                     })}
                 </Grid>
-              </Container> */}
+              )}
+              {filter === 2 && (
+                <Grid container justifyContent="center">
+                  {_mostViewNft?.data.nfts &&
+                    _mostViewNft?.data.nfts.map((nft, index) => {
+                      return (
+                        <>
+                          <Grid item key={index} lg={4} md={4} sm={6}>
+                            <NftBox data={nft} />
+                          </Grid>
+                        </>
+                      );
+                    })}
+                </Grid>
+              )}
+
+              {filter === 3 && (
+                <Grid container justifyContent="center">
+                  {_mostLikeNft?.data.nfts &&
+                    _mostLikeNft?.data.nfts.map((nft, index) => {
+                      return (
+                        <>
+                          <Grid item key={index} lg={4} md={4} sm={6}>
+                            <NftBox data={nft} />
+                          </Grid>
+                        </>
+                      );
+                    })}
+                </Grid>
+              )}
+            </Box>
+          ) : null}
+
+          {!dataEthereum?.pages[0] && (
+       
+              <Grid container md={12} justifyContent="center" className={classes.bin1}>
+                <Typography variant="h5">No NFTs Added Yet</Typography>
+              </Grid>
+            
+          )}
+
+
+
+          {/* <Container> */}
+  
+          {show1 ? (
+            <>
+          <Box>
+            {/* <Container> */}
+            <Grid item md={12}>
+            <Typography variant="h3">Featured Binance Wolf Pups</Typography>
+            </Grid>
+            {/* </Container> */}
+          </Box>
+            <Box>
+            {filter===0 &&(
+              <Grid container justifyContent="center">
+                  {dataBsc_Testnet?.pages[0] &&
+                    dataBsc_Testnet?.pages.map( (page, i) =>
+                     page?.responseResult?.map((nfts, index) => {
+                        return (
+                          <>
+                            <Grid item key={index} lg={4} md={4} sm={6}>
+                              <NftBox data={nfts} />
+                            </Grid>
+                          </>
+                        );
+                      })
+                    )}
+                <Box>
+                {isFetchingBsc_Testnet && !isFetchingNextPageBsc_Testnet ? (
+                    <CircularProgress color="primary" />
+                  ) : null}
+                  {dataBsc_Testnet?.pages[0] && hasNextPageBsc_Testnet ? (
+                    <Button
+                      variant="contained"
+                      disabled={!hasNextPageBsc_Testnet}
+                      onClick={() => fetchNextPageBsc_Testnet()}
+                      sx={{
+                        background: "#000",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "20px",
+                        // margin: "10px",
+                        fontSize: "0.7rem",
+                        fontWeight: "bold",
+                        margin:"50px 0"
+                      }}
+                    >
+                      Load More
+                    </Button>
+                  ) : null}
+                </Box>
+                </Grid>
+            )}
+
+            </Box>
+            </>
+          ) : null}
+        
+              </Container>
           {/* <Container>
                 <Grid container>
                   {Data2 &&
@@ -401,7 +512,7 @@ const _mostLikeNft=useQuery(["mostLikeNft"],mostLikeNft,{});
                 </Grid>
               </Container> */}
           {/* </Grid> */}
-        </Container>
+        {/* </Container> */}
       </Box>
     </>
   );

@@ -200,12 +200,8 @@ updateNftNameOrDescription,{
     validationSchema: yup.object({
       decs: yup.string()
         .min(0, "Too Short!")
-        .max(160, "Too Long!")
-        .required("Required!"),
+        .max(160, "Too Long!"),
       name: yup.string()
-      .min(4, "Too Short!")
-      .max(20, "Too Long!")
-      .required("Required!"),
      
     }),
     onSubmit: async (values) => {
@@ -218,8 +214,9 @@ updateNftNameOrDescription,{
             lazyDescription:values.decs
           }
         });
+        handleClose()
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
 
@@ -234,7 +231,7 @@ updateNftNameOrDescription,{
                 <Grid container >
                   <Grid md={12}>
                     <Box className={classes.bag15}>
-                      <img src={data?.responseResult?.metadata?.image?`${ data?.responseResult?.metadata?.image.replace("ipfs://","https://ipfs.io/ipfs/")}`:""}alt="" />
+                      <img src={data?.responseResult?.metadata?.image?`${ data?.responseResult?.metadata?.image.replace("ipfs://","https://wizard.infura-ipfs.io/ipfs/")}`:""}alt="" />
                       {/* <h1>{elz.title}</h1> */}
                     </Box>
                   </Grid>
@@ -259,8 +256,8 @@ updateNftNameOrDescription,{
                       { ((!!token && isConnected && address) && (data?.responseResult?.tokenOwner===address)) &&
                       <a variant="primary" onClick={handleShow} style={{textAlign:'center'}}>Edit</a>
                       }
-                        <a href={`https://opensea.io/assets/ethereum/${WOLFPUPS_NFT_address}/${data?.responseResult?.tokenId}`} target="_blank">Veiw on OpenSea</a>
-                        <a href={`https://etherscan.io/nft//${WOLFPUPS_NFT_address}/${data?.responseResult?.tokenId}`} target="_blank">Veiw on EtherScan</a>
+                        <a href={`https://opensea.io/assets/ethereum/${data?.responseResult?.tokenAddress}/${data?.responseResult?.tokenId}`} target="_blank">View on OpenSea</a>
+                        <a href={`https://etherscan.io/nft//${data?.responseResult?.tokenAddress}/${data?.responseResult?.tokenId}`} target="_blank">View on EtherScan</a>
 
                       </Box>
 
@@ -277,7 +274,7 @@ updateNftNameOrDescription,{
             </>
              
 
-      <Box>
+      {/* <Box>
         <Container>
           <Grid container>
             <Grid md={12}>
@@ -318,7 +315,6 @@ updateNftNameOrDescription,{
                 </Box>
               </Box>
             </Grid>
-            {/* <Avatar src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/2048px-2021_Facebook_icon.svg.png"></Avatar> */}
           </Grid>
         </Container>
 
@@ -335,7 +331,7 @@ updateNftNameOrDescription,{
                 </Grid>
               </Container>
             </Box>
-      </Box>
+      </Box> */}
       <Footer />
 
 
@@ -354,7 +350,7 @@ updateNftNameOrDescription,{
                 id="name"
                 placeholder="Enter Name"
                 className={classes.bag90  }
-                sx={{width:"100%"}}
+                // sx={{width:"100%"}}
                 value={formik.values.name}
                 onChange={formik.handleChange}
                 error={

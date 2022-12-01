@@ -33,12 +33,39 @@ import {
   omniWallet
 } from '@rainbow-me/rainbowkit/wallets';
 import { UserProvider } from './context/User/UserContext';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 
+
+const bscTest = {
+  id:97,
+  name: 'BSC Testnet',
+  network: 'Binance Smart Chain Testnet',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'tBNB',
+    symbol: 'tBNB',
+  },
+  iconUrl:'',
+  rpcUrls: {
+    default: 'https://data-seed-prebsc-1-s3.binance.org:8545',
+    
+  },
+  blockExplorers: {
+    default: {name:'BscScan TestNet',url:'https://testnet.bscscan.com'},
+  },
+  testnet: true,
+}
 const { chains,provider,webSocketProvider } = configureChains(
-  [chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
+  [chain.mainnet, bscTest],
   [
-    // infuraProvider({ apiKey: '782faee1db2f45a8842d36ff4c72e4e4'}),
-    publicProvider()
+  publicProvider(),
+  jsonRpcProvider({
+    priority:0,
+    rpc: (chain) => {
+      if (chain.id !== bscTest.id) return { http: chain.rpcUrls.default }
+      return { http: chain.rpcUrls.default }
+    },
+  }),
   ]
 );
 const connectors = connectorsForWallets([

@@ -17,9 +17,20 @@ import {
 } from "@mui/material";
 import { UserContext } from "../../context/User/UserContext";
 import {actionTypes} from "../../context/User/UserReducer"
+import { makeStyles } from "@mui/styles";
 const drawerWidth = 300;
 
 
+const useStyle = makeStyles((theme)=>({
+  ghjk:{
+    color:"#000",fontSize:"1.5rem",
+    [theme.breakpoints.down("sm")]: {
+      fontSize:"17px",
+     },
+  }
+
+
+}));
 const Header = () => {
   const [{token,userData}, dispatch] = useContext(UserContext);
   const sideBar = [
@@ -47,6 +58,7 @@ const Header = () => {
     setIsOpen(!open);
   };
 
+  const classes = useStyle();
   return (
     <>
       <Box sx={{ display: "flex", padding:"1rem 0" }}>
@@ -59,11 +71,11 @@ const Header = () => {
           <Toolbar>
             <Box component="div" sx={{ flexGrow: 1 }}>
               <Typography
-                variant="h4"
+                variant="h6"
                 component="div"
                 sx={{ color: "#fff", fontWeight: "bold" }}
               >
-                <Link to={token?`/explore`:`/`} style={{color:"#000"}}>Lazy</Link>
+                <Link to={token?`/explore`:`/`} style={{}} className={classes.ghjk}>Wolf Pup Registry</Link>
               </Typography>
             </Box>
             {token? (

@@ -1,4 +1,4 @@
-import React,{useContext} from "react";
+import React, { useContext } from "react";
 import {
   Box,
   Button,
@@ -11,7 +11,19 @@ import {
 import { makeStyles } from "@mui/styles";
 import { UserContext } from "../../context/User/UserContext";
 import { Link } from "react-router-dom";
-const useStyle = makeStyles((theme)=>({
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  TelegramShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  FacebookIcon,
+  TelegramIcon,
+  TwitterIcon,
+  WhatsappIcon,
+} from "react-share";
+import { discord, LIVE_DOMAIN } from "../../config";
+const useStyle = makeStyles((theme) => ({
   wrap5: {
     width: "100%",
     padding: "2rem 0",
@@ -20,8 +32,8 @@ const useStyle = makeStyles((theme)=>({
       fontWeight: "bold",
       [theme.breakpoints.down("sm")]: {
         fontSize: "1.5rem",
-        textAlign:"center"
-       },
+        textAlign: "center",
+      },
     },
     "& button": {
       fontSize: "1rem",
@@ -54,26 +66,29 @@ const useStyle = makeStyles((theme)=>({
   bag9: {
     display: "flex",
     gap: "12px",
-    justifyContent:"center",
-    alignItems:"center",
-    marginTop:"2.3rem",
-    "& img":{
-        border: "1px solid #ccc", padding: "8px 11px", borderRadius: "5px", width: "80%"
-    }
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "2.3rem",
+    "& img": {
+      border: "1px solid #ccc",
+      padding: "8px 11px",
+      borderRadius: "5px",
+      width: "80%",
+    },
   },
 }));
 const Share = () => {
-  const [{ userData },] = useContext(UserContext);
+  const [{ userData }] = useContext(UserContext);
   const Data = [
     {
       id: 1,
       img: "https://platform-cdn.sharethis.com/img/twitter-white.svg",
-      link:"https://twitter.com/",
+      link: "https://twitter.com/",
     },
     {
       id: 1,
       img: "https://platform-cdn.sharethis.com/img/facebook-white.svg",
-      link:"https://www.facebook.com/",
+      link: "https://www.facebook.com/",
     },
     // {
     //   id: 1,
@@ -82,12 +97,12 @@ const Share = () => {
     {
       id: 1,
       img: "https://platform-cdn.sharethis.com/img/email-white.svg",
-      link:"https://www.facebook.com/",
+      link: "https://www.facebook.com/",
     },
     {
       id: 1,
       img: "https://platform-cdn.sharethis.com/img/sms-white.svg",
-      link:"https://www.facebook.com/",
+      link: "https://www.facebook.com/",
     },
     // {
     //   id: 1,
@@ -97,8 +112,8 @@ const Share = () => {
     {
       id: 1,
       img: "https://platform-cdn.sharethis.com/img/whatsapp-white.svg",
-      link:"https://web.whatsapp.com/",
-    //   width:"61%"
+      link: "https://web.whatsapp.com/",
+      //   width:"61%"
     },
   ];
   const classes = useStyle();
@@ -106,14 +121,19 @@ const Share = () => {
     <>
       <Box className={classes.wrap5}>
         <Container>
-          <Grid container sx={{justifyContent:{lg:"auto",xs:"center",}}}>
+          <Grid container sx={{ justifyContent: { lg: "auto", xs: "center" } }}>
             <Grid item lg={12} sm={12}>
               <Box>
                 <Typography variant="h3">Share</Typography>
               </Box>
               <Box className={classes.bag5}>
-                <Button variant="contained" sx={{mt:{lg:"auto",xs:"15px",textTransform:"none"}}}>
-                  <Link to={`/${userData?.userName}`} style={{color:"#000"}}>https://d2ubgtumno6dlw.cloudfront.net/{userData?.userName}</Link>
+                <Button
+                  variant="contained"
+                  sx={{ mt: { lg: "auto", xs: "15px", textTransform: "none" } }}
+                >
+                  <a href={encodeURI(LIVE_DOMAIN+userData?.userName)} style={{ color: "#000" }}>
+                    {LIVE_DOMAIN}{userData?.userName}
+                  </a>
                 </Button>
               </Box>
             </Grid>
@@ -122,7 +142,7 @@ const Share = () => {
             </Grid> */}
             <Grid item md={12}>
               <Box className={classes.bag9}>
-                {Data.map((e,i) => {
+                {/* {Data.map((e,i) => {
                   return (
                     <>
                       <Box key={i}>
@@ -130,7 +150,17 @@ const Share = () => {
                       </Box>
                     </>
                   );
-                })}
+                })} */}
+                <TelegramShareButton url={encodeURI(LIVE_DOMAIN+userData?.userName)}>
+                  <TelegramIcon size={32} round />
+                </TelegramShareButton>
+                <WhatsappShareButton url={encodeURI(LIVE_DOMAIN+userData?.userName)}>
+                  <WhatsappIcon size={32} round />
+                </WhatsappShareButton>
+                <TwitterShareButton url={encodeURI(LIVE_DOMAIN+userData?.userName)}>
+                  <TwitterIcon size={32} round />
+                </TwitterShareButton>
+               {/* <a href={encodeURI(LIVE_DOMAIN+userData?.userName)} target="_blank" style={{color:"#000"}}> <i class="bi bi-discord" style={{fontSize:"2rem"}}></i></a> */}
               </Box>
             </Grid>
           </Grid>
