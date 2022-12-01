@@ -249,7 +249,7 @@ const AllNFT = ({userName}) => {
                     ) : (
                       <Box sx={{display:"flex",flexDirection:"column",alignItems:"center",padding:"0 10px 0 15px",textAlign:"center"}}>
                       <Typography variant="h5"> No NFTs Added Yet </Typography>
-                      <Typography variant="body1" className={classes.alert}> (Please note, it may take 30-40 minutes initially to show up your data)</Typography>
+                      <Typography variant="body1" className={classes.alert}> (Please note, it may take 3-5 minutes initially to show up your data)</Typography>
                       </Box>
                     )
                     }
@@ -311,7 +311,7 @@ const AllNFT = ({userName}) => {
 
                       <Box sx={{display:"flex",flexDirection:"column",alignItems:"center",padding:"0 10px 0 15px",textAlign:"center"}}>
                       <Typography variant="h5"> No NFTs Added Yet </Typography>
-                      <Typography variant="body1" className={classes.alert}> (Please note, it may take 30-40 minutes initially to show up your data)</Typography>
+                      <Typography variant="body1" className={classes.alert}> (Please note, it may take 3-5 minutes initially to show up your data)</Typography>
                       </Box>
                
                     )
