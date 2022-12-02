@@ -431,13 +431,13 @@ updateNftNameOrDescription,{
                     </>
                   );
                 })} */}
-                <TelegramShareButton url={encodeURI(LIVE_DOMAIN+userData?.userName)}>
+                <TelegramShareButton url={encodeURI(LIVE_DOMAIN+"nftdetailpage/"+nftCollectionId)}>
                   <TelegramIcon size={32} round />
                 </TelegramShareButton>
-                <WhatsappShareButton url={encodeURI(LIVE_DOMAIN+userData?.userName)}>
+                <WhatsappShareButton url={encodeURI(LIVE_DOMAIN+"nftdetailpage/"+nftCollectionId)}>
                   <WhatsappIcon size={32} round />
                 </WhatsappShareButton>
-                <TwitterShareButton url={encodeURI(LIVE_DOMAIN+userData?.userName)}>
+                <TwitterShareButton url={encodeURI(LIVE_DOMAIN+"nftdetailpage/"+nftCollectionId)}>
                   <TwitterIcon size={32} round />
                 </TwitterShareButton>
                {/* <a href={encodeURI(LIVE_DOMAIN+userData?.userName)} target="_blank" style={{color:"#000"}}> <i class="bi bi-discord" style={{fontSize:"2rem"}}></i></a> */}
