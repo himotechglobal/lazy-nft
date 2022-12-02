@@ -20,7 +20,7 @@ import Data from "../Explore/ExploreData";
 import { Link } from "react-router-dom";
 import WOLFPUPS_NFT_ABI from "../../config/WOLFPUPS_NFT_ABI.json"
 import {WOLFPUPS_NFT_address} from "../../config/index";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery,useQueryClient } from "react-query";
 import { useContractRead,useContract,useProvider, useAccount } from "wagmi";
 import Modal from 'react-bootstrap/Modal';
 import { useFormik } from 'formik';
@@ -46,6 +46,7 @@ import Favorite from "@mui/icons-material/Favorite";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { display } from "@mui/system";
+import { toggleLike } from "../../api/ApiCall/nftCollection/toggleLike";
 const useStyle = makeStyles((theme) =>({
   wrap12: {
     padding: "6rem 0",
@@ -212,19 +213,21 @@ const useStyle = makeStyles((theme) =>({
   },
 }));
 
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
+
 const NFTdetailpage = () => {
   // const provider = useProvider()
-  const [{token},]=useContext(UserContext)
+  const queryClient=useQueryClient();
   const {address,isConnected}=useAccount()
   const [show, setShow] = useState(false);
   const classes = useStyle();
   const {id:nftCollectionId } = useParams();
 
 
-const {data,refetch}=useQuery(["getNftByNftCollectionId",nftCollectionId],
+const {data}=useQuery(["getNftByNftCollectionId",nftCollectionId],
  ()=>getNftByNftCollectionId(nftCollectionId),{
     onSuccess:(data)=>{
-      // console.log({data});
+      // console.log(data?.responseResult.likes)
      
     }
   })
@@ -233,17 +236,37 @@ const {data,refetch}=useQuery(["getNftByNftCollectionId",nftCollectionId],
 const {mutateAsync}=useMutation("updateNftNameOrDescription",
 updateNftNameOrDescription,{
   onSuccess:(data)=>{
-    refetch();
+    queryClient.invalidateQueries("getNftByNftCollectionId");
   }
 }
 )
 
+const {mutateAsync:mutateAsyncToggleLike,data:likeData,isLoading:isLoadingtoggleLike}=useMutation(
+  "toggleLike",
+  toggleLike,{
+    onSuccess:(data)=>{
+      // console.log(data?.responseResult?.likes);
+  
+      queryClient.invalidateQueries("getAllHideNft");
+      queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
+      queryClient.invalidateQueries("getAllNftByChainName")
+      queryClient.invalidateQueries("getAllPinnedNftByUserName");
+      queryClient.invalidateQueries("getNftByNftCollectionId");
+      // queryClient.invalidateQueries("getAllNftCollection");
+      // queryClient.invalidateQueries("recentlyListedNft");
+      // queryClient.invalidateQueries("mostViewNft");
+      // queryClient.invalidateQueries("mostLikeNft");
+    
+      
+    }
+  }
+)
+
 
   const [shows, setShows] = useState(false);
-  const [{ userData }] = useContext(UserContext);
+  const [{ userData ,token}] = useContext(UserContext);
   const handleClose = () => setShows(false);
   const handleShow = () => setShows(true);
-  const [count, setCount] = useState()
   const formik = useFormik({
     initialValues: {
       decs: "",
@@ -273,6 +296,7 @@ updateNftNameOrDescription,{
     },
 
   });
+  // console.log(data?.responseResult?.likes.includes(userData?._id));
   return (
     <>
       <Header />
@@ -304,9 +328,18 @@ updateNftNameOrDescription,{
                   <Grid  md={6}>
                     <Box>
                     <Box sx={{ textAlign: "right" }}>
-                  <Badge badgeContent="0" color="primary">
+                    <Badge badgeContent={`${likeData?.responseResult?.likes?.length || data?.responseResult.likes.length || "0"}`} color="primary">
                     <Checkbox
+                      onClick={async() => {
                       
+                        try{
+                  await mutateAsyncToggleLike({token:localStorage.getItem("token"),nftCollectionId:nftCollectionId})
+                }catch(error){
+
+                }
+                        
+                      }}
+                      {...label}
                       icon={<FavoriteBorder />}
                       checkedIcon={
                         <Favorite
@@ -317,12 +350,12 @@ updateNftNameOrDescription,{
                           // }}
                         />
                       }
-                      
+                      checked={(data?.responseResult?.likes  || likeData?.responseResult)? data?.responseResult?.likes.includes(userData?._id) || likeData?.responseResult?.likes.includes(userData?._id):false }
                     />
                   </Badge>
                  
-                  <Typography variant="body2"> <Badge badgeContent="0" color="primary">
-                  <RemoveRedEyeIcon />
+                  <Typography variant="body2"> <Badge badgeContent={data?.responseResult?.viewsCount?data?.responseResult?.viewsCount:"0"} color="primary">
+                  <RemoveRedEyeIcon/>
                  
                   </Badge></Typography>
                   {/* <Typography variant="body2"><RemoveRedEyeIcon/>{" "}{props?.data.viewsCount}</Typography> */}
@@ -334,11 +367,21 @@ updateNftNameOrDescription,{
                     <Grid md={12}>
                       <Stack spacing={2} direction="row" justifyContent="center">
                       <Box>
-                      { ((!!token && isConnected && address) && (data?.responseResult?.tokenOwner===address)) &&
+                      { (token && data?.responseResult?.userId===userData?._id) &&
                       <a variant="primary" onClick={handleShow} style={{textAlign:'center'}}>Edit</a>
                       }
+                      { data?.responseResult?.chainName==="Ethereum" &&
+                        <>
                         <a href={`https://opensea.io/assets/ethereum/${data?.responseResult?.tokenAddress}/${data?.responseResult?.tokenId}`} target="_blank">View on OpenSea</a>
-                        <a href={`https://etherscan.io/nft//${data?.responseResult?.tokenAddress}/${data?.responseResult?.tokenId}`} target="_blank">View on EtherScan</a>
+                        <a href={`https://etherscan.io/nft/${data?.responseResult?.tokenAddress}/${data?.responseResult?.tokenId}`} target="_blank">View on EtherScan</a>
+                        </>
+                      }
+                      { data?.responseResult?.chainName==="BSC Testnet" &&
+                        <>
+                        {/* <a href={`https://opensea.io/assets/bsc/${data?.responseResult?.tokenAddress}/${data?.responseResult?.tokenId}`} target="_blank">View on OpenSea</a> */}
+                        <a href={`https://testnet.bscscan.com/token/${data?.responseResult?.tokenAddress}?a=${data?.responseResult?.tokenId}`} target="_blank">View on BscScan</a>
+                        </>
+                      }
                       </Box>
                       <Box>
                       </Box>

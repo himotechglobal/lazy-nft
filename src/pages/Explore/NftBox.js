@@ -221,15 +221,15 @@ const NftBox = (props) => {
 // console.log(userData._id);
   const {mutateAsync:mutateAsyncEdit, isLoading:isLoadingupdateNftNameOrDescription}=useMutation("updateNftNameOrDescription",
 updateNftNameOrDescription,{
-  onSuccess:(data,error)=>{
+  onSuccess:(data)=>{
     queryClient.invalidateQueries("getAllHideNft");
     queryClient.invalidateQueries("getNftCollectionByChainNameAndUserName")
     queryClient.invalidateQueries("getAllNftByChainName")
     queryClient.invalidateQueries("getAllPinnedNftByUserName");
     queryClient.invalidateQueries("getAllNftByChainName");
-    queryClient.invalidateQueries("recentlyListedNft");
-    queryClient.invalidateQueries("mostViewNft");
-    queryClient.invalidateQueries("mostLikeNft")
+    // queryClient.invalidateQueries("recentlyListedNft");
+    // queryClient.invalidateQueries("mostViewNft");
+    // queryClient.invalidateQueries("mostLikeNft")
   }
 }
 )
@@ -243,9 +243,9 @@ updateNftNameOrDescription,{
       queryClient.invalidateQueries("getAllNftByChainName")
       queryClient.invalidateQueries("getAllPinnedNftByUserName");
       // queryClient.invalidateQueries("getAllNftCollection");
-      queryClient.invalidateQueries("recentlyListedNft");
-      queryClient.invalidateQueries("mostViewNft");
-      queryClient.invalidateQueries("mostLikeNft")
+      // queryClient.invalidateQueries("recentlyListedNft");
+      // queryClient.invalidateQueries("mostViewNft");
+      // queryClient.invalidateQueries("mostLikeNft")
       
   
     }
@@ -262,9 +262,9 @@ updateNftNameOrDescription,{
         queryClient.invalidateQueries("getAllNftByChainName")
         queryClient.invalidateQueries("getAllPinnedNftByUserName");
         // queryClient.invalidateQueries("getAllNftCollection");
-        queryClient.invalidateQueries("recentlyListedNft");
-        queryClient.invalidateQueries("mostViewNft");
-        queryClient.invalidateQueries("mostLikeNft")
+        // queryClient.invalidateQueries("recentlyListedNft");
+        // queryClient.invalidateQueries("mostViewNft");
+        // queryClient.invalidateQueries("mostLikeNft")
         
       }
     }
@@ -281,14 +281,16 @@ updateNftNameOrDescription,{
         queryClient.invalidateQueries("getAllNftByChainName")
         queryClient.invalidateQueries("getAllPinnedNftByUserName");
         // queryClient.invalidateQueries("getAllNftCollection");
-        queryClient.invalidateQueries("recentlyListedNft");
-        queryClient.invalidateQueries("mostViewNft");
-        queryClient.invalidateQueries("mostLikeNft");
+        // queryClient.invalidateQueries("recentlyListedNft");
+        // queryClient.invalidateQueries("mostViewNft");
+        // queryClient.invalidateQueries("mostLikeNft");
       
         
       }
     }
   )
+
+
 // console.log(props?.data?.likes);
   const formik = useFormik({
     initialValues: {
@@ -340,7 +342,7 @@ updateNftNameOrDescription,{
           {/* <Typography variant="h3" style={{margin:"2rem 0 0 0"}}>{props.data1.title}</Typography> */}
         </Box>
       </Grid>
-      <Grid  item md={12} style={{margin:props.data.margin}}  >
+      <Grid  item md={12} style={{margin:props?.data.margin}}  >
         <Box className={classes.bag8}>
           <Box className={classes.bag9}>
             <Box className={classes.bag7}>
@@ -359,7 +361,7 @@ updateNftNameOrDescription,{
 
             {show ? (
               <Box className={classes.bag10} >
-              {  ((!!token && address && isConnected )&& (props?.data.tokenOwner===address)) && (
+              {  (token && (props?.data.userId._id===userData?._id || props?.data.userId===userData?._id || props?.data.userId.userName===userData?.userName)) && (
                 <>
                 <p
                        
@@ -371,7 +373,7 @@ updateNftNameOrDescription,{
                 </p>
                <p onClick={async()=>{
                 try{
-                  await mutateAsync({token:localStorage.getItem("token"),value:props.data.metadata.image.replace("ipfs://","https://wizard.infura-ipfs.io/ipfs/")})
+                  await mutateAsync({token:localStorage.getItem("token"),value:props.data.metadata.image.replace("ipfs://","https://ipfs.io/ipfs/")})
                 }catch(error){
 
                 }
@@ -419,12 +421,26 @@ updateNftNameOrDescription,{
               
                </>
                )}
+               { props?.data?.chainName==="Ethereum" &&
+                <>
                <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
                <a href={`https://opensea.io/assets/ethereum/${props?.data.tokenAddress}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on OpenSea</a>
                </Box>
                <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
-               <a href={`https://etherscan.io/nft//${props?.data.tokenAddress}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on EtherScan</a>
+               <a href={`https://etherscan.io/nft/${props?.data.tokenAddress}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on EtherScan</a>
                </Box>
+               </>
+               }
+               { props?.data?.chainName==="BSC Testnet" &&
+                <>
+               {/* <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
+               <a href={`https://opensea.io/assets/ethereum/${props?.data.tokenAddress}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on OpenSea</a>
+               </Box> */}
+               <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
+               <a href={`https://testnet.bscscan.com/token/${props?.data.tokenAddress}?a=${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on BscScan</a>
+               </Box>
+               </>
+               }
 
               </Box>
             ) : null}
@@ -456,7 +472,7 @@ updateNftNameOrDescription,{
                   </p>
                 </Box>
                 <Box sx={{ textAlign: "center" }}>
-                  <Badge badgeContent={`${(data?.responseResult?.likes?.length || props?.data?.likes?.length)??0}`} color="primary">
+                  <Badge badgeContent={`${(data?.responseResult?.likes?.length || props?.data.likesCount || props?.data.likes.length)}`} color="primary">
                     <Checkbox
                       onClick={async() => {
                       
@@ -478,11 +494,11 @@ updateNftNameOrDescription,{
                           // }}
                         />
                       }
-                      checked={data?.responseResult?.likes?.includes(userData?._id) || props?.data?.likes?.includes(userData?._id)}
+                      checked={data?.responseResult?.likes.includes(userData?._id)||props?.data?.likes.includes(userData?._id)}
                     />
                   </Badge>
                  
-                  <Typography variant="body2"> <Badge badgeContent={props?.data.viewsCount} color="primary">
+                  <Typography variant="body2"> <Badge badgeContent={props?.data?.viewsCount ? props?.data?.viewsCount:"0" } color="primary">
                   <RemoveRedEyeIcon/>
                  
                   </Badge></Typography>

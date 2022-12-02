@@ -302,7 +302,7 @@ const Wallet = () => {
       </Box>
 
       <EditProfile heading="My Profile" />
-      <Swap />
+      {/* <Swap /> */}
       {/* <Newsletter /> */}
       <Share />
     </>

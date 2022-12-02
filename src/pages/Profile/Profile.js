@@ -129,21 +129,21 @@ useEffect(()=>{
                 Twitter
                 </p> */}
                 <Box sx={{"display":"flex","justifyContent":"center","gap":"2rem",flex:"wrap"}}>
-                {(userData?.twitterName || userUpdateData?.twitterName) && <a href={`https://twitter.com/${userUpdateData?.twitterName??userData?.twitterName}`} target="_blank" style={{color:"#000"}}>
+                {(userData?.twitterName || userUpdateData?.twitterName) && <a href={`https://twitter.com/${userUpdateData?.twitterName??userData?.twitterName}`} style={{color:"#000"}}>
                 <i class="bi bi-twitter" style={{marginRight:"8px",color:"gray"}}></i>
                 Twitter
                 </a>
                }
                {
                 (userData?.facebookName || userUpdateData?.facebookName) &&
-                <a href={`https://twitter.com/${userUpdateData?.facebookName??userData?.facebookName}`}  style={{color:"#000"}}>
+                <a href={`https://www.facebook.com/${userUpdateData?.facebookName??userData?.facebookName}`}  style={{color:"#000"}}>
                 <i class="bi bi-facebook" style={{marginRight:"8px",color:"gray"}}></i>
                 Facebook
                 </a>
                }
                {
                 (userData?.personalURL || userUpdateData?.personalURL) &&
-                <a  href={`https://twitter.com/${userUpdateData?.personalURL??userData?.personalURL}`} style={{color:"#000"}}>
+                <a  href={`${userUpdateData?.personalURL??userData?.personalURL}`} style={{color:"#000"}}>
                 <i class="bi bi-globe" style={{marginRight:"8px",color:"gray"}}></i>
                 Personal URL
                 </a>
@@ -192,21 +192,21 @@ useEffect(()=>{
              
               </div>
                 <Box sx={{"display":"flex","justifyContent":"center","gap":"2rem",flex:"wrap"}}>
-               {dataByUserName?.responseResult[0].userId["twitterName"] && <a href={`https://twitter.com/${dataByUserName?.responseResult[0].userId["twitterName"]}`} target="_blank" style={{color:"#000"}}>
+               {dataByUserName?.responseResult[0].userId["twitterName"] && <a href={`https://twitter.com/${dataByUserName?.responseResult[0].userId["twitterName"]}`}  style={{color:"#000"}}>
                 <i class="bi bi-twitter" style={{marginRight:"8px",color:"gray"}}></i>
                 Twitter
                 </a>
                }
                {
                 dataByUserName?.responseResult[0].userId["facebookName"] &&
-                <a href={`https://twitter.com/${dataByUserName?.responseResult[0].userId["facebookName"]}`}  style={{color:"#000"}}>
+                <a href={`https://www.facebook.com/${dataByUserName?.responseResult[0].userId["facebookName"]}`}  style={{color:"#000"}}>
                 <i class="bi bi-facebook" style={{marginRight:"8px",color:"gray"}}></i>
                 Facebook
                 </a>
                }
                {
                 dataByUserName?.responseResult[0].userId["personalURL"] &&
-                <a  href={`https://twitter.com/${dataByUserName?.responseResult[0].userId["personalURL"]}`} style={{color:"#000"}}>
+                <a  href={`${dataByUserName?.responseResult[0].userId["personalURL"]}`} style={{color:"#000"}}>
                 <i class="bi bi-globe" style={{marginRight:"8px",color:"gray"}}></i>
                 Personal URL
                 </a>
