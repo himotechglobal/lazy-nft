@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import FormHelperText from "@mui/material/FormHelperText";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 //   import Header from "../Header/Header";
 import { makeStyles } from "@mui/styles";
 //   import Data from "../ExploreData";
@@ -233,13 +233,13 @@ const ExploreNFT = () => {
   const [filter, setFilter] = useState(0);
   // console.log(filter);
 
-  const _recentlyListedNft = useQuery(
-    ["recentlyListedNft"],
-    recentlyListedNft,
-    {}
-  );
-  const _mostViewNft = useQuery(["mostViewNft"], mostViewNft, {});
-  const _mostLikeNft = useQuery(["mostLikeNft"], mostLikeNft, {});
+  // const _recentlyListedNft = useQuery(
+  //   ["recentlyListedNft"],
+  //   recentlyListedNft,
+  //   {}
+  // );
+  // const _mostViewNft = useQuery(["mostViewNft"], mostViewNft, {});
+  // const _mostLikeNft = useQuery(["mostLikeNft"], mostLikeNft, {});
 
   const handleChange = (event) => {
     setFilter(event.target.value);
@@ -256,15 +256,17 @@ const ExploreNFT = () => {
   }
 ];
 
-const networkLabels = {
-  "BSC Testnet" : "Binance Testnet",
-  "Ethereum" : "Ethereum",
-}
-
-
+// const networkLabels = {
+//   "BSC Testnet" : "Binance Testnet",
+//   "Ethereum" : "Ethereum",
+// }
 const [activeNetworks,setActiveNetworks] = useState(["Ethereum","BSC Testnet"])
+
+useEffect(() => {
+  // alert(activeNetworks.length)
+},[activeNetworks])
   
-const toggleActiveNetwork = (_v) => {
+const toggleActiveNetwork = async (_v) => {
   let _activeNetworks = activeNetworks ; 
   if(_activeNetworks.includes(_v)){
     let _temp = [];
@@ -276,11 +278,10 @@ const toggleActiveNetwork = (_v) => {
     setActiveNetworks(_temp);
   }
   else{
-    // alert("here")
-    _activeNetworks.push(_v);
-    console.log(_activeNetworks)
-    setActiveNetworks(_activeNetworks);
-  
+     
+ 
+    setActiveNetworks(oldArray => [...oldArray, _v]);
+
 
   }
 }
@@ -341,7 +342,7 @@ const toggleActiveNetwork = (_v) => {
               </FormControl>
               </Box>
           </Grid>
-
+{/* {activeNetworks.length} */}
               {
                 netWorkArray.length > 0 && netWorkArray.map((v,i) => {
                   if(activeNetworks.includes(v.value)){
