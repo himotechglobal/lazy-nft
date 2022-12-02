@@ -9,7 +9,9 @@ import {
   Button,
   Avatar,
   TextField,
-  TextareaAutosize
+  TextareaAutosize,
+  Checkbox,
+  Badge
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Footer from "../../components/Footer/Footer";
@@ -26,9 +28,25 @@ import * as yup from 'yup';
 import {updateNftNameOrDescription} from "../../api/ApiCall/nftCollection/updateNftNameOrDescription"
 import {getNftByNftCollectionId} from "../../api/ApiCall/nftCollection/getNftByNftCollectionId"
 import { UserContext } from "../../context/User/UserContext";
-
-
-const useStyle = makeStyles({
+import Share from "../../components/Share/Share";
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  TelegramShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  FacebookIcon,
+  TelegramIcon,
+  TwitterIcon,
+  WhatsappIcon,
+} from "react-share";
+// import { discord, LIVE_DOMAIN } from "../../config";
+import { discord, LIVE_DOMAIN } from "../../config";
+import Favorite from "@mui/icons-material/Favorite";
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import { display } from "@mui/system";
+const useStyle = makeStyles((theme) =>({
   wrap12: {
     padding: "6rem 0",
     width: "100%",
@@ -158,8 +176,41 @@ const useStyle = makeStyles({
       transition:
         "color 0.5s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out",
     },
-  }
-});
+  },
+  bag9: {
+    display: "flex",
+    gap: "12px",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "2.3rem",
+    marfinBottom:"1rem",
+  },
+  bin1:{
+    justifyContent:"center",
+     display:"flex", 
+     [theme.breakpoints.down("sm")]: {
+      justifyContent:"flex-start",
+    },
+  },
+  bin2:{
+    "& h4":{
+      [theme.breakpoints.down("sm")]: {
+       fontSize:"14px"
+      },
+    },
+    "& p":{
+      [theme.breakpoints.down("sm")]: {
+       fontSize:"14px"
+      },
+    },
+   
+  },
+  wrap5: {
+    width: "100%",
+    padding: "2rem 0",
+  
+  },
+}));
 
 const NFTdetailpage = () => {
   // const provider = useProvider()
@@ -189,9 +240,10 @@ updateNftNameOrDescription,{
 
 
   const [shows, setShows] = useState(false);
-
+  const [{ userData }] = useContext(UserContext);
   const handleClose = () => setShows(false);
   const handleShow = () => setShows(true);
+  const [count, setCount] = useState()
   const formik = useFormik({
     initialValues: {
       decs: "",
@@ -241,16 +293,45 @@ updateNftNameOrDescription,{
        
             <Box className={classes.wrap13}>
               <Container>
-                <Grid>
-                  <Grid md={6}>
-                    <Box>
+                <Grid container item sx={{}} className={classes.bin1}>
+                  <Grid  md={6}>
+                    <Box className={classes.bin2}>
                     {/* <Typography variant="h4">#{data?.responseResult?.tokenId}</Typography> */}
                       <Typography variant="h4">{data?.responseResult?.lazyName? data?.responseResult?.lazyName :data?.responseResult?.metadata?.name}</Typography>
                       <p>{data?.responseResult?.lazyDescription? data?.responseResult?.lazyDescription :data?.responseResult?.metadata?.description}</p>
                     </Box>
                   </Grid>
-                  <Box>
-                    <Grid>
+                  <Grid  md={6}>
+                    <Box>
+                    <Box sx={{ textAlign: "right" }}>
+                  <Badge badgeContent="0" color="primary">
+                    <Checkbox
+                      
+                      icon={<FavoriteBorder />}
+                      checkedIcon={
+                        <Favorite
+                          indeterminateIcon
+                          sx={{ color: "red" }}
+                          // onClick={() => {
+                          //   setCount(count + 1);
+                          // }}
+                        />
+                      }
+                      
+                    />
+                  </Badge>
+                 
+                  <Typography variant="body2"> <Badge badgeContent="0" color="primary">
+                  <RemoveRedEyeIcon />
+                 
+                  </Badge></Typography>
+                  {/* <Typography variant="body2"><RemoveRedEyeIcon/>{" "}{props?.data.viewsCount}</Typography> */}
+                </Box>
+                    </Box>
+                  </Grid>
+
+                
+                    <Grid md={12}>
                       <Stack spacing={2} direction="row" justifyContent="center">
                       <Box>
                       { ((!!token && isConnected && address) && (data?.responseResult?.tokenOwner===address)) &&
@@ -258,15 +339,11 @@ updateNftNameOrDescription,{
                       }
                         <a href={`https://opensea.io/assets/ethereum/${data?.responseResult?.tokenAddress}/${data?.responseResult?.tokenId}`} target="_blank">View on OpenSea</a>
                         <a href={`https://etherscan.io/nft//${data?.responseResult?.tokenAddress}/${data?.responseResult?.tokenId}`} target="_blank">View on EtherScan</a>
-
                       </Box>
-
                       <Box>
-
                       </Box>
                     </Stack>
                     </Grid>
-                  </Box>
                 </Grid>
               </Container>
             </Box>
@@ -332,7 +409,43 @@ updateNftNameOrDescription,{
               </Container>
             </Box>
       </Box> */}
-      <Footer />
+      {/* <Footer /> */}
+      {/* <Share/> */}
+
+
+      <Box className={classes.wrap5}>
+        <Container>
+          <Grid container sx={{ justifyContent: { lg: "auto", xs: "center" } }}>
+           
+            {/* <Grid item md={12} sm={12}>
+             
+            </Grid> */}
+            <Grid item md={12}>
+              <Box className={classes.bag9}>
+                {/* {Data.map((e,i) => {
+                  return (
+                    <>
+                      <Box key={i}>
+                        <a href={e.link}><img src={e.img} alt="" style={{width:e.width}}/></a>
+                      </Box>
+                    </>
+                  );
+                })} */}
+                <TelegramShareButton url={encodeURI(LIVE_DOMAIN+userData?.userName)}>
+                  <TelegramIcon size={32} round />
+                </TelegramShareButton>
+                <WhatsappShareButton url={encodeURI(LIVE_DOMAIN+userData?.userName)}>
+                  <WhatsappIcon size={32} round />
+                </WhatsappShareButton>
+                <TwitterShareButton url={encodeURI(LIVE_DOMAIN+userData?.userName)}>
+                  <TwitterIcon size={32} round />
+                </TwitterShareButton>
+               {/* <a href={encodeURI(LIVE_DOMAIN+userData?.userName)} target="_blank" style={{color:"#000"}}> <i class="bi bi-discord" style={{fontSize:"2rem"}}></i></a> */}
+              </Box>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
 
 
       {/* Modal Open Edit name and decs */}
