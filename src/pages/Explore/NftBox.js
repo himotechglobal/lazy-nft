@@ -35,6 +35,9 @@ import { getUserNFTByTokenURI } from "../../api/ApiCall/getNftByTokenURI";
 // import useOnClickOutSide from "../../components/useOnclick";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 const useStyle = makeStyles((theme) => ({
+  fav:{
+ padding:"0 !important"
+  },
   wrap7: {
     // color:"#000",
     "& h3": {
@@ -436,7 +439,7 @@ updateNftNameOrDescription,{
                {/* <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
                <a href={`https://opensea.io/assets/ethereum/${props?.data.tokenAddress}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on OpenSea</a>
                </Box> */}
-               <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
+               <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "12px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
                <a href={`https://testnet.bscscan.com/token/${props?.data.tokenAddress}?a=${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on BscScan</a>
                </Box>
                </>
@@ -473,7 +476,7 @@ updateNftNameOrDescription,{
                 </Box>
                 <Box sx={{ textAlign: "center" }}>
                   <Badge badgeContent={`${(data?.responseResult?.likes?.length || props?.data.likesCount || props?.data.likes.length)}`} color="primary">
-                    <Checkbox
+                    <Checkbox className={classes.fav}
                       onClick={async() => {
                       
                         try{

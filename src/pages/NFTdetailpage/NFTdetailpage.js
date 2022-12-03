@@ -48,6 +48,9 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { display } from "@mui/system";
 import { toggleLike } from "../../api/ApiCall/nftCollection/toggleLike";
 const useStyle = makeStyles((theme) =>({
+  fav:{
+    padding:"0 !important"
+     },
   wrap12: {
     padding: "6rem 0",
     width: "100%",
@@ -329,7 +332,7 @@ const {mutateAsync:mutateAsyncToggleLike,data:likeData,isLoading:isLoadingtoggle
                     <Box>
                     <Box sx={{ textAlign: "right" }}>
                     <Badge badgeContent={`${likeData?.responseResult?.likes?.length || data?.responseResult.likes.length || "0"}`} color="primary">
-                    <Checkbox
+                    <Checkbox className={classes.fav}
                       onClick={async() => {
                       
                         try{

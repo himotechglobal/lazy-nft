@@ -133,6 +133,14 @@ const useStyle = makeStyles((theme) => ({
         fontSize:"1rem"
       },
     }
+  },
+  sel:{
+    "& .MuiSelect-select":{
+      // display:"flex",
+      // gap:"5px",
+      textAlign:"start",
+      padding:"6px 18px !important"
+    }
   }
 }));
 const ExploreNFT = () => {
@@ -303,12 +311,11 @@ const toggleActiveNetwork = async (_v) => {
               {
                 netWorkArray.map((v,i) => {
                   return (
-                    <FormGroup>
+                    
                     <FormControlLabel
-                      control={<Checkbox defaultChecked onClick={() => toggleActiveNetwork(v.value)} />}
+                      control={<Checkbox  defaultChecked onClick={() => toggleActiveNetwork(v.value)} />}
                       label={v.label}
                     />
-                  </FormGroup>
                   )
                 })
               }
@@ -318,6 +325,7 @@ const toggleActiveNetwork = async (_v) => {
 
                 <FormControl sx={{ m: 1, minWidth: 150 }}>
                 <Select
+                className={classes.sel}
                   value={filter}
                   onChange={handleChange}
                   displayEmpty

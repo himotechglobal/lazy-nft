@@ -1,4 +1,8 @@
-.ghb{
+*{
+    text-decoration: none !important;
+
+}
+/* .ghb{
     margin-top: 10px;
         border: 1px solid linen;
 }
@@ -13,7 +17,6 @@
 *{text-decoration: none !important;}
 .css-1ptx2yq-MuiInputBase-root-MuiInput-root:before{
     border-bottom: none !important;
-    /* box-shadow: 0px 0px 5px 0px #ccc; */
     box-shadow: rgb(0 0 0 / 5%) 0px 2px 16px 0px;
     padding: 10px !important;
     border-radius: 15px;
@@ -23,9 +26,7 @@
 .css-1x51dt5-MuiInputBase-input-MuiInput-input{
     padding: 10px !important;
 }
-/* .MuiInput-underline{
-    border-bottom: none !important;
-} */
+
 .css-1ptx2yq-MuiInputBase-root-MuiInput-root::before{
 
 }
@@ -109,4 +110,4 @@
 
  .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input{
     padding: 7.5px 32px 7.5px 0px !important;
- }
+ } */

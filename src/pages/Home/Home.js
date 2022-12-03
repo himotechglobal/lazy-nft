@@ -72,7 +72,7 @@ const Home = () => {
             <Grid item lg={12} sm={12} md={12}>
               <Box>
                 <Typography variant="h6">
-                  Every pup deserve a name and a story. Show off and share yours.
+                  Every pup deserves a name and a story. Show off and share yours.
                 </Typography>
               </Box>
             </Grid>
