@@ -128,7 +128,8 @@ const Wallet = () => {
   );
 
   const addWallets = async () => {
-    if (isConnected && chain && address) {
+    if (isConnected  && address && chain?.name == "Ethereum" ) {
+
       try {
         await mutateAsync({
           token: localStorage.getItem("token"),
@@ -136,6 +137,10 @@ const Wallet = () => {
           address: address,
         });
       } catch (err) {}
+    }
+    else if ( chain?.name != "Ethereum"){
+      toast.error("Please switch to Ethereum mainnet");
+
     }
   };
 

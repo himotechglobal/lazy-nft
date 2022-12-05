@@ -256,12 +256,12 @@ const ExploreNFT = () => {
 
   const netWorkArray = [{
     "value" : "Ethereum",
-    "label" : "Ethereum"
+    "label" : "Wolf Pups"
   },
-  {
-    "value" : "BSC Testnet",
-    "label" : "Binance Testnet"
-  }
+  // {
+  //   "value" : "BSC Testnet",
+  //   "label" : "Binance Testnet"
+  // }
 ];
 
 // const networkLabels = {
@@ -308,7 +308,7 @@ const toggleActiveNetwork = async (_v) => {
                 flexWrap: "wrap",
               }} >
             <Box className={classes.bag15}>
-              {
+              {/* {
                 netWorkArray.map((v,i) => {
                   return (
                     
@@ -318,7 +318,7 @@ const toggleActiveNetwork = async (_v) => {
                     />
                   )
                 })
-              }
+              } */}
               
              
             </Box>

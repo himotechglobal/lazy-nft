@@ -99,7 +99,7 @@ const useStyle = makeStyles((theme) => ({
 }));
 const AllNFT = ({userName}) => {
   const [show, setShow] = useState(true);
-  const [show1, setShow1] = useState(true);
+  const [show1, setShow1] = useState(false);
   const [{ token,userData }] = useContext(UserContext);
   const [chainName,setChainName]=useState({Ethereum:"Ethereum",BSC_Testnet:"BSC Testnet"})
   const Active = () => {
@@ -196,8 +196,8 @@ const AllNFT = ({userName}) => {
       <Box className={classes.wrap5}>
         <Container>
           <Grid container spacing={3}>
-            <Grid item md={12} sm={12}>
-              <Typography variant="h2">All NFTs</Typography>
+            {/* <Grid item md={12} sm={12}>
+              {/* <Typography variant="h2">All NFTs</Typography>  
               <Box className={classes.bag11}>
                 <FormGroup>
                   <FormControlLabel
@@ -210,7 +210,7 @@ const AllNFT = ({userName}) => {
                     label="Ethereum"
                   />
                 </FormGroup>
-
+ 
                 <FormGroup>
                   <FormControlLabel
                     control={
@@ -221,15 +221,15 @@ const AllNFT = ({userName}) => {
                     }
                     label="Binance"
                   />
-                </FormGroup>
+                </FormGroup>  
               
               </Box>
-            </Grid>
+            </Grid> */}
             {show ? (
               <>
                 <Grid item md={12} sm={12}>
                   <Typography variant="h5" sx={{ textAlign: "left", fontWeight: "bold" }}>
-                    Ethereum NFTs
+                    WOLF PUP NFTs
                   </Typography>
                 </Grid>
                 { (

@@ -42,9 +42,10 @@ const Header = () => {
   const navigate = useNavigate();
   const logout = (e) => {
     e.preventDefault();
-    navigate("/");
-    localStorage.removeItem("token");
+    localStorage.clear();
     dispatch({ type: actionTypes.SET_TOKEN, value: null });
+    navigate("/login");
+
   };
   const location = useLocation();
   const [isopen, setIsOpen] = useState(false);
