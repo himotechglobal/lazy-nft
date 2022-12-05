@@ -1,4 +1,4 @@
-import React, { useContext,useState,useRef } from "react";
+import React, { useContext,useState,useRef, useEffect } from "react";
 import {
   Box,
   Button,
@@ -150,7 +150,8 @@ const useStyle = makeStyles({
 });
 
 const EditProfile = ({heading}) => {
-  const [{userData}, dispatch] = useContext(UserContext);
+  const [{userData,userUpdateData}, dispatch] = useContext(UserContext);
+
   const bodyRef = useRef()
   // const [words, setWords] = useState("")
 
@@ -160,9 +161,6 @@ const EditProfile = ({heading}) => {
   const CHARACTER_LIMIT = 160;
   const [words, setWords] = useState(0)
 
-  const count = () => {
-    setWords(0 + bodyRef.current.value.length)
-  }
 
   const {isLoading, mutateAsync } = useMutation(
     "editProfile",
@@ -185,6 +183,24 @@ const EditProfile = ({heading}) => {
       },
     }
   );
+  const [bio,setBio]=useState(null)
+  const [twitterName,setTwitterName]=useState(null);
+  const [facebookName,setFacebookName]=useState(null);
+  const [personalURL,setPersonalURL]=useState(null);
+  useEffect(()=>{
+    if(userData){
+      setBio(userData?.bio);
+      setWords(0 + userData?.bio?.length)
+      setTwitterName(userData?.twitterName);
+      setFacebookName(userData?.facebookName);
+      setPersonalURL(userData?.personalURL);
+    }
+  },[userData])
+  
+  const count = (e) => {
+    setWords(0 + bodyRef.current.value.length)
+    setBio(e.target.value);
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -228,7 +244,9 @@ const EditProfile = ({heading}) => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
- 
+
+
+
    
   return (
     <>
@@ -292,7 +310,7 @@ const EditProfile = ({heading}) => {
                   // onChange={formik.handleChange}
                   id="bio"
                   required
-                  // value={formik.values.bio}
+                  value={bio}
                   // error={formik.touched.bio && Boolean(formik.errors.bio)}
                   // helperText={formik.touched.bio && formik.errors.bio}
                 />
@@ -308,8 +326,8 @@ const EditProfile = ({heading}) => {
                 variant="outlined"
                 placeholder="Enter Twitter Name"
                 className={classes.bag9}
-                value={formik.values.twitterName}
-                onChange={formik.handleChange}
+                value={twitterName}
+                onChange={(e)=>setTwitterName(e.target.value)}
                 error={
                   formik.touched.twitterName &&
                   Boolean(formik.errors.twitterName)
@@ -349,8 +367,8 @@ const EditProfile = ({heading}) => {
                 className={classes.bag9}
                 id="facebookName"
                 variant="outlined"
-                value={formik.values.facebookName}
-                onChange={formik.handleChange}
+                value={facebookName}
+                onChange={(e)=>setFacebookName(e.target.value)}
                 error={
                   formik.touched.facebookName &&
                   Boolean(formik.errors.facebookName)
@@ -376,8 +394,8 @@ const EditProfile = ({heading}) => {
                 variant="outlined"
                 id="personalURL"
                 className={classes.bag9}
-                value={formik.values.personalURL}
-                onChange={formik.handleChange}
+                value={personalURL}
+                onChange={(e)=>setPersonalURL(e.target.value)}
                 error={
                   formik.touched.personalURL &&
                   Boolean(formik.errors.personalURL)

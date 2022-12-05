@@ -1,4 +1,4 @@
-import React, { useState,useContext,useRef } from "react";
+import React, { useState,useContext,useRef,useEffect } from "react";
 import { makeStyles } from "@mui/styles";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import {updateProfilePic} from "../../api/ApiCall/updateProfilePic"
@@ -225,9 +225,6 @@ const useStyle = makeStyles((theme) => ({
 const NftBox = (props) => {
   const [words, setWords] = useState(0)
   const bodyRef = useRef()
-  const count = () => {
-    setWords(0 + bodyRef.current.value.length)
-  }
   const CHARACTER_LIMIT = 160;
   const ref = useRef();
   const queryClient=useQueryClient();
@@ -363,6 +360,22 @@ updateNftNameOrDescription,{
 //  )
 
 //  console.log(imageData);
+const [lazyName,setLazyName]=useState(null);
+const [lazyDescription,setLazyDescription]=useState(null)
+
+useEffect(()=>{
+  if(props?.data){
+    console.log();
+    setLazyName(props?.data?.lazyName);
+    setWords(0 + props?.data?.lazyDescription?.length)
+    setLazyDescription(props?.data?.lazyDescription);
+  }
+},[props?.data])
+
+const count = (e) => {
+  setWords(0 + bodyRef.current.value.length)
+  setLazyDescription(e.target.value);
+}
   
   useOnClick(ref, () => setShow(false));
   return (
@@ -559,8 +572,8 @@ updateNftNameOrDescription,{
                   className={classes.bag90}
                   // sx={{ width: "100%" }}
                   
-                  value={formik.values.name}
-                  onChange={formik.handleChange}
+                  value={lazyName}
+                  onChange={(e)=>setLazyName(e.target.value)}
                   error={formik.touched.name && Boolean(formik.errors.name)}
                   helperText={formik.touched.name && formik.errors.name}
                   InputProps={{
@@ -579,7 +592,7 @@ updateNftNameOrDescription,{
                   maxLength={CHARACTER_LIMIT}
                   id="decs"
                   name="decs"
-                  // value={formik.values.decs}
+                  value={lazyDescription}
                   // error={formik.touched.decs && Boolean(formik.errors.decs)}
                   // helperText={formik.touched.decs && formik.errors.decs}
                 />
