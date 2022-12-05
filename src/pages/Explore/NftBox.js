@@ -95,6 +95,10 @@ const useStyle = makeStyles((theme) => ({
       padding: "13px",
       borderRadius: "15px",
       boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
+      "& fieldset":{
+       borderWidth:"0px !important"
+      }
+      
     },
     bagr: {
       "& button": {
@@ -110,6 +114,7 @@ const useStyle = makeStyles((theme) => ({
         transition:
           "color 0.5s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out",
       },
+      
     },
   },
   bag7: {
@@ -166,7 +171,18 @@ const useStyle = makeStyles((theme) => ({
     },
     "& p": {
       cursor: "pointer",
+      "&:hover":{
+        color:"blue"
+      }
     },
+  },
+  bin2: {
+      "&:hover":{
+        color:"blue !important"
+      },
+      "&:active":{
+        color:"blue !important"
+      }
   },
   bag11: {
     width: "13%",
@@ -181,6 +197,14 @@ const useStyle = makeStyles((theme) => ({
     padding: "13px",
     borderRadius: "15px",
     boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
+  },
+  bag6: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    "& h5,h6": {
+      margin: "0",
+    },
   },
   bagr: {
     "& button": {
@@ -199,6 +223,12 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 const NftBox = (props) => {
+  const [words, setWords] = useState(0)
+  const bodyRef = useRef()
+  const count = () => {
+    setWords(0 + bodyRef.current.value.length)
+  }
+  const CHARACTER_LIMIT = 160;
   const ref = useRef();
   const queryClient=useQueryClient();
   const [{userData,token}, dispatch] = useContext(UserContext);
@@ -427,10 +457,10 @@ updateNftNameOrDescription,{
                { props?.data?.chainName==="Ethereum" &&
                 <>
                <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
-               <a href={`https://opensea.io/assets/ethereum/${props?.data.tokenAddress}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on OpenSea</a>
+               <a href={`https://opensea.io/assets/ethereum/${props?.data.tokenAddress}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}} className={classes.bin2}>View on OpenSea</a>
                </Box>
                <Box sx={{color: "#000", margin: "0 0 4px 0", padding: "4px", fontSize: "1rem", textAlign: "left", fontWeight: "500"}}>
-               <a href={`https://etherscan.io/nft/${props?.data.tokenAddress}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}}>View on EtherScan</a>
+               <a href={`https://etherscan.io/nft/${props?.data.tokenAddress}/${props?.data.tokenId}`} target="_blank" style={{color: "#000",fontSize:"0.8rem"}} className={classes.bin2}>View on EtherScan</a>
                </Box>
                </>
                }
@@ -528,29 +558,40 @@ updateNftNameOrDescription,{
                   placeholder="Enter Name"
                   className={classes.bag90}
                   // sx={{ width: "100%" }}
+                  
                   value={formik.values.name}
                   onChange={formik.handleChange}
                   error={formik.touched.name && Boolean(formik.errors.name)}
                   helperText={formik.touched.name && formik.errors.name}
+                  InputProps={{
+        disableUnderline: true,
+      }}
                 />
 
                 <TextareaAutosize
                   className={classes.bag90}
+                  ref={bodyRef}
                   // aria-label="minimum height"
                   minRows={3}
                   placeholder="Enter Description"
                   // style={{ width: 200 }}
-                  onChange={formik.handleChange}
+                  onChange={count}
+                  maxLength={CHARACTER_LIMIT}
                   id="decs"
                   name="decs"
-                  value={formik.values.decs}
-                  error={formik.touched.decs && Boolean(formik.errors.decs)}
-                  helperText={formik.touched.decs && formik.errors.decs}
+                  // value={formik.values.decs}
+                  // error={formik.touched.decs && Boolean(formik.errors.decs)}
+                  // helperText={formik.touched.decs && formik.errors.decs}
                 />
+                <Box className={classes.bag6} mb>
+                <h6>Character Count {words}/160</h6>
+                {/* <h6>Character Count {count}/160</h6> */}
+              </Box>
                 <button type="submit">Submit</button>
-
-                <button onClick={handleClose}>Close</button>
               </form>
+                <Box className={classes.bagr}>
+                <button onClick={handleClose}>Close</button>
+                </Box>
             </Box>
           </Box>
         </Modal.Body>

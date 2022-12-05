@@ -129,21 +129,21 @@ useEffect(()=>{
                 Twitter
                 </p> */}
                 <Box sx={{"display":"flex","justifyContent":"center","gap":"2rem",flex:"wrap"}}>
-                {(userData?.twitterName || userUpdateData?.twitterName) && <a href={`https://twitter.com/${userUpdateData?.twitterName??userData?.twitterName}`} style={{color:"#000"}}>
+                {(userData?.twitterName || userUpdateData?.twitterName) && <a href={`https://twitter.com/${userUpdateData?.twitterName??userData?.twitterName}`} target="_blank" style={{color:"#000"}}>
                 <i class="bi bi-twitter" style={{marginRight:"8px",color:"gray"}}></i>
                 Twitter
                 </a>
                }
                {
                 (userData?.facebookName || userUpdateData?.facebookName) &&
-                <a href={`https://www.facebook.com/${userUpdateData?.facebookName??userData?.facebookName}`}  style={{color:"#000"}}>
+                <a href={`https://www.facebook.com/${userUpdateData?.facebookName??userData?.facebookName}`} target="_blank"  style={{color:"#000"}}>
                 <i class="bi bi-facebook" style={{marginRight:"8px",color:"gray"}}></i>
                 Facebook
                 </a>
                }
                {
                 (userData?.personalURL || userUpdateData?.personalURL) &&
-                <a  href={`${userUpdateData?.personalURL??userData?.personalURL}`} style={{color:"#000"}}>
+                <a  href={`${userUpdateData?.personalURL??userData?.personalURL}`} target="_blank" style={{color:"#000"}}>
                 <i class="bi bi-globe" style={{marginRight:"8px",color:"gray"}}></i>
                 Personal URL
                 </a>

@@ -19,6 +19,9 @@ import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import { UserContext } from "../../context/User/UserContext";
 import {actionTypes} from "../../context/User/UserReducer";
+import InputAdornment from '@mui/material/InputAdornment';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+
 import Counter from "./Counter"
 const useStyle = makeStyles({
   //Wrap 3 Start
@@ -61,11 +64,14 @@ const useStyle = makeStyles({
   },
   bag7: {
     width: "100% !important",
-    border: "none",
+    border: "1px solid",
     margin: "3rem 0 0 0",
-    border: "none",
+    border: "1px solid ",
     padding: "10px",
     boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
+    borderColor:"linen",
+    borderRadius:"20px"
+    
   },
 
   bag8: {
@@ -75,7 +81,7 @@ const useStyle = makeStyles({
     },
     "& input": {
       fontSize: "13px",
-      padding:"10px 20px !important"
+      padding:"10px!important"
     },
     " & p": {
       fontSize: "13px",
@@ -100,13 +106,15 @@ const useStyle = makeStyles({
       display: "block",
       padding: "10px",
       "& input":{
-        display: "block",
-        border: "1px solid linen",
-        margin: "10px 0",
-        width: "100%",
-        padding: "13px",
-        borderRadius: "25px",
-        boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
+        // display: "block",
+         border: "solid linen",
+         borderWidth:"0 0 0 1px",
+        // margin: "10px 0",
+        // width: "100%",
+        //  borderRadius: "0 25px 25px 0",
+         boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
+         padding:"auto 0 !important"
+        
       },
       "&  h2": {
         fontSize: "1.5rem",
@@ -121,13 +129,24 @@ const useStyle = makeStyles({
   },
   bag9: {
     // display: "block",
-    // border: "1px solid linen",
+     borderColor: "linen !important",
     // margin: "10px 0",
     // width: "100%",
     // padding: "13px",
     // borderRadius: "25px",
     // boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
+    "& input":{
+      padding:"auto 0 !important"
+    },
+    "& fieldset":{
+      borderColor:"linen",
+      borderRadius:"20px"
+    }
   },
+  bin1:{
+    marginBottom:"2px ",
+    fontSize:"14px"
+  }
 });
 
 const EditProfile = ({heading}) => {
@@ -138,6 +157,7 @@ const EditProfile = ({heading}) => {
   // const count = () => {
   //  return  words.count();
   // }
+  const CHARACTER_LIMIT = 160;
   const [words, setWords] = useState(0)
 
   const count = () => {
@@ -264,24 +284,28 @@ const EditProfile = ({heading}) => {
                   className={classes.bag7}
                   // aria-label="minimum height"
                   minRows={3}
-                  variant="standard"
+                
                   placeholder="Enter Bio"
                   style={{ width: 200 }}
                   onChange={count}
+                  maxLength={CHARACTER_LIMIT}
                   // onChange={formik.handleChange}
                   id="bio"
+                  required
                   // value={formik.values.bio}
                   // error={formik.touched.bio && Boolean(formik.errors.bio)}
                   // helperText={formik.touched.bio && formik.errors.bio}
                 />
               </Box>
               <h2>Links</h2>
+              
               <label htmlFor="bio">Twitter Name:</label>
+              
               <TextField
               fullWidth
                 name="twitterName"
                 id="twitterName"
-                variant="standard"
+                variant="outlined"
                 placeholder="Enter Twitter Name"
                 className={classes.bag9}
                 value={formik.values.twitterName}
@@ -293,6 +317,13 @@ const EditProfile = ({heading}) => {
                 helperText={
                   formik.touched.twitterName && formik.errors.twitterName
                 }
+                InputProps={{
+          startAdornment: (
+            <InputAdornment position="start"  >
+              <span className={classes.bin1}>@</span>
+            </InputAdornment>
+          ),
+        }}
               />
                {/* <TextField
                             fullWidth
@@ -317,7 +348,7 @@ const EditProfile = ({heading}) => {
                 placeholder="Enter Facebook Name"
                 className={classes.bag9}
                 id="facebookName"
-                variant="standard"
+                variant="outlined"
                 value={formik.values.facebookName}
                 onChange={formik.handleChange}
                 error={
@@ -327,7 +358,13 @@ const EditProfile = ({heading}) => {
                 helperText={
                   formik.touched.facebookName && formik.errors.facebookName
                 }
-                
+                InputProps={{
+          startAdornment: (
+            <InputAdornment position="start"  >
+              <span className={classes.bin1} >https://facebook.com</span>
+            </InputAdornment>
+          ),
+        }}    
               />
 
               <label htmlFor="">Personal URL:</label>
@@ -336,7 +373,7 @@ const EditProfile = ({heading}) => {
                 name="personalURL"
                 type="text"
                 placeholder=" Website"
-                variant="standard"
+                variant="outlined"
                 id="personalURL"
                 className={classes.bag9}
                 value={formik.values.personalURL}
@@ -348,6 +385,13 @@ const EditProfile = ({heading}) => {
                 helperText={
                   formik.touched.personalURL && formik.errors.personalURL
                 }
+                  InputProps={{
+          startAdornment: (
+            <InputAdornment position="start" >
+              <span className={classes.bin1}>https://</span>
+            </InputAdornment>
+          ),
+        }}
               />
 
               {/* <Box> */}
@@ -362,9 +406,11 @@ const EditProfile = ({heading}) => {
               </button>
               
             </form>
-            <button  onClick={handleClose}>
+           <Box sx={{px:"10px"}}>
+           <button  onClick={handleClose}>
                 Close
               </button>
+           </Box>
           </Box>
         </Modal.Body>
       </Modal>

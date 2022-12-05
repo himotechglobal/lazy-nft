@@ -195,7 +195,7 @@ const AllNFT = ({userName}) => {
     <>
       <Box className={classes.wrap5}>
         <Container>
-          <Grid container spacing={3}>
+          <Grid>
             {/* <Grid item md={12} sm={12}>
               {/* <Typography variant="h2">All NFTs</Typography>  
               <Box className={classes.bag11}>
@@ -227,11 +227,13 @@ const AllNFT = ({userName}) => {
             </Grid> */}
             {show ? (
               <>
-                <Grid item md={12} sm={12}>
-                  <Typography variant="h5" sx={{ textAlign: "left", fontWeight: "bold" }}>
-                    WOLF PUP NFTs
+                {/* <Grid> */}
+                {/* <Grid item md={12} sm={12}> */}
+                  <Typography variant="h2" sx={{ textAlign: "left",fontSize:"1.6rem !important", fontWeight: "bold !important",textTransform:"capitalize" }}>
+                   ALL WOLF PUP NFTs
                   </Typography>
-                </Grid>
+                {/* </Grid> */}
+                {/* </Grid> */}
                 { (
                   <Grid container justifyContent="center">
                     {dataEthereum?.pages[0] ? (
@@ -345,7 +347,7 @@ const AllNFT = ({userName}) => {
               </>
             ) : null}
           </Grid>
-        </Container>
+       </Container>
       </Box>
     </>
   );

@@ -158,8 +158,8 @@ const useStyle = makeStyles((theme) =>({
   },
     
   bag90: {
-    display: "block",
-    border: "1px solid linen",
+    // display: "block",
+    // border: "1px solid linen",
     margin: "10px 0",
     width: "100%",
     padding: "13px",
@@ -508,7 +508,7 @@ const {mutateAsync:mutateAsyncToggleLike,data:likeData,isLoading:isLoadingtoggle
                 name="name"
                 id="name"
                 placeholder="Enter Name"
-                className={classes.bag90  }
+                className={classes.bag90}
                 // sx={{width:"100%"}}
                
                 value={formik.values.name}
@@ -539,11 +539,13 @@ const {mutateAsync:mutateAsyncToggleLike,data:likeData,isLoading:isLoadingtoggle
                 Submit
               </button>
        
+         </form>
+        
+              <Box className={classes.bagr}>
               <button  onClick={handleClose}>
                 Close
               </button>
-         </form>
-        
+              </Box>
               </Box>
           </Box>
         </Modal.Body>
