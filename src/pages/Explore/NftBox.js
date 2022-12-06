@@ -521,13 +521,10 @@ const count = (e) => {
                   <Badge badgeContent={`${(data?.responseResult?.likes?.length || props?.data.likesCount || props?.data.likes.length)}`} color="primary">
                     <Checkbox className={classes.fav}
                       onClick={async() => {
-                      
                         try{
                   await mutateAsyncToggleLike({token:localStorage.getItem("token"),nftCollectionId:props?.data._id})
                 }catch(error){
-
-                }
-                        
+                }         
                       }}
                       {...label}
                       icon={<FavoriteBorder />}
@@ -543,10 +540,8 @@ const count = (e) => {
                       checked={data?.responseResult?.likes.includes(userData?._id)||props?.data?.likes.includes(userData?._id)}
                     />
                   </Badge>
-                 
                   <Typography variant="body2"> <Badge badgeContent={props?.data?.viewsCount ? props?.data?.viewsCount:"0" } color="primary">
-                  <RemoveRedEyeIcon/>
-                 
+                  <RemoveRedEyeIcon/> 
                   </Badge></Typography>
                   {/* <Typography variant="body2"><RemoveRedEyeIcon/>{" "}{props?.data.viewsCount}</Typography> */}
                 </Box>
@@ -580,10 +575,8 @@ const count = (e) => {
         disableUnderline: true,
       }}
                 />
-
                 <TextareaAutosize
                   className={classes.bag90}
-              
                   // aria-label="minimum height"
                   minRows={3}
                   placeholder="Enter Description"

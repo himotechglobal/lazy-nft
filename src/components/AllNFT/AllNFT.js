@@ -225,16 +225,23 @@ const AllNFT = ({userName}) => {
               
               </Box>
             </Grid> */}
+            
             {show ? (
               <>
                 {/* <Grid> */}
                 {/* <Grid item md={12} sm={12}> */}
-                  <Typography variant="h2" sx={{ textAlign: "left",fontSize:"1.6rem !important", fontWeight: "bold !important",textTransform:"capitalize" }}>
+                  <Typography variant="h2" sx={{ textAlign: "left",fontSize:"1.95rem !important", fontWeight: "bold !important",textTransform:"capitalize" }}>
                    ALL WOLF PUP NFTs
                   </Typography>
                 {/* </Grid> */}
                 {/* </Grid> */}
                 { (
+                  <>
+                  {isFetchingEthereum && !!dataEthereum?.pages[0] && !isFetchingNextPageEthereum ? (
+                      <Box justifyContent="center" sx={{display:"flex"}}>
+                      <CircularProgress color="primary" size={30}/>
+                      </Box>
+                    ) : null}
                   <Grid container justifyContent="center">
                     {dataEthereum?.pages[0] ? (
                       dataEthereum?.pages.map((page, i) =>
@@ -255,9 +262,8 @@ const AllNFT = ({userName}) => {
                       </Box>
                     )
                     }
-                    {isFetchingEthereum && !!dataEthereum?.pages[0] && !isFetchingNextPageEthereum ? (
-                      <CircularProgress color="primary" />
-                    ) : null}
+                    
+                    
                     <Box sx={{ "display": "block", "width": "100%", "textAlign": "center", marginTop: "1rem" }}>
                       {dataEthereum?.pages[0] && hasNextPageEthereum && (
                         <Button
@@ -280,6 +286,7 @@ const AllNFT = ({userName}) => {
                       )}
                     </Box>
                   </Grid>
+                  </>
                 
                  ) 
   

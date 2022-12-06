@@ -26,7 +26,7 @@ import { useMutation, useQuery } from "react-query";
 import { UserContext } from "../../context/User/UserContext";
 import { actionTypes } from "../../context/User/UserReducer";
 import { removeWallet } from "../../api/ApiCall/removeWallet";
-const useStyle = makeStyles((theme)=>({
+const useStyle = makeStyles((theme) => ({
   wrap2: {
     width: "100%",
     padding: "2rem 0",
@@ -47,16 +47,26 @@ const useStyle = makeStyles((theme)=>({
       textAlign: "center",
     },
   },
-  bag12: {
+  main: {
     display: "flex",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+    alignItems:"center",
+    padding:"25px 15px",
+    marginTop: "20px",
+    boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
+    borderRadius: "15px",
+  },
+  bag12: {
+    // display: "flex",
     // justifyContent: "space-between",
     marginBottom: "1rem",
-    flexDirection: "column",
+    // flexDirection: "column",
   },
   // Wrap2 Complete
   bag5: {
-    display: "flex",
-    justifyContent: "center",
+    // display: "flex",
+    // justifyContent: "center",
     "& Button": {
       background: "#fff",
       color: "#111",
@@ -102,34 +112,27 @@ const Wallet = () => {
       }
     },
     // refetchOnWindowFocus: false,
-  }
-  );
+  });
 
-  const { isError, error, mutateAsync } = useMutation(
-    "addWallet",
-    addWallet,
-    {
-      onSuccess: (data) => {
-        try {
-          if (data.success === true) {
-            refetch();
-          } else {
-            toast.error(JSON.stringify(data.message));
-          }
-        } catch (error) {
-          // toast.error(JSON.stringify(error));
+  const { isError, error, mutateAsync } = useMutation("addWallet", addWallet, {
+    onSuccess: (data) => {
+      try {
+        if (data.success === true) {
+          refetch();
+        } else {
+          toast.error(JSON.stringify(data.message));
         }
-      },
-      onError: (error, data) => {
+      } catch (error) {
         // toast.error(JSON.stringify(error));
-      },
-      
-    }
-  );
+      }
+    },
+    onError: (error, data) => {
+      // toast.error(JSON.stringify(error));
+    },
+  });
 
   const addWallets = async () => {
-    if (isConnected  && address && chain?.name == "Ethereum" ) {
-
+    if (isConnected && address && chain?.name == "Ethereum") {
       try {
         await mutateAsync({
           token: localStorage.getItem("token"),
@@ -137,10 +140,8 @@ const Wallet = () => {
           address: address,
         });
       } catch (err) {}
-    }
-    else if ( chain?.name != "Ethereum"){
+    } else if (chain?.name != "Ethereum") {
       toast.error("Please switch to Ethereum mainnet");
-
     }
   };
 
@@ -149,8 +150,6 @@ const Wallet = () => {
   //     addWallets?.();
   //   }
   // }, [chain?.name,address]);
-
- 
 
   const { mutateAsync: mutateAsyncRemoveWallet } = useMutation(
     "removeWallet",
@@ -212,6 +211,7 @@ const Wallet = () => {
                       xs: "space-between",
                       alignItems: "center",
                     },
+                    fontWeight:"bold",fontSize:"2rem !important"
                   }}
                 >
                   My Wallets
@@ -229,8 +229,7 @@ const Wallet = () => {
                   >
                     Add Wallet
                   </Button>
-                ) : 
-                (
+                ) : (
                   <Button
                     onClick={() => isDisconnected && openConnectModal()}
                     size="large"
@@ -239,19 +238,19 @@ const Wallet = () => {
                   >
                     Connect Wallet
                   </Button>
-                )
-                
-              }
+                )}
               </Box>
             </Grid>
           </Grid>
-          {data?.responseResult.length > 0  ? (
+          {data?.responseResult.length > 0 ? (
             <>
               {data?.responseResult &&
                 data?.responseResult.map(
                   ({ networkName, address, _id }, index) => {
                     return (
-                      <Grid
+                      <Box className={classes.main}>
+                        {/* <Grid
+                      className={classes.main}
                         container
                         key={index}
                         spacing={3}
@@ -260,36 +259,37 @@ const Wallet = () => {
                           boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
                           borderRadius: "15px",
                         }}
-                      >
-                        <Grid item lg={10} md={12}>
-                          <Box className={classes.bag12}>
-                            <Typography
-                              variant="h6"
-                              sx={{
-                                fontWeight: "bold",
-                                wordBreak: "break-all",
-                              }}
-                            >
-                              {networkName}
-                            </Typography>
-                            <Typography sx={{ wordBreak: "break-all" }}>
-                              {address}
-                            </Typography>
-                          </Box>
-                        </Grid>
-                        <Grid item lg={2} md={12}>
-                          <Box className={classes.bag5}>
-                            <Button
-                              onClick={async () => await disconnectAsync(_id)}
-                              size="large"
-                              sx={{ borderRadius: 50, textTransform: "none" }}
-                              variant="submit"
-                            >
-                              Remove
-                            </Button>
-                          </Box>
-                        </Grid>
-                      </Grid>
+                      > */}
+
+                        <Box className={classes.bag12}>
+                          <Typography
+                            variant="h6"
+                            sx={{
+                              fontWeight: "bold",
+                              wordBreak: "break-all",
+                            }}
+                          >
+                            {networkName}
+                          </Typography>
+                          <Typography sx={{ wordBreak: "break-all" }}>
+                            {address}
+                          </Typography>
+                        </Box>
+
+                        {/* <Grid item lg={2} md={12}> */}
+                        <Box className={classes.bag5}>
+                          <Button
+                            onClick={async () => await disconnectAsync(_id)}
+                            size="large"
+                            sx={{ borderRadius: 50, textTransform: "none" }}
+                            variant="submit"
+                          >
+                            Remove
+                          </Button>
+                        </Box>
+                        {/* </Grid> */}
+                        {/* </Grid> */}
+                      </Box>
                     );
                   }
                 )}

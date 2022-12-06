@@ -146,9 +146,11 @@ useEffect(()=>{
                }
                
                </Box>
+             <Box mt={2}>
              {  token && 
                  <EditProfile userName={``} />
                    }
+             </Box>
               </div>
             </Grid>
           </Grid>
