@@ -7,7 +7,7 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import CloseIcon from '@mui/icons-material/Close';
-import { Link,useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Button,
   List,
@@ -42,12 +42,11 @@ const Header = () => {
   const navigate = useNavigate();
   const logout = (e) => {
     e.preventDefault();
-    localStorage.clear();
     dispatch({ type: actionTypes.SET_TOKEN, value: null });
-    navigate("/login");
+    localStorage.clear();
+    navigate("/explore");
 
   };
-  const location = useLocation();
   const [isopen, setIsOpen] = useState(false);
   const toggleDrawer = (open) => (event) => {
     if (
@@ -88,7 +87,7 @@ const Header = () => {
               >
                 <MenuIcon fontSize="large" sx={{ color: "#111" }} />
               </IconButton>
-            ) : location.pathname === "/" ? (
+            ) :   (
               <Link to="/signup">
                 <Button
                   size="large"
@@ -98,9 +97,8 @@ const Header = () => {
                   Get Started
                 </Button>
               </Link>
-            ) : (
-              <Box component="div" sx={{ flexGrow: 1 }}></Box>
-            )}
+            ) 
+}
           </Toolbar>
         </AppBar>
       </Box>

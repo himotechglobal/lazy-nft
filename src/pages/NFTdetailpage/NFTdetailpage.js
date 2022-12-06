@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState ,useRef} from "react";
 import Header from "../../components/Header/Header";
 import {
   Box,
@@ -214,6 +214,14 @@ const useStyle = makeStyles((theme) =>({
     padding: "2rem 0",
   
   },
+  bag6: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    "& h5,h6": {
+      margin: "0",
+    },
+  },
 }));
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
@@ -225,6 +233,10 @@ const NFTdetailpage = () => {
   const [show, setShow] = useState(false);
   const classes = useStyle();
   const {id:nftCollectionId } = useParams();
+  const [words, setWords] = useState(0)
+  const bodyRef = useRef()
+  const CHARACTER_LIMIT = 160;
+  const ref = useRef();
 
 
 const {data}=useQuery(["getNftByNftCollectionId",nftCollectionId],
@@ -300,6 +312,23 @@ const {mutateAsync:mutateAsyncToggleLike,data:likeData,isLoading:isLoadingtoggle
 
   });
   // console.log(data?.responseResult?.likes.includes(userData?._id));
+
+const [lazyName,setLazyName]=useState(null);
+const [lazyDescription,setLazyDescription]=useState(null)
+
+useEffect(()=>{
+  if(data?.responseResult){
+    // console.log();
+    setLazyName(data?.responseResult?.lazyName);
+    setWords(0 + data?.responseResult?.lazyDescription?.length)
+    setLazyDescription(data?.responseResult?.lazyDescription);
+  }
+},[data?.responseResult])
+
+const count = (e) => {
+  setWords(0 + bodyRef.current.value.length)
+  setLazyDescription(e.target.value);
+}
   return (
     <>
       <Header />
@@ -511,8 +540,8 @@ const {mutateAsync:mutateAsyncToggleLike,data:likeData,isLoading:isLoadingtoggle
                 className={classes.bag90}
                 // sx={{width:"100%"}}
                
-                value={formik.values.name}
-                onChange={formik.handleChange}
+                value={lazyName}
+                onChange={(e)=>setLazyName(e.target.value)}
                 error={
                   formik.touched.name &&
                   Boolean(formik.errors.name)
@@ -531,10 +560,14 @@ const {mutateAsync:mutateAsyncToggleLike,data:likeData,isLoading:isLoadingtoggle
                   onChange={formik.handleChange}
                   id="decs"
                   name="decs"
-                  value={formik.values.decs}
+                  value={lazyDescription}
                   error={formik.touched.decs && Boolean(formik.errors.decs)}
                   helperText={formik.touched.decs && formik.errors.decs}
                 />
+                 <Box className={classes.bag6} mb>
+                <h6>Character Count {words}/160</h6>
+                {/* <h6>Character Count {count}/160</h6> */}
+              </Box>
                  <button type="submit">
                 Submit
               </button>

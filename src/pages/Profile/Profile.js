@@ -112,16 +112,15 @@ useEffect(()=>{
             <Grid item md={12}>
               <div>
                 <img
-                  src={ updatePic?.profilePic ?? userData?.profilePic ??"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"}
+                  src={ updatePic?.profilePic ?? userData?.profilePic}
                   alt=""
                 />
-                <h6>@{userData?.userName ?? "demo"}</h6>
+                <h6>@{userData?.userName ?? null}</h6>
                 { !!dataByUserName?.responseResult &&
                 <h6>Total NFTs Owned{" "}{dataByUserName?.responseResult.length ?? 0}</h6>
                 }
                 <p>
-                { (userUpdateData?.bio ||userData?.bio) ??
-                 " NFTs are the future and I primarily use them for their utility, as well as investment."
+                { (userUpdateData?.bio ||userData?.bio)
                 }
                 </p>
                 {/* <p >
@@ -143,7 +142,7 @@ useEffect(()=>{
                }
                {
                 (userData?.personalURL || userUpdateData?.personalURL) &&
-                <a  href={`${userUpdateData?.personalURL??userData?.personalURL}`} target="_blank" style={{color:"#000"}}>
+                <a  href={`https://${userUpdateData?.personalURL??userData?.personalURL}`} target="_blank" style={{color:"#000"}}>
                 <i class="bi bi-globe" style={{marginRight:"8px",color:"gray"}}></i>
                 Personal URL
                 </a>
@@ -169,7 +168,8 @@ useEffect(()=>{
           </Grid>
         </Container>
      )
-      ):(
+    ):(
+      dataByUserName?.responseResult[0] ? (
         <>
         <Box className={classes.wrap5}>
         <Container >
@@ -177,10 +177,10 @@ useEffect(()=>{
             <Grid item md={12}>
               <div>
                 <img
-                  src={ dataByUserName?.responseResult[0]?.metadata?.["image"]?`${dataByUserName?.responseResult[0]?.metadata?.["image"].replace("ipfs://","https://ipfs.io/ipfs/")}`:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png" }
+                  src={ dataByUserName?.responseResult[0]?.metadata?.["image"]?`${dataByUserName?.responseResult[0]?.metadata?.["image"].replace("ipfs://","https://ipfs.io/ipfs/")}`:null }
                   alt=""
                 />
-                <h6>@{dataByUserName?.responseResult[0].userId["userName"] ?? "demo"}</h6>
+                <h6>@{dataByUserName?.responseResult[0].userId["userName"]}</h6>
                 { !!dataByUserName?.responseResult &&
                 <h6>Total NFTs Owned{" "}{dataByUserName?.responseResult.length ?? 0}</h6>
                 }
@@ -192,21 +192,21 @@ useEffect(()=>{
              
               </div>
                 <Box sx={{"display":"flex","justifyContent":"center","gap":"2rem",flex:"wrap"}}>
-               {dataByUserName?.responseResult[0].userId["twitterName"] && <a href={`https://twitter.com/${dataByUserName?.responseResult[0].userId["twitterName"]}`}  style={{color:"#000"}}>
+               {dataByUserName?.responseResult[0].userId["twitterName"] && <a href={`https://twitter.com/${dataByUserName?.responseResult[0].userId["twitterName"]}`} target="_blank"  style={{color:"#000"}}>
                 <i class="bi bi-twitter" style={{marginRight:"8px",color:"gray"}}></i>
                 Twitter
                 </a>
                }
                {
                 dataByUserName?.responseResult[0].userId["facebookName"] &&
-                <a href={`https://www.facebook.com/${dataByUserName?.responseResult[0].userId["facebookName"]}`}  style={{color:"#000"}}>
+                <a href={`https://www.facebook.com/${dataByUserName?.responseResult[0].userId["facebookName"]}`} target="_blank"   style={{color:"#000"}}>
                 <i class="bi bi-facebook" style={{marginRight:"8px",color:"gray"}}></i>
                 Facebook
                 </a>
                }
                {
                 dataByUserName?.responseResult[0].userId["personalURL"] &&
-                <a  href={`${dataByUserName?.responseResult[0].userId["personalURL"]}`} style={{color:"#000"}}>
+                <a  href={`https://${dataByUserName?.responseResult[0].userId["personalURL"]}`} target="_blank"  style={{color:"#000"}}>
                 <i class="bi bi-globe" style={{marginRight:"8px",color:"gray"}}></i>
                 Personal URL
                 </a>
@@ -218,6 +218,17 @@ useEffect(()=>{
       </Box>
       <PinnedNFT  userName={userName}/>
       </>
+      ):(
+        <Container>
+        <Grid container>
+        <Grid   item md={12}  sx={{marginTop:5}}>
+          <Box alignItems="center" className={classes.bag5} sx={{height:"600px",display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <Typography  variant='h6' textAlign="center">No User Found.</Typography>
+          </Box>
+          </Grid>
+        </Grid>
+      </Container>
+      )
       )
       }
     </>
