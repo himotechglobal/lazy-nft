@@ -226,7 +226,7 @@ const NftBox = (props) => {
   const [words, setWords] = useState(0)
   const bodyRef = useRef()
   const count = () => {
-    setWords(0 + bodyRef.current.value.length)
+    setWords(0 + formik.values.decs.length)
   }
   const CHARACTER_LIMIT = 160;
   const ref = useRef();
@@ -570,21 +570,21 @@ updateNftNameOrDescription,{
 
                 <TextareaAutosize
                   className={classes.bag90}
-                  ref={bodyRef}
+              
                   // aria-label="minimum height"
                   minRows={3}
                   placeholder="Enter Description"
                   // style={{ width: 200 }}
-                  onChange={count}
+                  onChange={formik.handleChange}
                   maxLength={CHARACTER_LIMIT}
                   id="decs"
                   name="decs"
-                  // value={formik.values.decs}
+                  value={formik.values.decs}
                   // error={formik.touched.decs && Boolean(formik.errors.decs)}
                   // helperText={formik.touched.decs && formik.errors.decs}
                 />
                 <Box className={classes.bag6} mb>
-                <h6>Character Count {words}/160</h6>
+                <h6>Character Count {formik.values.decs.length}/160</h6>
                 {/* <h6>Character Count {count}/160</h6> */}
               </Box>
                 <button type="submit">Submit</button>
