@@ -425,7 +425,7 @@ const count = (e) => {
                 }
                }}>
                
-               Make Profile Picture</p>
+               Make Profile Picture{isLoadingUpdateProfilePic && <CircularProgress color="primary" size={18} />}</p>
 
                {props?.data.pinnedStatus==="PINNED" ? (
           
@@ -436,7 +436,7 @@ const count = (e) => {
 
                 }
                }}
-               >Unpin Nft  {isLoadingpinnedToggleNft &&   <CircularProgress color="primary" size="sm"/>}</p>   
+               >Unpin Nft  {isLoadingpinnedToggleNft &&   <CircularProgress color="primary" size={18} />}</p>   
                ):(
                 <p onClick={async()=>{
                 try{
@@ -444,7 +444,7 @@ const count = (e) => {
                 }catch(error){
 
                 }
-               }}>Pin Nft {isLoadingpinnedToggleNft &&   <CircularProgress color="primary" size="sm"/>}</p>
+               }}>Pin Nft {isLoadingpinnedToggleNft &&   <CircularProgress color="primary" size={18}/>}</p>
                )}
                { props?.data.status==="HIDE" ?(
                <p onClick={async()=>{
@@ -454,7 +454,7 @@ const count = (e) => {
 
                 }
                }}
-               >Unhide Nft  {isLoadinghideToggleNft &&   <CircularProgress color="primary" size="sm"/>}</p>
+               >Unhide Nft  {isLoadinghideToggleNft &&   <CircularProgress color="primary" size={18} />}</p>
                ):(
                 <p onClick={async()=>{
                 try{
@@ -462,7 +462,7 @@ const count = (e) => {
                 }catch(error){
 
                 }
-               }}>Hide Nft {isLoadinghideToggleNft &&   <CircularProgress color="primary" size="sm"/>}</p>
+               }}>Hide Nft {isLoadinghideToggleNft &&   <CircularProgress color="primary" size={18} />}</p>
                )}
               
                </>

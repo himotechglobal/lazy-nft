@@ -100,9 +100,6 @@ useEffect(()=>{
   return (
     <>
       <Header />
-      {  (!data?.responseResult[0]?.address && token)  && 
-      <EditProfile />
-      }
       {!!token ?(
         (data?.responseResult[0]?.address) ?(
         <>
@@ -149,7 +146,9 @@ useEffect(()=>{
                }
                
                </Box>
-               
+             {  token && 
+                 <EditProfile userName={``} />
+                   }
               </div>
             </Grid>
           </Grid>

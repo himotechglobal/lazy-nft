@@ -23,11 +23,12 @@ import InputAdornment from '@mui/material/InputAdornment';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
 import Counter from "./Counter"
+import { Link, Navigate } from "react-router-dom";
 const useStyle = makeStyles({
   //Wrap 3 Start
 
   wrap3: {
-    padding: "4rem 0 2rem",
+    // padding: "4rem 0 2rem",
     " & h2": {
       fontSize: "2rem",
       fontWeight: "bold",
@@ -39,7 +40,7 @@ const useStyle = makeStyles({
     "& Button": {
       background: "#000",
       borderRadius: "15px",
-      padding: "0.6rem 1.4rem",
+      padding: "0.6rem 1.4rem", 
       fontSize: "13px",
     },
     "& Button:hover": {
@@ -149,7 +150,7 @@ const useStyle = makeStyles({
   }
 });
 
-const EditProfile = ({heading}) => {
+const EditProfile = ({heading,userName}) => {
   const [{userData,userUpdateData}, dispatch] = useContext(UserContext);
 
   const bodyRef = useRef()
@@ -225,10 +226,10 @@ const EditProfile = ({heading}) => {
         await mutateAsync({
           token: localStorage.getItem("token"),
           value: {
-            bio: bodyRef.current.value,
-            twitterName: values?.twitterName,
-            facebookName: values?.facebookName,
-            personalURL: values?.personalURL,
+            bio:bio,
+            twitterName: twitterName,
+            facebookName: facebookName,
+            personalURL: personalURL,
           },
         });
         handleClose();
@@ -277,9 +278,13 @@ const EditProfile = ({heading}) => {
               </Box>
             </Grid>
             <Grid item md={12}>
+              {userName && 
               <Box className={classes.bag5}>
-                <p style={{ margin: "0" }}>@{userData?.userName ?? "demo"}</p>
+                <Link to={`/${userName.replace("@","")}`}>
+                <p  style={{ margin: "0" }}>{userName}</p>
+                </Link>
               </Box>
+              }
             </Grid>
      
           </Grid>

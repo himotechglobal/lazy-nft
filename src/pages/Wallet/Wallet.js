@@ -261,7 +261,7 @@ const Wallet = () => {
                           borderRadius: "15px",
                         }}
                       >
-                        <Grid item md={10}>
+                        <Grid item lg={10} md={12}>
                           <Box className={classes.bag12}>
                             <Typography
                               variant="h6"
@@ -277,7 +277,7 @@ const Wallet = () => {
                             </Typography>
                           </Box>
                         </Grid>
-                        <Grid item md={2}>
+                        <Grid item lg={2} md={12}>
                           <Box className={classes.bag5}>
                             <Button
                               onClick={async () => await disconnectAsync(_id)}
@@ -306,7 +306,7 @@ const Wallet = () => {
         </Container>
       </Box>
 
-      <EditProfile heading="My Profile" />
+      <EditProfile heading="My Profile" userName={`@${userData?.userName}`} />
       {/* <Swap /> */}
       {/* <Newsletter /> */}
       <Share />
