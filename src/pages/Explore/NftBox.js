@@ -341,8 +341,8 @@ updateNftNameOrDescription,{
           token: localStorage.getItem("token"),
           nftCollectionId:props?.data._id,
           value: {
-            lazyName:values.name,
-            lazyDescription:values.decs
+            lazyName:lazyName,
+            lazyDescription:lazyDescription
           }
         });
         handleClose()
@@ -373,7 +373,7 @@ useEffect(()=>{
 },[props?.data])
 
 const count = (e) => {
-  setWords(0 + bodyRef.current.value.length)
+  setWords(0 + e.target.value.length)
   setLazyDescription(e.target.value);
 }
   
@@ -588,7 +588,7 @@ const count = (e) => {
                   minRows={3}
                   placeholder="Enter Description"
                   // style={{ width: 200 }}
-                  onChange={formik.handleChange}
+                  onChange={(e) => count(e)}
                   maxLength={CHARACTER_LIMIT}
                   id="decs"
                   name="decs"
@@ -597,7 +597,7 @@ const count = (e) => {
                   // helperText={formik.touched.decs && formik.errors.decs}
                 />
                 <Box className={classes.bag6} mb>
-                <h6>Character Count {formik.values.decs.length}/160</h6>
+                <h6>Character Count {words}/160</h6>
                 {/* <h6>Character Count {count}/160</h6> */}
               </Box>
                 <button type="submit">Submit</button>

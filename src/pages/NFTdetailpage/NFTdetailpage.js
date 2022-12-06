@@ -300,8 +300,8 @@ const {mutateAsync:mutateAsyncToggleLike,data:likeData,isLoading:isLoadingtoggle
           token: localStorage.getItem("token"),
           nftCollectionId:nftCollectionId,
           value: {
-            lazyName:values.name,
-            lazyDescription:values.decs
+            lazyName:lazyName,
+            lazyDescription:lazyDescription
           }
         });
         handleClose()
@@ -326,7 +326,7 @@ useEffect(()=>{
 },[data?.responseResult])
 
 const count = (e) => {
-  setWords(0 + bodyRef.current.value.length)
+  setWords(0 + e.target.value.length)
   setLazyDescription(e.target.value);
 }
   return (
@@ -557,7 +557,7 @@ const count = (e) => {
                   minRows={3}
                   placeholder="Enter Description"
                   // style={{ width: 200 }}
-                  onChange={formik.handleChange}
+                  onChange={(e) => count(e)}
                   id="decs"
                   name="decs"
                   value={lazyDescription}
