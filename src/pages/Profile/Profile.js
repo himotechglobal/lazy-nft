@@ -59,7 +59,8 @@ const Profile =  () => {
   const {address,isConnected}=useAccount()
   const classes = useStyle();
   const [{userData,userUpdateData,updatePic,token},] = useContext(UserContext);
-
+  
+// console.log(UserContext);
   const {data:dataProfileByUserName}=useQuery(
     ["getProfileByUserName",userName],
     ()=>getProfileByUserName(userName),{
@@ -112,18 +113,10 @@ return (
     <Header />
     {
     dataProfileByUserName?.data.userName ? (
-      !data?.responseResult[0]?.address ?(
-        <Container>
-        <Grid container>
-        <Grid   item md={12}  sx={{marginTop:5}}>
-          <Box alignItems="center" className={classes.bag5}>
-          <Typography  variant='h6' textAlign="center">This user has not added any wallets.</Typography>
-          </Box>
-          </Grid>
-        </Grid>
-      </Container>
-      ):(
+   
       <>
+
+        
       <Box className={classes.wrap5}>
       <Container >
         <Grid container spacing={2} className={classes.wer}>
@@ -164,7 +157,8 @@ return (
              }
              </Box>
              <Box mt={2}>
-           {  (dataProfileByUserName?.data.userName ===userData?.userName) && 
+              {userData?.userName}
+           {  (dataProfileByUserName?.data.userName === userData?.userName) && 
                <EditProfile userName={``} />
                  }
            </Box>
@@ -172,9 +166,22 @@ return (
         </Grid>
       </Container>
     </Box>
+    {dataByUserName?.responseResult.length == 0 &&  
+      
+      <Container>
+      <Grid container>
+      <Grid   item md={12}  sx={{marginTop:5}}>
+        <Box alignItems="center" className={classes.bag5}>
+        <Typography  variant='h6' textAlign="center">This user has not added any wallets.</Typography>
+        </Box>
+        </Grid>
+      </Grid>
+    </Container>
+      
+    }
     <PinnedNFT  userName={userName}/>
     </>
-      )
+    
     ):(
 
       <Container>
