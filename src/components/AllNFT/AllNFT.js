@@ -17,6 +17,7 @@ import { getMyNftCollection } from "../../api/ApiCall/nftCollection/getMyNftColl
 import { useQuery, useInfiniteQuery } from "react-query";
 import { UserContext } from "../../context/User/UserContext";
 import { getNftCollectionByChainNameAndUserName } from "../../api/ApiCall/nftCollection/getNftCollectionByChainNameAndUserName";
+import {getAllNftByUserName} from "../../api/ApiCall/nftCollection/getAllNftByUserName"
 
 const useStyle = makeStyles((theme) => ({
   wrap5: {
@@ -100,6 +101,7 @@ const useStyle = makeStyles((theme) => ({
 const AllNFT = ({userName}) => {
   const [show, setShow] = useState(true);
   const [show1, setShow1] = useState(false);
+  const [totalNftPages,setTotalNftPages] = useState(5);
   const [{ token,userData }] = useContext(UserContext);
   const [chainName,setChainName]=useState({Ethereum:"Ethereum",BSC_Testnet:"BSC Testnet"})
   const Active = () => {
@@ -114,6 +116,16 @@ const AllNFT = ({userName}) => {
     setShow1(!show1);
   };
 
+
+  const {data:dataByUserName}=useQuery(
+    ["getAllNftByUserName",userName],
+    ()=>getAllNftByUserName(userName),{
+     onSuccess : (data) => {
+      setTotalNftPages(Math.ceil(data?.responseResult.length/6))
+     }   
+    },
+    
+  )
 
   // const [nfts, setNfts] = useState([])
   // const {isLoading}=useQuery(
@@ -156,7 +168,7 @@ const AllNFT = ({userName}) => {
     {
       refetchOnWindowFocus: false,
       getNextPageParam: (lastPage, pages) => {
-        if (pages.length < 4) {
+        if (pages.length <= totalNftPages) {
           return pages.length + 1;
         } else {
           return undefined;
