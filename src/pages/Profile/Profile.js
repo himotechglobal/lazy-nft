@@ -157,7 +157,7 @@ return (
              }
              </Box>
              <Box mt={2}>
-              {userData?.userName}
+           
            {  (dataProfileByUserName?.data.userName === userData?.userName) && 
                <EditProfile userName={``} />
                  }

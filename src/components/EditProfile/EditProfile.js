@@ -199,10 +199,12 @@ const EditProfile = ({heading,userName}) => {
             queryClient?.invalidateQueries("viewProfile")
             dispatch({ type: actionTypes.UPDATE_USER, value:data?.data});
             toast.success(JSON.stringify("You Profile Update Successfully"));
-            navigate(`/${username}`)
+            navigate(`/${data?.data.userName}`)
           } 
           if(data.success==false){
-            toast.error("already exist");
+            toast.error(data?.message);
+            navigate(`/${userName}`)
+
           }
         } catch(error) {
           if(value){
