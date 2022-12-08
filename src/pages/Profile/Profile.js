@@ -100,7 +100,8 @@ useEffect(()=>{
   return (
     <>
       <Header />
-      {!!token ?(
+      {!dataByUserName?.responseResult[0].userId["userName"] && userData?.userName?(
+        
         (data?.responseResult[0]?.address) ?(
         <>
       <Box className={classes.wrap5}>
@@ -115,7 +116,7 @@ useEffect(()=>{
                 <h6>@{userData?.userName ?? null}</h6>
                 { !!dataByUserName?.responseResult &&
                 <h6>Total NFTs Owned{" "}{dataByUserName?.responseResult.length ?? 0}</h6>
-                }
+                }   
                 <p>
                 { (userUpdateData?.bio ||userData?.bio)
                 }
@@ -147,7 +148,7 @@ useEffect(()=>{
                
                </Box>
              <Box mt={2}>
-             {  token && 
+             { userData?.userName && 
                  <EditProfile userName={``} />
                    }
              </Box>
@@ -186,8 +187,7 @@ useEffect(()=>{
                 <h6>Total NFTs Owned{" "}{dataByUserName?.responseResult.length ?? 0}</h6>
                 }
                 <p>
-                { (dataByUserName?.responseResult[0].userId["bio"]) ??
-                 " NFTs are the future and I primarily use them for their utility, as well as investment."
+                { (dataByUserName?.responseResult[0].userId["bio"]) 
                 }
                 </p>
              
