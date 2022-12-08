@@ -13,7 +13,7 @@ import { makeStyles } from "@mui/styles";
 import * as Yup from "yup";
 // import Button from 'react-bootstrap/Button';
 import Modal from "react-bootstrap/Modal";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { editProfile } from "../../api/ApiCall/editProfile";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
@@ -23,7 +23,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
 import Counter from "./Counter"
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { LIVE_DOMAIN } from "../../config";
 const useStyle = makeStyles({
   //Wrap 3 Start
 
@@ -57,16 +58,21 @@ const useStyle = makeStyles({
   },
   bag6: {
     display: "flex",
+    margin:"10px 0",
     alignItems: "center",
     justifyContent: "space-between",
-    "& h5,h6": {
+    "& h2,h6": {
       margin: "0",
     },
+    "& h2":{
+      fontSize: "1.5rem",
+      fontWeight: "bold",
+    }
   },
   bag7: {
     width: "100% !important",
     border: "1px solid",
-    margin: "3rem 0 0 0",
+    // margin: "3rem 0 0 0",
     border: "1px solid ",
     padding: "10px",
     boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
@@ -76,6 +82,8 @@ const useStyle = makeStyles({
   },
 
   bag8: {
+    marginBottom:"20px",
+    padding:"0",
     "& input::placeholder": {
       fontSize: "13px",
       // padding:"0 10px"
@@ -91,7 +99,7 @@ const useStyle = makeStyles({
     },
     "& button": {
       width: "100%",
-      margin: "13px 0",
+      // margin: "13px 0",
       border: "1px solid #000",
       padding: "10px",
       borderRadius: "41px",
@@ -102,7 +110,7 @@ const useStyle = makeStyles({
       transition:
         "color 0.5s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out",
     },
-    marginTop: "10px",
+    // marginTop: "10px",
     "& Form": {
       display: "block",
       padding: "10px",
@@ -112,7 +120,7 @@ const useStyle = makeStyles({
          borderWidth:"0 0 0 1px",
         // margin: "10px 0",
         // width: "100%",
-        //  borderRadius: "0 25px 25px 0",
+        //  borderRadius: "25px",
          boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
          padding:"auto 0 !important"
         
@@ -120,9 +128,10 @@ const useStyle = makeStyles({
       "&  h2": {
         fontSize: "1.5rem",
         fontWeight: "bold",
+        marginBottom:"0 !important"
       },
       "& label": {
-        margin: "18px  0",
+        margin: "8px  0",
         fontSize: "1.3rem",
         fontWeight: "bolder",
       },
@@ -137,22 +146,38 @@ const useStyle = makeStyles({
     // borderRadius: "25px",
     // boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
     "& input":{
-      padding:"auto 0 !important"
+      padding:"auto 0 !important",
+      // borderRadius:"25px"
     },
     "& fieldset":{
       borderColor:"linen",
       borderRadius:"20px"
     }
+
+  },
+  bag10: {
+    // display: "block",
+     borderColor: "linen !important",
+    "& input":{
+      padding:"auto 0 !important",
+      borderRadius:"25px"
+    },
+    "& fieldset":{
+      borderColor:"linen",
+      borderRadius:"20px"
+    }
+
   },
   bin1:{
-    marginBottom:"2px ",
+    // marginBottom:"2px ",
     fontSize:"14px"
   }
 });
 
 const EditProfile = ({heading,userName}) => {
   const [{userData,userUpdateData}, dispatch] = useContext(UserContext);
-
+  const queryClient=useQueryClient();
+  const navigate=useNavigate()
   const bodyRef = useRef()
   // const [words, setWords] = useState("")
 
@@ -163,35 +188,43 @@ const EditProfile = ({heading,userName}) => {
   const [words, setWords] = useState(0)
 
 
-  const {isLoading, mutateAsync } = useMutation(
+  const {isError, mutateAsync,status } = useMutation(
     "editProfile",
     editProfile,
     {
-      onSuccess: (data) => {
+      onSuccess: (data,value) => {
         try {
-          if (data?.data) {
+          if (data?.success) {
+            queryClient?.invalidateQueries("getProfileByUserName")
+            queryClient?.invalidateQueries("viewProfile")
             dispatch({ type: actionTypes.UPDATE_USER, value:data?.data});
             toast.success(JSON.stringify("You Profile Update Successfully"));
-          } else {
-            toast.error(JSON.stringify(data?.message));
+            navigate(`/${username}`)
+          } 
+          if(data.success==false){
+            toast.error("already exist");
           }
-        } catch (error) {
-          toast.error(JSON.stringify(error.message));
+        } catch(error) {
+          if(value){
+            toast.error("Email Or Username already exist");
+          }
         }
       },
-      onError: (error, data) => {
-        toast.error(JSON.stringify(data?.message));
-      },
+
     }
   );
   const [bio,setBio]=useState(null)
   const [twitterName,setTwitterName]=useState(null);
   const [facebookName,setFacebookName]=useState(null);
   const [personalURL,setPersonalURL]=useState(null);
+  const [email,setEmail]=useState(null);
+  const [username,setUsername]=useState(null);
   useEffect(()=>{
     if(userData){
       setBio(userData?.bio);
-      setWords(0 + userData?.bio?.length)
+      setWords(0 + userData?.bio?.length);
+      setEmail(userData?.email);
+      setUsername(userData?.userName);
       setTwitterName(userData?.twitterName);
       setFacebookName(userData?.facebookName);
       setPersonalURL(userData?.personalURL);
@@ -205,6 +238,8 @@ const EditProfile = ({heading,userName}) => {
 
   const formik = useFormik({
     initialValues: {
+      email:"",
+      username:"",
       bio: "",
       twitterName: "",
       facebookName: "",
@@ -226,6 +261,8 @@ const EditProfile = ({heading,userName}) => {
         await mutateAsync({
           token: localStorage.getItem("token"),
           value: {
+            email:email,
+            userName:username,
             bio:bio,
             twitterName: twitterName,
             facebookName: facebookName,
@@ -234,7 +271,7 @@ const EditProfile = ({heading,userName}) => {
         });
         handleClose();
       } catch (error) {
-        // console.log(error);
+        toast.error(JSON.stringify(error?.message));
       }
     // setShow(true)
     },
@@ -246,6 +283,9 @@ const EditProfile = ({heading,userName}) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  if(status==="error"){
+   toast.error(JSON.stringify("error"))
+  }
 
 
    
@@ -295,8 +335,60 @@ const EditProfile = ({heading,userName}) => {
         <Modal.Body>
           <Box className={classes.bag8}>
             <form onSubmit={formik.handleSubmit}>
+            <label htmlFor="bio">Email:</label>
+              
+              <TextField
+              fullWidth
+                name="email"
+                id="email"
+                variant="outlined"
+                placeholder="Enter Your Email"
+                className={classes.bag10}
+                value={email}
+                onChange={(e)=>setEmail(e.target.value)}
+                error={
+                  formik.touched.email &&
+                  Boolean(formik.errors.email)
+                }
+                helperText={
+                  formik.touched.email && formik.errors.email
+                }
+        //         InputProps={{
+        //   startAdornment: (
+        //     <InputAdornment position="start"  >
+        //       <span className={classes.bin1}>Email</span>
+        //     </InputAdornment>
+        //   ),
+        // }}
+              />
+              <label htmlFor="bio">Username:</label>
+              
+              <TextField
+              fullWidth
+                name="username"
+                id="username"
+                variant="outlined"
+                placeholder="Enter Your username "
+                className={classes.bag9}
+                value={username}
+                onChange={(e)=>setUsername(e.target.value)}
+                error={
+                  formik.touched.username &&
+                  Boolean(formik.errors.username)
+                }
+                helperText={
+                  formik.touched.username && formik.errors.username
+                }
+                InputProps={{
+          startAdornment: (
+            <InputAdornment position="start"  >
+              <span className={classes.bin1}>{LIVE_DOMAIN}</span>
+            </InputAdornment>
+          ),
+        }}
+              />
               <Box className={classes.bag6}>
-                <h5>Bio</h5>
+                <h2>Bio</h2>
                 <h6>Character Count {words}/160</h6>
                 {/* <h6>Character Count {count}/160</h6> */}
               </Box>
@@ -384,7 +476,7 @@ const EditProfile = ({heading,userName}) => {
                 InputProps={{
           startAdornment: (
             <InputAdornment position="start"  >
-              <span className={classes.bin1} >https://facebook.com</span>
+              <span className={classes.bin1} >https://facebook.com/</span>
             </InputAdornment>
           ),
         }}    

@@ -1,5 +1,5 @@
-// const url = "http://localhost:5000";
-const url ="https://d2ugm2w8bdhvj3.cloudfront.net"
+const url = "http://localhost:5001";
+// const url ="https://d2ugm2w8bdhvj3.cloudfront.net"
 
 
 const ApiConfigs = {
@@ -8,6 +8,7 @@ const ApiConfigs = {
   forget:`${url}/api/v1/profile/forget`,
   reset:`${url}/api/v1/profile/reset`,
   viewProfile: `${url}/api/v1/profile/viewProfile`,
+  getProfileByUserName:`${url}/api/v1/profile/getProfileByUserName`,
   editProfile: `${url}/api/v1/profile/editProfile`,
   viewWallet: `${url}/api/v1/userWallet/view`,
   addWallet:`${url}/api/v1/userWallet/add`,

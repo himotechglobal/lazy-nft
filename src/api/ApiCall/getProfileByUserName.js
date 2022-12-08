@@ -1,11 +1,11 @@
 import axios from "axios";
-import ApiConfigs from "../../ApiConfig";
+import ApiConfigs from "../ApiConfig";
 
-export const getAllNftByUserName = async (userName) => {
+export const getProfileByUserName = async (userName) => {
     try {
       const { data } = await axios({
         method:'GET',
-        url:ApiConfigs.getAllNftByUserName, 
+        url:ApiConfigs.getProfileByUserName,
         params:{
           userName:userName
         }
