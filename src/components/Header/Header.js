@@ -1,12 +1,12 @@
-import React, { useState,useContext } from "react";
+import React, { useState, useContext } from "react";
 import Box from "@mui/material/Box";
-import {Drawer, Avatar} from "@mui/material";
+import { Drawer, Avatar } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Button,
@@ -16,23 +16,21 @@ import {
   ListItemText,
 } from "@mui/material";
 import { UserContext } from "../../context/User/UserContext";
-import {actionTypes} from "../../context/User/UserReducer"
+import { actionTypes } from "../../context/User/UserReducer";
 import { makeStyles } from "@mui/styles";
 const drawerWidth = 300;
 
-
-const useStyle = makeStyles((theme)=>({
-  ghjk:{
-    color:"#000",fontSize:"1.5rem",
+const useStyle = makeStyles((theme) => ({
+  ghjk: {
+    color: "#000",
+    fontSize: "1.5rem",
     [theme.breakpoints.down("sm")]: {
-      fontSize:"17px",
-     },
-  }
-
-
+      fontSize: "17px",
+    },
+  },
 }));
 const Header = () => {
-  const [{token,userData}, dispatch] = useContext(UserContext);
+  const [{ token, userData }, dispatch] = useContext(UserContext);
   const sideBar = [
     { sidebarName: "Explore", path: "/explore" },
     { sidebarName: "My Settings", path: "/wallet" },
@@ -45,7 +43,6 @@ const Header = () => {
     dispatch({ type: actionTypes.SET_TOKEN, value: null });
     localStorage.clear();
     navigate("/explore");
-
   };
   const [isopen, setIsOpen] = useState(false);
   const toggleDrawer = (open) => (event) => {
@@ -61,7 +58,7 @@ const Header = () => {
   const classes = useStyle();
   return (
     <>
-      <Box sx={{ display: "flex", padding:"1rem 0" }}>
+      <Box sx={{ display: "flex", padding: "1rem 0" }}>
         <AppBar
           color="transparent"
           component="div"
@@ -75,10 +72,16 @@ const Header = () => {
                 component="div"
                 sx={{ color: "#fff", fontWeight: "bold" }}
               >
-                <Link to={token?`/explore`:`/`} style={{}} className={classes.ghjk}>Wolf Pup Registry</Link>
+                <Link
+                  to={token ? `/explore` : `/`}
+                  style={{}}
+                  className={classes.ghjk}
+                >
+                  Wolf Pup Registry
+                </Link>
               </Typography>
             </Box>
-            {token? (
+            {token ? (
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -87,18 +90,22 @@ const Header = () => {
               >
                 <MenuIcon fontSize="large" sx={{ color: "#111" }} />
               </IconButton>
-            ) :   (
+            ) : (
               <Link to="/signup">
                 <Button
                   size="large"
-                  sx={{ borderRadius: 50, textTransform: "none",color:"#fff", background:"#000" }}
+                  sx={{
+                    borderRadius: 50,
+                    textTransform: "none",
+                    color: "#fff",
+                    background: "#000",
+                  }}
                   variant="contained"
                 >
                   Get Started
                 </Button>
               </Link>
-            ) 
-}
+            )}
           </Toolbar>
         </AppBar>
       </Box>
@@ -115,29 +122,36 @@ const Header = () => {
         open={isopen}
         onClose={toggleDrawer(true)}
       >
-          <Box sx={{display: "flex", justifyContent: "end", marginTop: "17px" , padding:"0  10px 0"}}>
-          <Avatar   onClick={toggleDrawer(true)} sx={{bgcolor:"none"}}>
-            <CloseIcon/>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "end",
+            marginTop: "17px",
+            padding: "0  10px 0",
+          }}
+        >
+          <Avatar onClick={toggleDrawer(true)} sx={{ bgcolor: "none" }}>
+            <CloseIcon />
           </Avatar>
-          </Box>
+        </Box>
         <List>
           {sideBar.map((data, index) => (
-            <ListItem key={index} >
-              <ListItemButton>
-                <Link to={data.path}>
-                  <Typography component="div" sx={{ color: "#111", padding:"0" }}>
+            <Link to={data.path} key={index}>
+              <ListItem>
+                <ListItemButton>
+                  <Typography
+                    component="div"
+                    sx={{ color: "#111", padding: "0" }}
+                  >
                     <ListItemText primary={data.sidebarName} />
                   </Typography>
-                </Link>
-              </ListItemButton>
-            </ListItem>
+                </ListItemButton>
+              </ListItem>
+            </Link>
           ))}
-          <ListItem >
+          <ListItem>
             <ListItemButton>
-              <ListItemText
-                onClick={logout}
-                primary={`Sign Out`}
-              />
+              <ListItemText onClick={logout} primary={`Sign Out`} />
             </ListItemButton>
           </ListItem>
         </List>
