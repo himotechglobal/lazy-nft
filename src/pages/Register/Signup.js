@@ -44,9 +44,9 @@ const useStyle = makeStyles((theme)=>({
       }
   },
   signup:{
-    margin:"3rem 0",
+    margin:"2.5rem 0",
       "& h1":{
-        fontSize: "2rem", fontWeight: "500"
+        fontSize: "2rem", fontWeight: "500",textAlign:"center"
       }
   },
   typ:{
@@ -93,7 +93,7 @@ const Signup = () => {
       email: Yup.string().email("Invalid email format").required("Required!"),
       userName: Yup.string() .trim('The contact name cannot include leading and trailing spaces')
       .strict(true)
-        .min(4, "Minimum 4 characters")
+        // .min(4, "Minimum 4 characters")
         .required("Required!"),
       password: Yup.string()
         .min(4, "Minimum 4 characters")
