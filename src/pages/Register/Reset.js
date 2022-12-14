@@ -3,10 +3,16 @@ import React from "react";
 import Header from "../../components/Header/Header";
 import { makeStyles } from "@mui/styles";
 import { useFormik } from "formik";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import FormControl from '@mui/material/FormControl';
 import * as Yup from "yup";
+import InputAdornment from '@mui/material/InputAdornment';
 import { useMutation } from "react-query";
+import IconButton from '@mui/material/IconButton';
 import { reset } from "../../api/ApiCall/reset";
-import { useNavigate,useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 const useStyle = makeStyles({
   wrap18: {
     padding: "3rem 0 2rem",
@@ -44,20 +50,30 @@ const useStyle = makeStyles({
     "@media (maxwidth: 991.98px)": {},
     "@media (maxwidth: 1199.98px)": {},
   },
-  
+  error: {
+    color: 'red',
+    paddingTop: '10px',
+    textAlign: 'left',
+    fontSize: '12px !important',
+  },
+  signupbox: {
+    width: "33%",
+    margin: "2rem auto",
+  },
+
 });
 const Reset = () => {
   const [searchParams] = useSearchParams();
   // console.log(searchParams.get("id"));
-  const navigate=useNavigate();
-  const {mutateAsync}=useMutation(
+  const navigate = useNavigate();
+  const { mutateAsync } = useMutation(
     "reset",
-    reset,{
-      onSuccess:(data)=>{
-        navigate("/login")
-        console.log(data);
-      }
+    reset, {
+    onSuccess: (data) => {
+      navigate("/login")
+      console.log(data);
     }
+  }
   )
   const formik = useFormik({
     initialValues: {
@@ -66,25 +82,47 @@ const Reset = () => {
     },
     validationSchema: Yup.object({
       password: Yup.string()
-        .min(4, "Minimum 4 characters")
-        .required("Passowrd is Required!"),
+        .required('Enter valid password')
+        .min(8, 'Password should be 8 to 26 digit')
+        .max(26, 'Password should be 8 to 26 digit'),
       confirmpassword: Yup.string()
-        .min(4, "Minimum 4 characters")
-        .required("Passowrd is Required!"),
+        .oneOf([Yup.ref("password")], "Password not match")
+        .required("Enter confirm password")
     }),
-    onSubmit:async (values)=>{
+    onSubmit: async (values) => {
       try {
         await mutateAsync({
           newPassword: values.password,
-          confirmPassword:values.confirmpassword,
-          id:searchParams.get("id"),
-          token:searchParams.get("token")
+          confirmPassword: values.confirmpassword,
+          id: searchParams.get("id"),
+          token: searchParams.get("token")
         });
       } catch (error) {
         // console.log(error);
       }
     },
   });
+
+
+
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+
+  const [showPassword2, setShowPassword2] = React.useState(false);
+
+  const handleClickShowPassword2 = () => setShowPassword2((show) => !show);
+
+  const handleMouseDownPassword2 = (event) => {
+    event.preventDefault();
+  };
+
+
 
   const classes = useStyle();
   return (
@@ -95,67 +133,91 @@ const Reset = () => {
         <Container >
           <Grid container spacing={2}>
             <Grid md={12} justifyContent="center">
-              <Typography variant="h5">Confirm Password</Typography>
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography variant="h5">Confirm Password</Typography>
+              </Box>
             </Grid>
             <Grid md={12} sm={12}>
-              <Box className={classes.bag22}>
-                <form onSubmit={formik.handleSubmit}>
-                  <TextField
-                    variant="standard"
-                    //   fullWidth
-                    sx={{
-                      boxShadow: "rgb(0 0 0 / 7%) 0px 2px 16px 0px",
-                      borderRadius: "35px",
-                      pl: "10px",
-                    }}
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
-                    id="password"
-                    name="password"
+
+              <Box sx={{ textAlign: 'center' }}>
+                <form onSubmit={formik.handleSubmit} className={classes.signupbox}>
+
+                  <FormControl sx={{ marginTop: '10px', width: '100%', boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px", borderRadius: "8px", }} variant="outlined">
+                    {/* <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel> */}
+                    <OutlinedInput
+                      name="password"
+                      value={formik.values.password}
+                      onChange={formik.handleChange}
+                      placeholder="Password"
+                      // error={formik.touched.password && Boolean(formik.errors.password)}
+                      // helperText={formik.touched.password && formik.errors.password}
+                      id="password"
+                      type={showPassword ? 'text' : 'password'}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
                     // label="Password"
-                    type="password"
-                    placeholder="password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    error={
-                      formik.touched.password && Boolean(formik.errors.password)
-                    }
-                    helperText={
-                      formik.touched.password && formik.errors.password
-                    }
-                  />
-                </form>
-              </Box>
-              <Box className={classes.bag22}>
-                <form onSubmit={formik.handleSubmit}>
-                  <TextField
-                    variant="standard"
-                    //   fullWidth
+                    />
+                  </FormControl>
+                  <Typography className={classes.error}> {formik.errors.password}</Typography>
+
+
+                  {/* <TextField
+                    variant="outlined"
                     sx={{
+                      width : '100%',
+                      marginTop: '10px',
                       boxShadow: "rgb(0 0 0 / 7%) 0px 2px 16px 0px",
-                      borderRadius: "35px",
-                      pl: "10px",
+                      borderRadius: "8px",
                     }}
                     InputProps={{
                       disableUnderline: true,
                     }}
                     id="confirmpassword"
                     name="confirmpassword"
-                    // label="confirm-password"
-                    placeholder="confirm password"
+                    placeholder="Confirm password"
                     type="password"
                     value={formik.values.confirmpassword}
                     onChange={formik.handleChange}
-                    error={
-                      formik.touched.confirmpassword &&
-                      Boolean(formik.errors.confirmpassword)
-                    }
-                    helperText={
-                      formik.touched.confirmpassword &&
-                      formik.errors.confirmpassword
-                    }
-                  />
+                    
+                  /> */}
+
+                  <FormControl sx={{ marginTop: '10px', width: '100%', boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px", borderRadius: "8px", }} variant="outlined">
+                    {/* <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel> */}
+                    <OutlinedInput
+                      name="confirmpassword"
+                      value={formik.values.confirmpassword}
+                      onChange={formik.handleChange}
+                      placeholder="Confirm password"
+                      // error={formik.touched.password && Boolean(formik.errors.password)}
+                      // helperText={formik.touched.password && formik.errors.password}
+                      id="confirmpassword"
+                      type={showPassword2 ? 'text' : 'password'}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword2}
+                            onMouseDown={handleMouseDownPassword2}
+                            edge="end"
+                          >
+                            {showPassword2 ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    // label="Password"
+                    />
+                  </FormControl>
+                  <Typography className={classes.error}> {formik.errors.confirmpassword}</Typography>
                   <Box className={classes.bag26}>
                     <button class="btn btn-primary btn-block" type="submit">
                       Submit

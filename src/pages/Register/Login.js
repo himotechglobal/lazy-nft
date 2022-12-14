@@ -6,12 +6,20 @@ import { login } from "../../api/ApiCall/login";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { TextField, Button, Box } from "@mui/material";
+import { TextField, Button, Box, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { UserContext } from "../../context/User/UserContext";
 import { actionTypes } from "../../context/User/UserReducer";
 import { viewProfile } from "../../api/ApiCall/viewProfile";
-const useStyle = makeStyles((theme)=>({
+import FormControl from '@mui/material/FormControl';
+import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
+const useStyle = makeStyles((theme) => ({
   signupbox: {
     width: "33%",
     margin: "5rem auto",
@@ -33,7 +41,7 @@ const useStyle = makeStyles((theme)=>({
     },
     "& input": {
       fontSize: "13px",
-      padding:"10px 20px !important"
+      padding: "20px 20px !important"
     }
   },
   btn: {
@@ -44,11 +52,12 @@ const useStyle = makeStyles((theme)=>({
       padding: "10px 27px",
       border: "none",
       borderRadius: "36px",
-    }, "& button:hover":{
+    }, "& button:hover": {
       background: "#000", padding: "10px 27px", border: "none", borderRadius: "36px"
     }
   },
   signup: {
+    textAlign: 'center',
     margin: "3rem 0",
     "& h1": {
       fontSize: "2rem",
@@ -60,6 +69,11 @@ const useStyle = makeStyles((theme)=>({
     textDecoration: "underline !important",
     fontSize: "1rem",
   },
+  error: {
+    color: 'red',
+    paddingTop: '10px',
+    fontSize: '12px !important',
+  }
 }));
 const Login = () => {
   const classes = useStyle();
@@ -108,10 +122,10 @@ const Login = () => {
       password: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().email("Invalid email format").required("Required!"),
+      email: Yup.string().email("Invalid email format").required("Enter valid email addresss"),
       password: Yup.string()
-        .min(4, "Minimum 4 characters")
-        .required("Required!"),
+        // .min(4, "Minimum 4 characters")
+        .required("Enter valid password"),
     }),
     onSubmit: async (values) => {
       try {
@@ -124,6 +138,14 @@ const Login = () => {
       }
     },
   });
+
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   return (
     <div>
       <Header />
@@ -134,31 +156,31 @@ const Login = () => {
           </div>
           <form onSubmit={formik.handleSubmit} className={classes.signupbox}>
             <TextField
-              // fullWidth
+              variant="outlined"
               id="email"
               name="email"
+              // label="Email"
               placeholder="Email"
-              variant="standard"
               value={formik.values.email}
               onChange={formik.handleChange}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
+              // error={formik.touched.email && Boolean(formik.errors.email)}
+              // helperText={formik.touched.email && formik.errors.email}
               sx={{
                 display: "flex",
-                margin: "12px",
                 boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px",
-                borderRadius: "35px",
+                borderRadius: "8px",
               }}
               InputProps={{
                 disableUnderline: true,
               }}
             />
-            <TextField
-              // fullWidth
+            <Typography className={classes.error}> {formik.errors.email}</Typography>
+            {/* <TextField
+              variant="outlined"
               id="password"
               name="password"
               placeholder="Password"
-              variant="standard"
+              label="Password"
               type="password"
               value={formik.values.password}
               onChange={formik.handleChange}
@@ -173,7 +195,38 @@ const Login = () => {
               InputProps={{
                 disableUnderline: true,
               }}
-            />
+            /> */}
+
+            <FormControl sx={{ marginTop: '10px', width: '100%', boxShadow: "rgb(0 0 0 / 5%) 0px 2px 16px 0px", borderRadius: "8px", }} variant="outlined">
+              {/* <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel> */}
+              <OutlinedInput
+                name="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                // error={formik.touched.password && Boolean(formik.errors.password)}
+                // helperText={formik.touched.password && formik.errors.password}
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Password"
+                InputProps={{
+                  disableUnderline: true,
+                }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                // label="Password"
+              />
+            </FormControl>
+            <Typography className={classes.error}> {formik.errors.password}</Typography>
 
             <Box className={classes.btn}>
               <button
@@ -185,23 +238,25 @@ const Login = () => {
                 login
               </button>
             </Box>
-            <p className="sig-pr">
-              Don't have an account?
-              <span>
-                <Link to="/signup" className={classes.typ}>
-                  {" "}
-                  Sign up.
-                </Link>
-              </span>
-            </p>
-            <p className="sig-pr" sx={{ textAlign: "center" }}>
-              <span>
-                <Link to="/forget" className={classes.typ}>
-                  {" "}
-                  Forgot your password?
-                </Link>
-              </span>
-            </p>
+            <Box sx={{ textAlign: 'center' }}>
+              <p className="sig-pr">
+                Don't have an account?
+                <span>
+                  <Link to="/signup" className={classes.typ}>
+                    {" "}
+                    Sign up.
+                  </Link>
+                </span>
+              </p>
+              <p className="sig-pr">
+                <span>
+                  <Link to="/forget" className={classes.typ}>
+                    {" "}
+                    Forgot your password?
+                  </Link>
+                </span>
+              </p>
+            </Box>
           </form>
         </div>
       </section>

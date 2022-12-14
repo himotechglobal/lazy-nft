@@ -60,6 +60,7 @@ function App() {
           <Route exact path="/reset" element={<UserGuard><Reset /></UserGuard>} />
           <Route exact path="/bizarro-world" element={<BizarroWorld />} />
           <Route exact path="/rabit-hole" element={<Rabbithole />} />
+          
         </Routes>
       </BrowserRouter>
     </div>

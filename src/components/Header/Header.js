@@ -130,7 +130,7 @@ const Header = () => {
             padding: "0  10px 0",
           }}
         >
-          <Avatar onClick={toggleDrawer(true)} sx={{ bgcolor: "none" }}>
+          <Avatar onClick={toggleDrawer(true)} sx={{ bgcolor: "none", cursor : 'pointer' }}>
             <CloseIcon />
           </Avatar>
         </Box>
