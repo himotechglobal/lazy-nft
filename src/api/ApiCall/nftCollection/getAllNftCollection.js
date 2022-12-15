@@ -8,7 +8,7 @@ export const getAllNftCollection = async (page) => {
         url:ApiConfigs.getAllNftCollection, 
         params:{
           page:page,
-          limit:6
+          limit:100
         }
 
     });

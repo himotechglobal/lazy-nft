@@ -137,6 +137,7 @@ const useStyle = makeStyles((theme) => ({
 const ExploreNFTSingle = (props) => {
   const [show, setShow] = useState(true);
   const [show1, setShow1] = useState(true);
+  const [totalNftPages,setTotalNftPages] = useState(5);
   // const [show2, setShow2] = useState(true);
   // const [show3, setShow3] = useState(true);
   // const [show4, setShow4] = useState(true);
@@ -165,25 +166,18 @@ const ExploreNFTSingle = (props) => {
 
  
 
-  // const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } =
-  //   useInfiniteQuery(
-  //     ["getAllNftCollection"],
-  //     ({ pageParam = 0 }) => getAllNftCollection(pageParam),
-  //     {
-  //       refetchOnWindowFocus: false,
-  //       getNextPageParam: (lastPage, pages) => {
-  //         if (pages.length < 4) {
-  //           return pages.length + 1;
-  //         } else {
-  //           return undefined;
-  //         }
-  //         // Here I'm assuming you have access to the total number of pages
+  const { data} =
+    useQuery(
+      ["getAllNftCollection"],
+      getAllNftCollection,
+      {
+        onSuccess:(data)=>{
+          setTotalNftPages(Math.ceil(data?.responseResult.length));
+          // console.log(data?.responseResult.length);
+        }
 
-  //         // If there is not a next page, getNextPageParam will return undefined and the hasNextPage boolean will be set to 'false'
-  //       },
-
-  //     }
-  //   );
+      }
+    );
 
     const { data:dataEthereum, fetchNextPage:fetchNextPageEthereum, hasNextPage:hasNextPageEthereum ,isFetchingNextPage:isFetchingNextPageEthereum, isFetching:isFetchingEthereum } =
     useInfiniteQuery(
@@ -192,7 +186,7 @@ const ExploreNFTSingle = (props) => {
       {
         refetchOnWindowFocus: false,
         getNextPageParam: (lastPage, pages) => {
-          if (pages.length < 4) {
+          if (pages.length <= totalNftPages) {
             return pages.length + 1;
           } else {
             return undefined;
