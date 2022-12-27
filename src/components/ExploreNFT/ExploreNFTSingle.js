@@ -36,6 +36,16 @@ import { mostLikeNft } from "../../api/ApiCall/nftCollection/mostLikeNft";
 import { useQuery, useInfiniteQuery } from "react-query";
 import { WOLFPUPS_NFT_address, WOLFPUPS_NFT_address_BSC } from "../../config";
 import { getAllNftByChainName } from "../../api/ApiCall/nftCollection/getAllNftByChainName";
+import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
+
+import arrow from '../../../src/pages/images/arrow.svg'
+import ExploreNFTHeading from "./ExploreNFTHeading";
+ 
+
+
+
+
+
 const useStyle = makeStyles((theme) => ({
   wrap7: {
     "& h3": {
@@ -43,7 +53,7 @@ const useStyle = makeStyles((theme) => ({
       fontWeight: "bold",
       [theme.breakpoints.down("sm")]: {
         fontSize: "1rem",
-        marginTop:"1rem"
+        marginTop: "1rem"
       },
     },
   },
@@ -121,27 +131,44 @@ const useStyle = makeStyles((theme) => ({
       display: "flex",
     },
   },
-  bin1:{
+  bin1: {
     [theme.breakpoints.down("sm")]: {
       display: "flex",
-      justifyContent:"flex-start !important",
+      justifyContent: "flex-start !important",
     },
-    "& h5":{
-      
+    "& h5": {
+
       [theme.breakpoints.down("sm")]: {
-        fontSize:"1rem"
+        fontSize: "1rem"
       },
+    }
+  },
+  hding: {
+    boxShadow: 'inset 0px 7px 15px -6px #00000024',
+    backgroundColor: '#efefef96',
+    borderRadius: '40px',
+    padding: '8px 20px',
+    width : '83%',
+    textAlign : 'left',
+  },
+  viewbtn  : { 
+    color : '#666666 !important',
+    textTransform: 'none !important',
+    fontSize: '18px !important',
+    fontWeight: '700 !important',
+    '&:hover':{
+      backgroundColor : 'transparent !important'
     }
   }
 }));
 const ExploreNFTSingle = (props) => {
   const [show, setShow] = useState(true);
   const [show1, setShow1] = useState(true);
-  const [totalNftPages,setTotalNftPages] = useState(5);
+  const [totalNftPages, setTotalNftPages] = useState(5);
   // const [show2, setShow2] = useState(true);
   // const [show3, setShow3] = useState(true);
   // const [show4, setShow4] = useState(true);
-  const [chainName,setChainName]=useState({BSC_Testnet:"BSC Testnet"})
+  const [chainName, setChainName] = useState({ BSC_Testnet: "BSC Testnet" })
 
   const Active = () => {
     setShow(!show);
@@ -151,7 +178,7 @@ const ExploreNFTSingle = (props) => {
     // }, 1000);
   };
   const inActive = () => {
-    setChainName({Ethereum:"Ethereum",BSC_Testnet:"BSC Testnet"})
+    setChainName({ Ethereum: "Ethereum", BSC_Testnet: "BSC Testnet" })
     setShow1(!show1);
   };
   // const DisActive = () => {
@@ -164,14 +191,14 @@ const ExploreNFTSingle = (props) => {
   //   setShow4(!show4);
   // };
 
- 
 
-  const { data} =
+
+  const { data } =
     useQuery(
       ["getAllNftCollection"],
       getAllNftCollection,
       {
-        onSuccess:(data)=>{
+        onSuccess: (data) => {
           setTotalNftPages(Math.ceil(data?.responseResult.length));
           // console.log(data?.responseResult.length);
         }
@@ -179,10 +206,10 @@ const ExploreNFTSingle = (props) => {
       }
     );
 
-    const { data:dataEthereum, fetchNextPage:fetchNextPageEthereum, hasNextPage:hasNextPageEthereum ,isFetchingNextPage:isFetchingNextPageEthereum, isFetching:isFetchingEthereum } =
+  const { data: dataEthereum, fetchNextPage: fetchNextPageEthereum, hasNextPage: hasNextPageEthereum, isFetchingNextPage: isFetchingNextPageEthereum, isFetching: isFetchingEthereum } =
     useInfiniteQuery(
-      ["getAllNftByChainName",props.network,props.filter],
-      ({ pageParam = 0 }) => getAllNftByChainName(pageParam,props.network,props.filter),
+      ["getAllNftByChainName", props.network, props.filter],
+      ({ pageParam = 0 }) => getAllNftByChainName(pageParam, props.network, props.filter),
       {
         refetchOnWindowFocus: false,
         getNextPageParam: (lastPage, pages) => {
@@ -198,7 +225,7 @@ const ExploreNFTSingle = (props) => {
 
       }
     );
- 
+
 
   const [filter, setFilter] = useState(0);
   // console.log(filter);
@@ -217,53 +244,35 @@ const ExploreNFTSingle = (props) => {
   const classes = useStyle();
 
 
-  
+
   return (
     <>
       <Box className={classes.wrap7}>
-        <Container>
-         
-
+        
           <Grid item lg={6}>
-            <Box
-              sx={{
-                textAlign: "center",
-                margin: "1rem 0",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                flexWrap: "wrap",
-              }}
-            >
-              {/* <Box> */}
-              {/* <Typography variant="h3">Ethereum Feature Nfts</Typography> */}
-         
-                <Typography variant="h3">Featured {props.label}</Typography>
-           
-             
-            </Box>
+            {/* <ExploreNFTHeading/> */}
           </Grid>
- 
-            <Box>
-              {filter === 0 && (
-                <Grid container justifyContent="center">
-                  {dataEthereum?.pages[0] &&
-                    dataEthereum?.pages.map( (page, i) =>
-                     page?.responseResult?.map((nfts, index) => {
-                        return (
-                          <>
-                            <Grid item key={index} lg={4} md={4} sm={6}>
-                              <NftBox data={nfts} />
-                            </Grid>
-                          </>
-                        );
-                      })
-                    )}
+
+          <Box>
+            {filter === 0 && (
+              <Grid container justifyContent="center">
+                {dataEthereum?.pages[0] &&
+                  dataEthereum?.pages.map((page, i) =>
+                    page?.responseResult?.map((nfts, index) => {
+                      return (
+                        <>
+                          <Grid item key={index} lg={4} md={4} sm={6}>
+                            <NftBox data={nfts} />
+                          </Grid>
+                        </>
+                      );
+                    })
+                  )}
                 {isFetchingEthereum && !isFetchingNextPageEthereum ? (
-                    <CircularProgress color="primary" />
-                  ) : null}
-                  <Box sx={{ "display": "block", "width": "100%", "textAlign": "center", marginTop: "1rem" }}>
-                  {(dataEthereum?.pages[0] && hasNextPageEthereum ) && (
+                  <CircularProgress color="primary" />
+                ) : null}
+                <Box sx={{ "display": "block", "width": "100%", "textAlign": "center", marginTop: "1rem" }}>
+                  {(dataEthereum?.pages[0] && hasNextPageEthereum) && (
                     <Button
                       variant="contained"
                       disabled={!hasNextPageEthereum}
@@ -280,28 +289,27 @@ const ExploreNFTSingle = (props) => {
                     >
                       Load More
                     </Button>
-                    
-                  )}
-                  </Box>
-                </Grid>
-              )}
 
-            </Box>
-      
+                  )}
+                </Box>
+              </Grid>
+            )}
+
+          </Box>
+
 
           {!dataEthereum?.pages[0] && show && (
-       
-              <Grid container md={12} justifyContent="center" className={classes.bin1}>
-                <Typography variant="h5">No NFTs Added Yet</Typography>
-              </Grid>
-            
+
+            <Grid container md={12} justifyContent="center" className={classes.bin1}>
+              <Typography variant="h5">No NFTs Added Yet</Typography>
+            </Grid>
+
           )}
 
+
+
  
-   
-        
-              </Container>
-         
+
       </Box>
     </>
   );
