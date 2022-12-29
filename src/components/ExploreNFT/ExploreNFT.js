@@ -44,7 +44,7 @@ const useStyle = makeStyles((theme) => ({
       fontWeight: "bold",
       [theme.breakpoints.down("sm")]: {
         fontSize: "1rem",
-        marginTop: "1rem"
+        marginTop:"1rem"
       },
     },
   },
@@ -122,24 +122,24 @@ const useStyle = makeStyles((theme) => ({
       display: "flex",
     },
   },
-  bin1: {
+  bin1:{
     [theme.breakpoints.down("sm")]: {
       display: "flex",
-      justifyContent: "flex-start !important",
+      justifyContent:"flex-start !important",
     },
-    "& h5": {
-
+    "& h5":{
+      
       [theme.breakpoints.down("sm")]: {
-        fontSize: "1rem"
+        fontSize:"1rem"
       },
     }
   },
-  sel: {
-    "& .MuiSelect-select": {
+  sel:{
+    "& .MuiSelect-select":{
       // display:"flex",
       // gap:"5px",
-      textAlign: "start",
-      padding: "6px 18px !important"
+      textAlign:"start",
+      padding:"6px 18px !important"
     }
   }
 }));
@@ -149,7 +149,7 @@ const ExploreNFT = () => {
   // const [show2, setShow2] = useState(true);
   // const [show3, setShow3] = useState(true);
   // const [show4, setShow4] = useState(true);
-  const [chainName, setChainName] = useState({ Ethereum: "Ethereum", BSC_Testnet: "BSC Testnet" })
+  const [chainName,setChainName]=useState({Ethereum:"Ethereum",BSC_Testnet:"BSC Testnet"})
 
   const Active = () => {
     setShow(!show);
@@ -159,7 +159,7 @@ const ExploreNFT = () => {
     // }, 1000);
   };
   const inActive = () => {
-    setChainName({ Ethereum: "Ethereum", BSC_Testnet: "BSC Testnet" })
+    setChainName({Ethereum:"Ethereum",BSC_Testnet:"BSC Testnet"})
     setShow1(!show1);
   };
   // const DisActive = () => {
@@ -172,7 +172,7 @@ const ExploreNFT = () => {
   //   setShow4(!show4);
   // };
 
-
+ 
 
   // const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetching } =
   //   useInfiniteQuery(
@@ -194,10 +194,10 @@ const ExploreNFT = () => {
   //     }
   //   );
 
-  const { data: dataEthereum, fetchNextPage: fetchNextPageEthereum, hasNextPage: hasNextPageEthereum, isFetchingNextPage: isFetchingNextPageEthereum, isFetching: isFetchingEthereum } =
+    const { data:dataEthereum, fetchNextPage:fetchNextPageEthereum, hasNextPage:hasNextPageEthereum ,isFetchingNextPage:isFetchingNextPageEthereum, isFetching:isFetchingEthereum } =
     useInfiniteQuery(
-      ["getAllNftByChainName", chainName?.Ethereum],
-      ({ pageParam = 0 }) => getAllNftByChainName(pageParam, chainName?.Ethereum),
+      ["getAllNftByChainName",chainName?.Ethereum],
+      ({ pageParam = 0 }) => getAllNftByChainName(pageParam,chainName?.Ethereum),
       {
         refetchOnWindowFocus: false,
         getNextPageParam: (lastPage, pages) => {
@@ -214,10 +214,10 @@ const ExploreNFT = () => {
       }
     );
 
-  const { data: dataBsc_Testnet, fetchNextPage: fetchNextPageBsc_Testnet, hasNextPage: hasNextPageBsc_Testnet, isFetchingNextPage: isFetchingNextPageBsc_Testnet, isFetching: isFetchingBsc_Testnet } =
+    const { data:dataBsc_Testnet, fetchNextPage:fetchNextPageBsc_Testnet, hasNextPage:hasNextPageBsc_Testnet ,isFetchingNextPage:isFetchingNextPageBsc_Testnet, isFetching:isFetchingBsc_Testnet } =
     useInfiniteQuery(
-      ["getAllNftByChainName", chainName?.BSC_Testnet],
-      ({ pageParam = 0 }) => getAllNftByChainName(pageParam, chainName?.BSC_Testnet),
+      ["getAllNftByChainName",chainName?.BSC_Testnet],
+      ({ pageParam = 0 }) => getAllNftByChainName(pageParam,chainName?.BSC_Testnet),
       {
         refetchOnWindowFocus: false,
         getNextPageParam: (lastPage, pages) => {
@@ -255,58 +255,58 @@ const ExploreNFT = () => {
   const classes = useStyle();
 
   const netWorkArray = [{
-    "value": "Ethereum",
-    "label": "featured NFTs"
+    "value" : "Ethereum",
+    "label" : "Wolf Pups"
   },
-    // {
-    //   "value" : "BSC Testnet",
-    //   "label" : "Binance Testnet"
-    // }
-  ];
-
-  // const networkLabels = {
-  //   "BSC Testnet" : "Binance Testnet",
-  //   "Ethereum" : "Ethereum",
+  // {
+  //   "value" : "BSC Testnet",
+  //   "label" : "Binance Testnet"
   // }
-  const [activeNetworks, setActiveNetworks] = useState(["Ethereum", "BSC Testnet"])
+];
 
-  useEffect(() => {
-    // alert(activeNetworks.length)
-  }, [activeNetworks])
+// const networkLabels = {
+//   "BSC Testnet" : "Binance Testnet",
+//   "Ethereum" : "Ethereum",
+// }
+const [activeNetworks,setActiveNetworks] = useState(["Ethereum","BSC Testnet"])
 
-  const toggleActiveNetwork = async (_v) => {
-    let _activeNetworks = activeNetworks;
-    if (_activeNetworks.includes(_v)) {
-      let _temp = [];
-      activeNetworks.map((v, i) => {
-        if (v != _v) {
-          _temp.push(v);
-        }
-      })
-      setActiveNetworks(_temp);
-    }
-    else {
-
-
-      setActiveNetworks(oldArray => [...oldArray, _v]);
-
-
-    }
+useEffect(() => {
+  // alert(activeNetworks.length)
+},[activeNetworks])
+  
+const toggleActiveNetwork = async (_v) => {
+  let _activeNetworks = activeNetworks ; 
+  if(_activeNetworks.includes(_v)){
+    let _temp = [];
+    activeNetworks.map((v,i) => {
+      if(v != _v){
+        _temp.push(v);
+      }
+    })
+    setActiveNetworks(_temp);
   }
+  else{
+     
+ 
+    setActiveNetworks(oldArray => [...oldArray, _v]);
+
+
+  }
+}
   return (
     <>
       <Box className={classes.wrap7}>
-
-        {/* <Grid container className={classes.hjk}> */}
-        <Grid item md={12}>
-          <Box sx={{
-            textAlign: "center",
-            margin: "1rem 0",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexWrap: "wrap",
-          }} >
+        <Container>
+          {/* <Grid container className={classes.hjk}> */}
+          <Grid item md={12}>
+              <Box   sx={{
+                textAlign: "center",
+                margin: "1rem 0",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexWrap: "wrap",
+              }} >
             <Box className={classes.bag15}>
               {/* {
                 netWorkArray.map((v,i) => {
@@ -319,11 +319,11 @@ const ExploreNFT = () => {
                   )
                 })
               } */}
-
-
+              
+             
             </Box>
 
-            {/* <FormControl sx={{ m: 1, minWidth: 150 }}>
+                <FormControl sx={{ m: 1, minWidth: 150 }}>
                 <Select
                 className={classes.sel}
                   value={filter}
@@ -338,7 +338,7 @@ const ExploreNFT = () => {
                   <MenuItem value={1} disableRipple>
                     Recently listed
                   </MenuItem>
-                  
+                  {/* <MenuItem value={10}>recently listed</MenuItem> */}
                   <MenuItem disableRipple value={2}>
                     Most viewed
                   </MenuItem>
@@ -346,24 +346,24 @@ const ExploreNFT = () => {
                     Most liked
                   </MenuItem>
                 </Select>
-          
-              </FormControl> */}
-          </Box>
-        </Grid>
-        {/* {activeNetworks.length} */}
-        {
-          netWorkArray.length > 0 && netWorkArray.map((v, i) => {
-            if (activeNetworks.includes(v.value)) {
-              return (
-                <ExploreNFTSingle label={v.label} network={v.value} filter={filter} />
-              )
-            }
-          })
-        }
-
-
-
-
+                {/* <FormHelperText>Without label</FormHelperText> */}
+              </FormControl>
+              </Box>
+          </Grid>
+{/* {activeNetworks.length} */}
+              {
+                netWorkArray.length > 0 && netWorkArray.map((v,i) => {
+                  if(activeNetworks.includes(v.value)){
+                  return (
+                    <ExploreNFTSingle label={v.label} network={v.value} filter={filter} />
+                  )
+                  }
+                })
+              }
+              
+        
+              </Container>
+           
       </Box>
     </>
   );
