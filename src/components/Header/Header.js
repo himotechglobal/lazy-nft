@@ -21,6 +21,25 @@ import { makeStyles } from "@mui/styles";
 const drawerWidth = 300;
 
 const useStyle = makeStyles((theme) => ({
+  adoptWrp : {
+    marginRight : '15px',
+    textAlign : 'center',
+    '@media(max-width : 600px)':{
+      marginRight : '0px !important',
+      width : '100% !important'
+    }
+  },
+  adoptbtn : {
+    color : '#fff !important',
+    borderRadius : '30px !important',
+    padding : '8px 30px !important',
+    transition : '0.5s !important',
+    '@media(max-width : 600px)':{
+      padding : '8px 27px !important',
+      marginTop : '15px !important',
+      width : '100% !important'
+    }
+  },
   ghjk: {
     color: "#000",
     fontSize: "1.5rem",
@@ -28,6 +47,13 @@ const useStyle = makeStyles((theme) => ({
       fontSize: "17px",
     },
   },
+  tbar : {
+    '@media(max-width : 600px)':{
+      display : 'inherit !important',
+      flexWrap : 'wrap',
+      textAlign : 'center'
+    }
+  }
 }));
 const Header = () => {
   const [{ token, userData }, dispatch] = useContext(UserContext);
@@ -65,7 +91,7 @@ const Header = () => {
           position="relative"
           elevation={0}
         >
-          <Toolbar>
+          <Toolbar className={classes.tbar}>
             <Box component="div" sx={{ flexGrow: 1 }}>
               <Typography
                 variant="h6"
@@ -91,20 +117,35 @@ const Header = () => {
                 <MenuIcon fontSize="large" sx={{ color: "#111" }} />
               </IconButton>
             ) : (
-              <Link to="/signup">
-                <Button
-                  size="large"
-                  sx={{
-                    borderRadius: 50,
-                    textTransform: "none",
-                    color: "#fff",
-                    background: "#000",
-                  }}
-                  variant="contained"
-                >
-                  Get Started
-                </Button>
-              </Link>
+              <Box sx={{ display: 'flex','@media(max-width : 600px)':{flexWrap : 'wrap', justifyContent : 'center'} }}>
+
+                <Box className={classes.adoptWrp}>
+                  <Button className={classes.adoptbtn} variant="contained" href="https://paragraph.xyz/@wolfpup0/urgent-before-adopting-a-wolf-pup" target="_blank">
+                    Adopt a Wolfpup
+                  </Button>
+                </Box>
+
+                <Link to="/signup">
+                  <Button
+                    size="large"
+                    sx={{
+                      borderRadius: 50,
+                      textTransform: "none",
+                      color: "#fff",
+                      background: "#000",
+                      '@media(max-width : 600px)':{
+                        marginTop : '15px',
+                        width : '100%'
+                      }
+                    }}
+                    variant="contained"
+                  >
+                    Get Started
+                  </Button>
+                </Link>
+
+
+              </Box>
             )}
           </Toolbar>
         </AppBar>
@@ -130,7 +171,7 @@ const Header = () => {
             padding: "0  10px 0",
           }}
         >
-          <Avatar onClick={toggleDrawer(true)} sx={{ bgcolor: "none", cursor : 'pointer' }}>
+          <Avatar onClick={toggleDrawer(true)} sx={{ bgcolor: "none", cursor: 'pointer' }}>
             <CloseIcon />
           </Avatar>
         </Box>
