@@ -40,6 +40,7 @@ const useStyle = makeStyles({
     justifyContent: "center",
     "& Button": {
       background: "#000",
+      transition : '0.5s',
       borderRadius: "15px",
       padding: "0.6rem 1.4rem",
       fontSize: "13px",
@@ -178,12 +179,14 @@ const useStyle = makeStyles({
   },
   adoptbtn : {
     color : '#fff !important',
-    borderRadius : '12px !important',
-    padding : '8px 30px !important',
+    fontSize : '13px !important',
+    backgroundColor : '#000 !important',
+    borderRadius : '15px !important',
+    padding : '9px 30px !important',
     transition : '0.5s !important',
     '&:hover':{
       color : '#fff !important',
-      transform : 'translateY(-5px)'
+      transform : 'translateY(-6px)'
     }
   }
 });

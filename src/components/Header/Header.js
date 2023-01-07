@@ -117,14 +117,7 @@ const Header = () => {
                 <MenuIcon fontSize="large" sx={{ color: "#111" }} />
               </IconButton>
             ) : (
-              <Box sx={{ display: 'flex','@media(max-width : 600px)':{flexWrap : 'wrap', justifyContent : 'center'} }}>
-
-                <Box className={classes.adoptWrp}>
-                  <Button className={classes.adoptbtn} variant="contained" href="https://paragraph.xyz/@wolfpup0/urgent-before-adopting-a-wolf-pup" target="_blank">
-                    Adopt a Wolfpup
-                  </Button>
-                </Box>
-
+               
                 <Link to="/signup">
                   <Button
                     size="large"
@@ -143,9 +136,8 @@ const Header = () => {
                     Get Started
                   </Button>
                 </Link>
-
-
-              </Box>
+               
+             
             )}
           </Toolbar>
         </AppBar>
