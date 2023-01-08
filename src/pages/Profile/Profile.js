@@ -1,7 +1,7 @@
 import React,{useContext, useEffect, useState} from "react";
 import EditProfile from "../../components/EditProfile/EditProfile";
 import Header from "../../components/Header/Header";
-import { Box, Container, Grid,Typography } from "@mui/material";
+import { Box, Container, Grid,Typography,Button} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PinnedNFT from "../../components/PinnedNFT/PinnedNFT";
 import { UserContext } from "../../context/User/UserContext";
@@ -19,6 +19,22 @@ import { viewWallet } from "../../api/ApiCall/viewWallet";
 import {getProfileByUserName} from "../../api/ApiCall/getProfileByUserName"
 
 const useStyle = makeStyles((theme)=>({
+  adoptWrp : {
+    marginTop : '20px',
+    textAlign : 'center',
+  },
+  adoptbtn : {
+    color : '#fff !important',
+    fontSize : '13px !important',
+    backgroundColor : '#000 !important',
+    borderRadius : '15px !important',
+    padding : '9px 30px !important',
+    transition : '0.5s !important',
+    '&:hover':{
+      color : '#fff !important',
+      transform : 'translateY(-6px)'
+    },
+  },
   wrap5: {
     padding: "2rem 0 ",
     [theme.breakpoints.down("sm")]: {
@@ -161,6 +177,11 @@ return (
            {  (dataProfileByUserName?.data.userName === userData?.userName) && 
                <EditProfile userName={``} />
                  }
+                  <Box className={classes.adoptWrp}>
+                <Button  className={classes.adoptbtn} variant="contained" href="https://paragraph.xyz/@wolfpup0/urgent-before-adopting-a-wolf-pup" target="_blank">
+                  Adopt a Wolfpup
+                </Button>
+              </Box>
            </Box>
           </Grid>
         </Grid>

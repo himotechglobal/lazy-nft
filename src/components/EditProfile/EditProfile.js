@@ -335,11 +335,7 @@ const EditProfile = ({ heading, userName }) => {
                   Edit Profile
                 </Button>
               </Box>
-              <Box className={classes.adoptWrp}>
-                <Button  className={classes.adoptbtn} variant="contained" href="https://paragraph.xyz/@wolfpup0/urgent-before-adopting-a-wolf-pup" target="_blank">
-                  Adopt a Wolfpup
-                </Button>
-              </Box>
+             
             </Grid>
             <Grid item md={12}>
               {userName &&
